@@ -1,0 +1,20 @@
+{
+  "name": "masterbookbank",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start:backend": "cd ./backend && npm run start",
+    "start:frontend": "cd ./frontend && npm run start",
+    "install:backend": "cd ./backend && npm install",
+    "install:frontend": "cd ./frontend && npm install",
+    "install:all": "npm install && npm run install:backend && npm run install:frontend",
+    "start": "concurrently \"npm run start:backend\" \"npm run start:frontend\""
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "concurrently": "^7.6.0"
+  }
+}
