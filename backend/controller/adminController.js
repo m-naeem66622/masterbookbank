@@ -80,8 +80,8 @@ const signin = async (req, res) => {
 const fetch = async (req, res) => {
     try {
         // Get admin id from middleware function
-        if (!req.user) {
-            return res.status(404).send({ message: "User not found 1" });
+        if (!req.admin) {
+            return res.status(404).send({ message: "Admin not found 1" });
         }
         const userID = req.admin.id;
 
@@ -94,7 +94,6 @@ const fetch = async (req, res) => {
 
         res.send({ data });
     } catch (error) {
-        console.log(error)
         return res.status(500).send({ message: "Server error 0x000a3" });
     }
 };

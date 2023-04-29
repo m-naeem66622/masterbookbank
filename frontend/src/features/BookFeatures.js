@@ -4,7 +4,12 @@ const host = "http://localhost:5000";
 // Fetch All Books
 export const fetchBooks = async () => {
     const url = `${host}/api/book/fetchAll`;
-    const options = { method: "GET" };
+    const options = {
+        method: "GET",
+        headers: {
+            authToken: localStorage.getItem("authToken")
+        }
+    };
     const response = await fetch(url, options);
     const json = await response.json();
 
@@ -18,7 +23,12 @@ export const fetchBooks = async () => {
 // Fetch Book
 export const fetchBook = async (bookID) => {
     const url = `${host}/api/book/fetch/${bookID}`;
-    const options = { method: "GET" };
+    const options = {
+        method: "GET",
+        headers: {
+            authToken: localStorage.getItem("authToken")
+        }
+    };
     const response = await fetch(url, options);
     const json = await response.json();
 
@@ -66,7 +76,13 @@ const prepareForm = (book, files) => {
 // Add Book
 export const addBook = async (book, blob) => {
     const url = `${host}/api/book/create`;
-    const options = { method: "POST", body: prepareForm(book, blob) };
+    const options = {
+        method: "POST",
+        body: prepareForm(book, blob),
+        headers: {
+            authToken: localStorage.getItem("authToken")
+        }
+    };
     const response = await fetch(url, options);
     const json = await response.json();
 
@@ -80,7 +96,13 @@ export const addBook = async (book, blob) => {
 // Update Book
 export const updateBook = async (book, blob, files) => {
     const url = `${host}/api/book/update/${book._id}`;
-    const options = { method: "PUT", body: prepareForm(book, blob) };
+    const options = {
+        method: "PUT",
+        body: prepareForm(book, blob),
+        headers: {
+            authToken: localStorage.getItem("authToken")
+        }
+    };
     const response = await fetch(url, options);
     const json = await response.json();
 
@@ -94,7 +116,11 @@ export const updateBook = async (book, blob, files) => {
 // Delete Book
 export const deleteBook = async (bookID) => {
     const url = `${host}/api/book/delete/${bookID}`
-    const options = { method: "DELETE" }
+    const options = {
+        method: "DELETE", headers: {
+            authToken: localStorage.getItem("authToken")
+        }
+    }
     const response = await fetch(url, options);
     const json = await response.json();
 
