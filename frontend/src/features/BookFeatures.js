@@ -5,10 +5,7 @@ const host = "http://localhost:5000";
 export const fetchBooks = async () => {
     const url = `${host}/api/book/fetchAll`;
     const options = {
-        method: "GET",
-        headers: {
-            authToken: localStorage.getItem("authToken")
-        }
+        method: "GET"
     };
     const response = await fetch(url, options);
     const json = await response.json();
@@ -24,10 +21,7 @@ export const fetchBooks = async () => {
 export const fetchBook = async (bookID) => {
     const url = `${host}/api/book/fetch/${bookID}`;
     const options = {
-        method: "GET",
-        headers: {
-            authToken: localStorage.getItem("authToken")
-        }
+        method: "GET"
     };
     const response = await fetch(url, options);
     const json = await response.json();
