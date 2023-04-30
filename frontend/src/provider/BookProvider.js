@@ -8,6 +8,7 @@ const BookProvider = (props) => {
     const [isAdmin, setIsAdmin] = useState(false);
     const [isUser, setIsUser] = useState(false);
     const [accountDetail, setAccountDetail] = useState({});
+    const [books, setBooks] = useState([]);
 
     // Show Push Notification
     const notify = (type, message) => {
@@ -19,7 +20,7 @@ const BookProvider = (props) => {
     };
 
     return (
-        <BookContext.Provider value={{ notify, loading, setLoading, rolling, setRolling, accountDetail, setAccountDetail, isAdmin, setIsAdmin, isUser, setIsUser }}>
+        <BookContext.Provider value={{ notify, loading, setLoading, rolling, setRolling, accountDetail, setAccountDetail, isAdmin, setIsAdmin, isUser, setIsUser, books, setBooks }}>
             {props.children}
         </BookContext.Provider>
     )
