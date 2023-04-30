@@ -42,7 +42,7 @@ function EditBook() {
         const response = await updateBook(book, filteredFiles, files);
         setRolling(false);
         if (response.status === 200) {
-            navigate(`/book/view/${id}`);
+            navigate(`/admin/book/view/${id}`);
             notify("success", "Book detail successfully updated");
             setTimeout(() => {
                 for (const url of imageBlobURL) {
@@ -142,11 +142,11 @@ function EditBook() {
                 }
             }
             else if (response.status === 404) {
-                navigate("/books");
+                navigate("/admin/books");
                 notify("error", response.json.message);
             }
             else {
-                navigate("/books");
+                navigate("/admin/books");
                 notify("error", `${response.json.message}! Please try again...`);
             }
         }

@@ -20,7 +20,7 @@ function AdminSignin() {
         const response = await signinAdmin(data);
 
         if (response) {
-            navigate("/book/add");
+            navigate("/admin/book/add");
         } else {
             notify("error", "Wrong username or password. Try Again...")
         }
@@ -30,7 +30,7 @@ function AdminSignin() {
         setLoading(true);
         const response = await authenticateAdmin();
         if (response.status) {
-            navigate("/book/add");
+            navigate("/admin/book/add");
             setIsAdmin(true);
             setAccountDetail(response.json);
         }

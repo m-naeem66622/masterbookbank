@@ -41,10 +41,10 @@ function App() {
               <Route exact path="/user/account/edit" element={<EditUserAccount />} />
             </Route>
             <Route element={<AdminPrivateRoutes />}>
-              <Route exact path="/book/add" element={<AddBook />} />
-              <Route exact path="/books" element={<Books />} />
-              <Route exact path="/book/view/:id" element={<ViewBook />} />
-              <Route exact path="/book/edit/:id" element={<EditBook />} />
+              <Route exact path="/admin/book/add" element={<AddBook />} />
+              <Route exact path="/admin/books" element={<Books />} />
+              <Route exact path="/admin/book/view/:id" element={<ViewBook />} />
+              <Route exact path="/admin/book/edit/:id" element={<EditBook />} />
             </Route>
           </Routes>
         </div>

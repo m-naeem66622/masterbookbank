@@ -25,11 +25,11 @@ function ViewBook() {
                 const response = await deleteBook(id);
                 setRolling(false);
                 if (response.status === 200) {
-                    navigate("/books");
+                    navigate("/admin/books");
                     notify("success", response.json.message);
                 }
                 else if (response.status === 404) {
-                    navigate("/books");
+                    navigate("/admin/books");
                     notify("error", response.json.message);
                 }
                 else {
@@ -61,11 +61,11 @@ function ViewBook() {
                 }
             }
             else if (response.status === 404) {
-                navigate("/books");
+                navigate("/admin/books");
                 notify("error", response.json.message);
             }
             else {
-                navigate("/books");
+                navigate("/admin/books");
                 notify("error", `${response.json.message}! Please try again...`);
             }
         }
@@ -96,7 +96,7 @@ function ViewBook() {
                         <p><strong>Language:</strong> {book.language}</p>
                         <p><strong>Category:</strong> {book.category}</p>
                         <p><strong>Tags:</strong> {book.tags && book.tags.map((tag, index) => <span key={index} style={{ padding: "0 0.3em 0.2em 0.3em" }} className="rounded-pill me-1 text-dark bg-light">{tag}</span>)}</p>
-                        <Link className="btn btn-sm btn-primary" to={`/book/edit/${book._id}`}>Edit</Link>
+                        <Link className="btn btn-sm btn-primary" to={`/admin/book/edit/${book._id}`}>Edit</Link>
                         <button onClick={deleteBookHandle} className="btn btn-sm btn-primary mx-3">Delete</button>
                     </div>
                 </div>

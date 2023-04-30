@@ -46,10 +46,10 @@ function Navbar() {
                     <ul className="navbar-nav">
                         {isAdmin && <>
                             <li className="nav-item">
-                                <Link className={`nav-link ${path === "/book/add" ? "active" : ""}`} to="/book/add"> Home </Link>
+                                <Link className={`nav-link ${path === "/admin/book/add" ? "active" : ""}`} to="/admin/book/add"> Home </Link>
                             </li>
                             <li className="nav-item">
-                                <Link className={`nav-link ${path === "/books" ? "active" : ""}`} to="/books"> Books </Link>
+                                <Link className={`nav-link ${path === "/admin/books" ? "active" : ""}`} to="/admin/books"> Books </Link>
                             </li>
                             <li className="nav-item">
                                 <Link className={`nav-link ${path === "/orders" ? "active" : ""}`} to="/orders"> Orders </Link>

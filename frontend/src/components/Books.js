@@ -22,7 +22,7 @@ function Books() {
 
       if (response.status === 200) {
         if (response.json.length === 0) {
-          navigate("/book/add")
+          navigate("/admin/book/add")
           notify("warning", "No books found! Try to add.")
         } else {
           if (isMounted) {
@@ -68,7 +68,7 @@ function Books() {
                 <td>{book.publisher}</td>
                 <td className="text-center">{book.pages}</td>
                 <td>{book.language}</td>
-                <td><Link to={`/book/view/${book._id}`}>View</Link></td>
+                <td><Link to={`/admin/book/view/${book._id}`}>View</Link></td>
               </tr>
             )
           })}
