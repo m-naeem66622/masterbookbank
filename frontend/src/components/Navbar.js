@@ -1,14 +1,13 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useBooksContext } from "../provider/BookProvider";
 import cartIcon from '../assets/cart-shopping-solid.svg'
-import { authenticateAdmin, authenticateUser } from "../features/AuthFeatures";
 
 function Navbar() {
     const location = useLocation();
     const path = location.pathname
     const naviagte = useNavigate();
-    const { isAdmin, setIsAdmin, isUser, setIsUser, setRolling, setAccountDetail } = useBooksContext();
+    const { isAdmin, setIsAdmin, isUser, setIsUser } = useBooksContext();
 
     const handleLogoutOnClick = () => {
         localStorage.removeItem("authToken");
@@ -20,44 +19,6 @@ function Navbar() {
             naviagte("/");
         }
     }
-
-    const authenticate = async () => {
-        setRolling(true);
-        const response = await authenticateUser();
-        setRolling(false);
-        if (response.status) {
-            setIsUser(true);
-            setAccountDetail(response.json)
-            return true;
-        }
-
-        authenticateAgain();
-    }
-
-    const authenticateAgain = async () => {
-        setRolling(true);
-        const response = await authenticateAdmin();
-        setRolling(false);
-        if (response.status) {
-            setIsAdmin(true);
-            setAccountDetail(response.json)
-            return true;
-        }
-    }
-
-    useEffect(() => {
-        authenticate();
-
-        // eslint-disable-next-line
-    }, [])
-
-    // const handleSigninOnClick = () => {
-    //     if (isAdmin) {
-    //         naviagte("/admin/signin");
-    //     } else {
-    //         naviagte("/signin");
-    //     }
-    // }
 
     return (
         <nav className="navbar navbar-expand-lg bg-dark navbar-dark border-bottom border-white">
@@ -90,7 +51,7 @@ function Navbar() {
                     </ul>
                     <div>
                         <div>
-                            <Link to="/cart" className="me-3"><img width="30px" src={cartIcon} alt="cart-icon" /></Link>
+                            {!isAdmin && <Link to="/cart" className="me-3"><img width="30px" src={cartIcon} alt="cart-icon" /></Link>}
                             {isAdmin || isUser ?
                                 <>
                                     <Link to="/user/account" className="btn btn-primary me-2">Account</Link>

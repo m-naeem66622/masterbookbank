@@ -5,7 +5,7 @@ import { updateUser } from '../features/AuthFeatures'
 import Loader from './Loader';
 
 function EditUserAccount() {
-    const { notify, loading, accountDetail, setAccountDetail } = useBooksContext();
+    const { notify, loading, accountDetail } = useBooksContext();
     const navigate = useNavigate();
     const [isPasswordWillChange, setIsPasswordWillChange] = useState(false);
     // const [data, setData] = useState({ password: "", confirmPassword: "", oldPassword: "", phoneNumber:accountDetail.phoneNumber, shippingAddress: { address: accountDetail.address, city: accountDetail.city, postalCode: accountDetail.postalCode, country: accountDetail.country } });
@@ -38,26 +38,6 @@ function EditUserAccount() {
         }
     }
 
-    // const authenticate = async () => {
-    //     setLoading(true);
-    //     const response = await authenticateUser();
-    //     if (response.status) {
-    //         navigate(`/user/account/edit`);
-    //         setIsUser(true);
-    //         setAccountDetail(response.json);
-    //     }
-    //     // else {
-    //     //     navigate('/');
-    //     // }
-    //     setLoading(false);
-    // }
-
-
-    // useEffect(() => {
-    //     setData({ password: "", confirmPassword: "", oldPassword: "", shippingAddress: { address: accountDetail.address, city: accountDetail.city, postalCode: accountDetail.postalCode, country: accountDetail.country } });
-
-    //     // eslint-disable-next-line
-    // }, [accountDetail])
     return (
         <main className="form-signin w-50 m-auto">
             {loading ?

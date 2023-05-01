@@ -1,5 +1,6 @@
-import React, { useContext, createContext, useState } from "react";
+import React, { useContext, createContext, useState, useEffect } from "react";
 import { toast } from "react-toastify";
+import { authenticateAdmin, authenticateUser } from "../features/AuthFeatures";
 const BookContext = createContext();
 
 const BookProvider = (props) => {
@@ -18,6 +19,36 @@ const BookProvider = (props) => {
             position: toast.POSITION.TOP_RIGHT
         })
     };
+
+    const authenticate = async () => {
+        setRolling(true);
+        const response = await authenticateUser();
+        setRolling(false);
+        if (response.status) {
+            setIsUser(true);
+            setAccountDetail(response.json)
+            return true;
+        }
+
+        authenticateAgain();
+    }
+
+    const authenticateAgain = async () => {
+        setRolling(true);
+        const response = await authenticateAdmin();
+        setRolling(false);
+        if (response.status) {
+            setIsAdmin(true);
+            setAccountDetail(response.json)
+            return true;
+        }
+    }
+
+    useEffect(() => {
+        authenticate();
+
+        // eslint-disable-next-line
+    }, [])
 
     return (
         <BookContext.Provider value={{ notify, loading, setLoading, rolling, setRolling, accountDetail, setAccountDetail, isAdmin, setIsAdmin, isUser, setIsUser, books, setBooks }}>
