@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useBooksContext } from "../provider/BookProvider";
-import cartIcon from '../assets/cart-plus-solid.svg'
+import cartIcon from '../assets/cart-shopping-solid.svg'
 import { authenticateAdmin, authenticateUser } from "../features/AuthFeatures";
 
 function Navbar() {
@@ -89,17 +89,19 @@ function Navbar() {
                         </>}
                     </ul>
                     <div>
-                        {isAdmin || isUser ?
-                            <div>
-                                <Link to="/cart" className="me-3"><img width="30px" src={cartIcon} alt="cart-icon" /></Link>
-                                <Link to="/user/account" className="btn btn-primary me-2">Account</Link>
-                                <button onClick={handleLogoutOnClick} className="btn btn-primary">Logout</button>
-                            </div> :
-                            <div>
-                                {path !== "/signin" && <Link to="/signin" className="btn btn-primary">Signin</Link>}
-                                {path !== "/signup" && <Link to="/signup" className="btn btn-primary ms-2">Signup</Link>}
-                            </div>
-                        }
+                        <div>
+                            <Link to="/cart" className="me-3"><img width="30px" src={cartIcon} alt="cart-icon" /></Link>
+                            {isAdmin || isUser ?
+                                <>
+                                    <Link to="/user/account" className="btn btn-primary me-2">Account</Link>
+                                    <button onClick={handleLogoutOnClick} className="btn btn-primary">Logout</button>
+                                </> :
+                                <>
+                                    {path !== "/signin" && <Link to="/signin" className="btn btn-primary">Signin</Link>}
+                                    {path !== "/signup" && <Link to="/signup" className="btn btn-primary ms-2">Signup</Link>}
+                                </>
+                            }
+                        </div>
                     </div>
                 </div>
             </div>

@@ -23,8 +23,8 @@ function BookCard(props) {
                 </div>
                 <div className="card-footer">
                     <div className="d-flex justify-content-between">
-                        <Link href="#" className="btn btn-primary btn-sm d-inline-flex justify-content-center align-items-center"><img width="20px" src={cartIcon} alt="cart-icon" /><span className='ms-1'>Add to Cart</span></Link>
-                        <Link href="#" className="btn btn-primary btn-sm d-inline-flex justify-content-center align-items-center"><img width="16px" src={buyIcon} alt="buy-icon" /><span className='ms-1'>Buy Now</span></Link>
+                        <Link href="#" className="btn btn-primary btn-sm d-inline-flex justify-content-center align-items-center"><img width="20px" src={cartIcon} alt="cart-icon" /><span className='ms-2'>Add</span></Link>
+                        <Link href="#" className="btn btn-primary btn-sm d-inline-flex justify-content-center align-items-center"><img width="16px" src={buyIcon} alt="buy-icon" /><span className='ms-2'>Buy Now</span></Link>
                     </div>
                 </div>
             </div>
