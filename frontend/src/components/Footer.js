@@ -28,12 +28,12 @@ function Footer() {
 
                 <ul className="nav col-md-6 justify-content-end list-unstyled d-flex">
                     <li className="ms-3">
-                        <a className="text-light" target="_blank" rel="noreferrer" href="https://www.facebook.com/masterbookbank">
+                        <a className="text-light" target="_blank" rel="noreferrer" href="https://www.facebook.com/">
                             <svg className="bi flex-shrink-0" role="img"><use xlinkHref="#facebook-icon" /></svg>
                         </a>
                     </li>
                     <li className="ms-3">
-                        <a className="text-light" target="_blank" rel="noreferrer" href="https://www.instagram.com/masterbookbank">
+                        <a className="text-light" target="_blank" rel="noreferrer" href="https://www.instagram.com">
                             <svg className="bi flex-shrink-0" role="img"><use xlinkHref="#instagram-icon" /></svg>
                         </a>
                     </li>
@@ -43,7 +43,7 @@ function Footer() {
                         </a>
                     </li>
                     <li className="ms-3">
-                        <a className="text-light" target="_blank" rel="noreferrer" href="https://api.whatsapp.com/send/?phone=923420464626">
+                        <a className="text-light" target="_blank" rel="noreferrer" href="https://api.whatsapp.com">
                             <svg className="bi flex-shrink-0" role="img"><use xlinkHref="#whatsapp-icon" /></svg>
                         </a>
                     </li>
