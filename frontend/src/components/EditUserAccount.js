@@ -8,7 +8,6 @@ function EditUserAccount() {
     const { notify, loading, accountDetail } = useBooksContext();
     const navigate = useNavigate();
     const [isPasswordWillChange, setIsPasswordWillChange] = useState(false);
-    // const [data, setData] = useState({ password: "", confirmPassword: "", oldPassword: "", phoneNumber:accountDetail.phoneNumber, shippingAddress: { address: accountDetail.address, city: accountDetail.city, postalCode: accountDetail.postalCode, country: accountDetail.country } });
     const [data, setData] = useState({ ...accountDetail, oldPassword: "", password: "", confirmPassword: "" })
 
 

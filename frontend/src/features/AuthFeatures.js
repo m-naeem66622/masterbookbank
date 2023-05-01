@@ -1,5 +1,4 @@
-// const host = process.env.REACT_APP_SERVER_HOST;
-const host = "http://localhost:5000";
+const host = process.env.REACT_APP_SERVER_HOST;
 
 export const signinAdmin = async (data) => {
     console.log(host);

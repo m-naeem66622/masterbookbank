@@ -4,7 +4,7 @@ import cartIcon from '../assets/cart-plus-solid.svg'
 import buyIcon from '../assets/bag-shopping-solid.svg'
 
 function BookCard(props) {
-    const host = "http://127.0.0.1:5000/"
+    const host = process.env.REACT_APP_SERVER_HOST;
     const { title, authors, price, images } = props.book;
 
     return (
@@ -12,7 +12,7 @@ function BookCard(props) {
             <div className="card h-100 pt-3" style={{ width: "250px" }}>
                 <div className='d-flex justify-content-center align-items-center'>
                     <div className="position-relative">
-                        <img src={host + images[0]} className="card-img-top w-auto rounded-0  border border-white border-4" style={{ maxHeight: "275px", maxWidth: "210px", filter: "drop-shadow(0px 10px 10px rgba(0,0,0,.6))" }} alt="Book Cover" />
+                        <img src={`${host}/${images[0]}`} className="card-img-top w-auto rounded-0  border border-white border-4" style={{ maxHeight: "275px", maxWidth: "210px", filter: "drop-shadow(0px 10px 10px rgba(0,0,0,.6))" }} alt="Book Cover" />
                         <span className="position-absolute badge rounded-circle bg-danger d-flex justify-content-center align-items-center flex-column fs-normal" style={{ width: "40px", height: "40px", right: "-10px", top: "-10px" }}><span>70%</span><span>Off</span></span>
                     </div>
                 </div>

@@ -1,8 +1,7 @@
 import React, { useRef, useState, useEffect } from 'react'
 
 function ImagePreview(props) {
-    const host = "http://localhost:5000";
-    // const host = process.env.REACT_APP_SERVER_HOST;
+    const host = process.env.REACT_APP_SERVER_HOST;
 
     const { files, getImagesBlobURL, deleteFile, edit } = props;
     const [index, setIndex] = useState(0);
