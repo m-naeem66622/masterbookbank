@@ -1,12 +1,14 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useBooksContext } from "../provider/BookProvider";
+import cartIcon from '../assets/cart-plus-solid.svg'
+import { authenticateAdmin, authenticateUser } from "../features/AuthFeatures";
 
 function Navbar() {
     const location = useLocation();
     const path = location.pathname
     const naviagte = useNavigate();
-    const { isAdmin, setIsAdmin, isUser, setIsUser } = useBooksContext();
+    const { isAdmin, setIsAdmin, isUser, setIsUser, setRolling, setAccountDetail } = useBooksContext();
 
     const handleLogoutOnClick = () => {
         localStorage.removeItem("authToken");
@@ -19,6 +21,36 @@ function Navbar() {
         }
     }
 
+    const authenticate = async () => {
+        setRolling(true);
+        const response = await authenticateUser();
+        setRolling(false);
+        if (response.status) {
+            setIsUser(true);
+            setAccountDetail(response.json)
+            return true;
+        }
+
+        authenticateAgain();
+    }
+
+    const authenticateAgain = async () => {
+        setRolling(true);
+        const response = await authenticateAdmin();
+        setRolling(false);
+        if (response.status) {
+            setIsAdmin(true);
+            setAccountDetail(response.json)
+            return true;
+        }
+    }
+
+    useEffect(() => {
+        authenticate();
+
+        // eslint-disable-next-line
+    }, [])
+
     // const handleSigninOnClick = () => {
     //     if (isAdmin) {
     //         naviagte("/admin/signin");
@@ -30,7 +62,7 @@ function Navbar() {
     return (
         <nav className="navbar navbar-expand-lg bg-dark navbar-dark border-bottom border-white">
             <div className="container-fluid">
-                <Link className="navbar-brand" to={isAdmin ? '/admin/signin' : '/'}>Master Book Bank</Link>
+                <Link className="navbar-brand" to={isAdmin ? '/admin/book/add' : '/'}>Master Book Bank</Link>
                 <button
                     className="navbar-toggler"
                     type="button"
@@ -56,16 +88,19 @@ function Navbar() {
                             </li>
                         </>}
                     </ul>
-                    {isAdmin || isUser ?
-                        <div>
-                            <Link to="/user/account" className="btn btn-primary me-2">Account</Link>
-                            <button onClick={handleLogoutOnClick} className="btn btn-primary">Logout</button>
-                        </div> :
-                        <div>
-                            {path !== "/signin" && <Link to="/signin" className="btn btn-primary">Signin</Link>}
-                            {path !== "/signup" && <Link to="/signup" className="btn btn-primary ms-2">Signup</Link>}
-                        </div>
-                    }
+                    <div>
+                        {isAdmin || isUser ?
+                            <div>
+                                <Link to="/cart" className="me-3"><img width="30px" src={cartIcon} alt="cart-icon" /></Link>
+                                <Link to="/user/account" className="btn btn-primary me-2">Account</Link>
+                                <button onClick={handleLogoutOnClick} className="btn btn-primary">Logout</button>
+                            </div> :
+                            <div>
+                                {path !== "/signin" && <Link to="/signin" className="btn btn-primary">Signin</Link>}
+                                {path !== "/signup" && <Link to="/signup" className="btn btn-primary ms-2">Signup</Link>}
+                            </div>
+                        }
+                    </div>
                 </div>
             </div>
         </nav>

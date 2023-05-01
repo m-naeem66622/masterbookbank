@@ -1,11 +1,11 @@
 import React, { useEffect } from 'react'
 import { useBooksContext } from '../provider/BookProvider';
 import { Outlet } from 'react-router-dom';
-import { authenticateUser } from '../features/AuthFeatures';
+import { authenticateAdmin, authenticateUser } from '../features/AuthFeatures';
 import Loader from './Loader';
 
 function IsLoggedin() {
-    const { rolling, setRolling, setIsUser, isUser, setAccountDetail } = useBooksContext();
+    const { rolling, setRolling, setIsUser, isUser, setIsAdmin, isAdmin, setAccountDetail } = useBooksContext();
     const Loading = <Loader />;
 
     const authenticate = async () => {
@@ -14,6 +14,19 @@ function IsLoggedin() {
         setRolling(false);
         if (response.status) {
             setIsUser(true);
+            setAccountDetail(response.json)
+            return true;
+        }
+        authenticateAgain();
+        return false;
+    }
+
+    const authenticateAgain = async () => {
+        setRolling(true);
+        const response = await authenticateAdmin();
+        setRolling(false);
+        if (response.status) {
+            setIsAdmin(true);
             setAccountDetail(response.json)
             return true;
         }
@@ -28,7 +41,7 @@ function IsLoggedin() {
 
     return (
         <>
-            {isUser ? <Outlet /> : rolling ? Loading : isUser ? <Outlet /> : <Outlet />}
+            {isUser||isAdmin ? <Outlet /> : rolling ? Loading : isUser ? <Outlet /> : <Outlet />}
         </>
     )
 }

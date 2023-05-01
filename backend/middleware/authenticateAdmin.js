@@ -17,7 +17,6 @@ const authenticateAdmin = async (req, res, next) => {
         const data = jwt.verify(authToken, JWT_SECRET);
 
         const admin = await Admin.findById(data.admin.id);
-        console.log(admin)
         if (!admin) {
             return res.status(401).send({ message: "Access denied 0x000f2" });
         }
