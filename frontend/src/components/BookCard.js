@@ -2,6 +2,7 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 import cartIcon from '../assets/cart-plus-solid.svg'
 import buyIcon from '../assets/bag-shopping-solid.svg'
+import '../styles/style.css'
 
 function BookCard(props) {
     const host = "http://127.0.0.1:5000/"
