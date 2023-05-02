@@ -10,6 +10,7 @@ const BookProvider = (props) => {
     const [isUser, setIsUser] = useState(false);
     const [accountDetail, setAccountDetail] = useState({});
     const [books, setBooks] = useState([]);
+    const [cart, setCart] = useState({});
 
     // Show Push Notification
     const notify = (type, message) => {
@@ -46,12 +47,19 @@ const BookProvider = (props) => {
 
     useEffect(() => {
         authenticate();
+        const cartItems = localStorage.getItem("cartItems");
+        if (cartItems) {
+            const parseData = JSON.parse(cartItems);
+            if (typeof (parseData) === "object" && Object.keys(parseData).length) {
+                setCart(parseData);
+            }
+        }
 
         // eslint-disable-next-line
     }, [])
 
     return (
-        <BookContext.Provider value={{ notify, loading, setLoading, rolling, setRolling, accountDetail, setAccountDetail, isAdmin, setIsAdmin, isUser, setIsUser, books, setBooks }}>
+        <BookContext.Provider value={{ notify, loading, setLoading, rolling, setRolling, accountDetail, setAccountDetail, isAdmin, setIsAdmin, isUser, setIsUser, books, setBooks, cart, setCart }}>
             {props.children}
         </BookContext.Provider>
     )

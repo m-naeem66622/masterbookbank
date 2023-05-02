@@ -7,7 +7,7 @@ function Navbar() {
     const location = useLocation();
     const path = location.pathname
     const naviagte = useNavigate();
-    const { isAdmin, setIsAdmin, isUser, setIsUser } = useBooksContext();
+    const { isAdmin, setIsAdmin, isUser, setIsUser, cart } = useBooksContext();
 
     const handleLogoutOnClick = () => {
         localStorage.removeItem("authToken");
@@ -21,7 +21,7 @@ function Navbar() {
     }
 
     return (
-        <nav className="navbar navbar-expand-lg bg-dark navbar-dark border-bottom border-white">
+        <nav className="navbar sticky-top navbar-expand-lg bg-dark navbar-dark border-bottom border-white">
             <div className="container-fluid">
                 <Link className="navbar-brand" to={isAdmin ? '/admin/book/add' : '/'}>Master Book Bank</Link>
                 <button
@@ -51,7 +51,10 @@ function Navbar() {
                     </ul>
                     <div>
                         <div>
-                            {!isAdmin && <Link to="/cart" className="me-3"><img width="30px" src={cartIcon} alt="cart-icon" /></Link>}
+                            {!isAdmin && <Link to="/cart" className="me-3 position-relative">
+                                <img width="28px" src={cartIcon} alt="cart-icon" />
+                                {Object.keys(cart).length > 0 && <span className="position-absolute top-0 start-100 translate-middle badge rounded-circle bg-danger d-flex justify-content-center align-items-center" style={{ width: "20px", height: "20px" }}>{Object.keys(cart).length}</span>}
+                            </Link>}
                             {isAdmin || isUser ?
                                 <>
                                     <Link to="/user/account" className="btn btn-primary me-2">Account</Link>
