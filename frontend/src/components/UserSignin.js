@@ -2,11 +2,11 @@ import React, { useEffect, useState } from 'react'
 import Logo from '../assets/logo.png'
 import { useBooksContext } from '../provider/BookProvider';
 import { Link, useNavigate } from 'react-router-dom';
-import { authenticateUser, signinUser } from '../features/AuthFeatures'
+import { signinUser } from '../features/AuthFeatures'
 import Loader from './Loader';
 
 function UserSignin() {
-    const { notify, setIsUser, loading, setLoading, setAccountDetail } = useBooksContext();
+    const { notify, isUser, loading } = useBooksContext();
     const navigate = useNavigate();
     const [data, setData] = useState({ email: "", password: "" });
 
@@ -18,7 +18,6 @@ function UserSignin() {
         e.preventDefault();
 
         const response = await signinUser(data);
-        console.log(response);
 
         if (response) {
             navigate("/");
@@ -27,26 +26,13 @@ function UserSignin() {
         }
     }
 
-    const authenticate = async () => {
-        setLoading(true);
-        const response = await authenticateUser();
-        if (response.status) {
-            navigate(`/user/account`);
-            setIsUser(true);
-            setAccountDetail(response.json);
-        }
-        // else {
-        //     navigate('/');
-        // }
-        setLoading(false);
-    }
-
-
     useEffect(() => {
-        authenticate();
+        if (isUser) {
+            navigate("/");
+        }
 
         // eslint-disable-next-line
-    }, [])
+    }, [isUser])
 
     return (
         <main className="form-signin w-50 m-auto">

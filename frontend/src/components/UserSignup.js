@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react'
 import { useBooksContext } from '../provider/BookProvider';
 import { Link, useNavigate } from 'react-router-dom';
-import { authenticateUser, signupUser } from '../features/AuthFeatures'
+import { signupUser } from '../features/AuthFeatures'
 import Loader from './Loader';
 
 function UserSignup() {
-    const { notify, setIsUser, loading, setLoading, setAccountDetail } = useBooksContext();
+    const { notify, setIsUser, isUser, loading } = useBooksContext();
     const navigate = useNavigate();
     const [data, setData] = useState({ name: "", email: "", password: "", confirmPassword: "", shippingAddress: { address: "", city: "", postalCode: "", country: "" } });
 
@@ -22,8 +22,7 @@ function UserSignup() {
     const handleOnSubmit = async (e) => {
         e.preventDefault();
 
-        const {json,status} = await signupUser(data);
-        // console.log(response);
+        const { json, status } = await signupUser(data);
 
         if (status === 200) {
             localStorage.setItem("authToken", json.authToken);
@@ -37,26 +36,13 @@ function UserSignup() {
         }
     }
 
-    const authenticate = async () => {
-        setLoading(true);
-        const response = await authenticateUser();
-        if (response.status) {
-            navigate(`/user/account`);
-            setIsUser(true);
-            setAccountDetail(response.json);
-        }
-        // else {
-        //     navigate('/');
-        // }
-        setLoading(false);
-    }
-
-
     useEffect(() => {
-        authenticate();
+        if (isUser) {
+            navigate("/");
+        }
 
         // eslint-disable-next-line
-    }, [])
+    }, [isUser])
 
     return (
         <main className="form-signin w-50 m-auto">

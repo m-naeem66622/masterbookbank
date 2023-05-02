@@ -11,7 +11,6 @@ function Home() {
 
         if (data.status === 200) {
             setBooks(data.json);
-            console.log(data.json);
         }
     }
 

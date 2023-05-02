@@ -2,11 +2,11 @@ import React, { useEffect, useState } from 'react'
 import Logo from '../assets/logo.png'
 import { useBooksContext } from '../provider/BookProvider';
 import { useNavigate } from 'react-router-dom';
-import { authenticateAdmin, signinAdmin } from '../features/AuthFeatures'
+import { signinAdmin } from '../features/AuthFeatures'
 import Loader from './Loader';
 
 function AdminSignin() {
-    const { notify, setIsAdmin, loading, setLoading, setAccountDetail } = useBooksContext();
+    const { notify, isAdmin, loading } = useBooksContext();
     const navigate = useNavigate();
     const [data, setData] = useState({ username: "", password: "" });
 
@@ -26,26 +26,13 @@ function AdminSignin() {
         }
     }
 
-    const authenticate = async () => {
-        setLoading(true);
-        const response = await authenticateAdmin();
-        if (response.status) {
-            navigate("/admin/book/add");
-            setIsAdmin(true);
-            setAccountDetail(response.json);
-        }
-        else {
-            navigate("/admin/signin");
-        }
-        setLoading(false);
-    }
-
-
     useEffect(() => {
-        authenticate();
+        if (isAdmin) {
+            navigate("/admin/book/add");
+        }
 
         // eslint-disable-next-line
-    }, [])
+    }, [isAdmin])
 
     return (
         <main className="form-signin w-50 m-auto">

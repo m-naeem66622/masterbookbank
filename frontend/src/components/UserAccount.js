@@ -40,6 +40,14 @@ function UserAccount() {
                                 <th scope="row">Address:</th>
                                 <td>{accountDetail.shippingAddress.address}</td>
                             </tr>
+                            <tr>
+                                <th scope="row">Created At:</th>
+                                <td>{new Date(accountDetail.createdAt).toString()}</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Updated At:</th>
+                                <td>{new Date(accountDetail.updatedAt).toString()}</td>
+                            </tr>
                         </tbody>
                     </table>
                     <Link to='/user/account/edit' className='btn btn-primary'>Edit</Link>

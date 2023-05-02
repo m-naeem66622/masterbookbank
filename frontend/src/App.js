@@ -14,11 +14,11 @@ import AdminPrivateRoutes from './components/AdminPrivateRoutes';
 import Page404 from './components/Page404';
 import UserSignin from './components/UserSignin';
 import AddBook from './components/AddBook';
-import IsLoggedin from './components/IsLoggedin';
 import UserPrivateRoutes from './components/UserPrivateRoutes';
-import Account from './components/UserAccount';
+import UserAccount from './components/UserAccount';
 import UserSignup from './components/UserSignup';
 import EditUserAccount from './components/EditUserAccount';
+import AdminAccount from './components/AdminAccount';
 
 
 function App() {
@@ -33,14 +33,13 @@ function App() {
             <Route exact path="/admin/signin" element={<AdminSignin />} />
             <Route exact path="/signin" element={<UserSignin />} />
             <Route exact path="/signup" element={<UserSignup />} />
-            <Route element={<IsLoggedin />}>
-              <Route exact path="/" element={<Home />} />
-            </Route>
+            <Route exact path="/" element={<Home />} />
             <Route element={<UserPrivateRoutes />}>
-              <Route exact path="/user/account" element={<Account />} />
+              <Route exact path="/user/account" element={<UserAccount />} />
               <Route exact path="/user/account/edit" element={<EditUserAccount />} />
             </Route>
             <Route element={<AdminPrivateRoutes />}>
+              <Route exact path="/admin/account" element={<AdminAccount />} />
               <Route exact path="/admin/book/add" element={<AddBook />} />
               <Route exact path="/admin/books" element={<Books />} />
               <Route exact path="/admin/book/view/:id" element={<ViewBook />} />

@@ -1,12 +1,13 @@
 import React from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useBooksContext } from "../provider/BookProvider";
+import cartIcon from '../assets/cart-shopping-solid.svg'
 
 function Navbar() {
     const location = useLocation();
     const path = location.pathname
     const naviagte = useNavigate();
-    const { isAdmin, setIsAdmin, isUser, setIsUser } = useBooksContext();
+    const { isAdmin, setIsAdmin, isUser, setIsUser, cart } = useBooksContext();
 
     const handleLogoutOnClick = () => {
         localStorage.removeItem("authToken");
@@ -19,18 +20,10 @@ function Navbar() {
         }
     }
 
-    // const handleSigninOnClick = () => {
-    //     if (isAdmin) {
-    //         naviagte("/admin/signin");
-    //     } else {
-    //         naviagte("/signin");
-    //     }
-    // }
-
     return (
-        <nav className="navbar navbar-expand-lg bg-dark navbar-dark border-bottom border-white">
+        <nav className="navbar sticky-top navbar-expand-lg bg-dark navbar-dark border-bottom border-white">
             <div className="container-fluid">
-                <Link className="navbar-brand" to={isAdmin ? '/admin/signin' : '/'}>Master Book Bank</Link>
+                <Link className="navbar-brand" to={isAdmin ? '/admin/book/add' : '/'}>Master Book Bank</Link>
                 <button
                     className="navbar-toggler"
                     type="button"
@@ -56,16 +49,24 @@ function Navbar() {
                             </li>
                         </>}
                     </ul>
-                    {isAdmin || isUser ?
+                    <div>
                         <div>
-                            <Link to="/user/account" className="btn btn-primary me-2">Account</Link>
-                            <button onClick={handleLogoutOnClick} className="btn btn-primary">Logout</button>
-                        </div> :
-                        <div>
-                            {path !== "/signin" && <Link to="/signin" className="btn btn-primary">Signin</Link>}
-                            {path !== "/signup" && <Link to="/signup" className="btn btn-primary ms-2">Signup</Link>}
+                            {!isAdmin && <Link to="/cart" className="me-3 position-relative">
+                                <img width="28px" src={cartIcon} alt="cart-icon" />
+                                {Object.keys(cart).length > 0 && <span className="position-absolute top-0 start-100 translate-middle badge rounded-circle bg-danger d-flex justify-content-center align-items-center" style={{ width: "20px", height: "20px" }}>{Object.keys(cart).length}</span>}
+                            </Link>}
+                            {isAdmin || isUser ?
+                                <>
+                                    <Link to="/user/account" className="btn btn-primary me-2">Account</Link>
+                                    <button onClick={handleLogoutOnClick} className="btn btn-primary">Logout</button>
+                                </> :
+                                <>
+                                    {path !== "/signin" && <Link to="/signin" className="btn btn-primary">Signin</Link>}
+                                    {path !== "/signup" && <Link to="/signup" className="btn btn-primary ms-2">Signup</Link>}
+                                </>
+                            }
                         </div>
-                    }
+                    </div>
                 </div>
             </div>
         </nav>
