@@ -4,33 +4,33 @@ const host = process.env.REACT_APP_SERVER_HOST;
 export const fetchBooks = async () => {
     const url = `${host}/api/book/fetchAll`;
     const options = {
-        method: "GET"
+        method: "GET",
     };
     const response = await fetch(url, options);
     const json = await response.json();
 
     const obj = {
         status: response.status,
-        json
-    }
+        json,
+    };
     return obj;
-}
+};
 
 // Fetch Book
 export const fetchBook = async (bookID) => {
     const url = `${host}/api/book/fetch/${bookID}`;
     const options = {
-        method: "GET"
+        method: "GET",
     };
     const response = await fetch(url, options);
     const json = await response.json();
 
     const obj = {
         status: response.status,
-        json
-    }
+        json,
+    };
     return obj;
-}
+};
 
 // Prepare Form to send
 const prepareForm = (book, files) => {
@@ -39,9 +39,25 @@ const prepareForm = (book, files) => {
     book.tags = book.tags.toString();
     book.categories = book.categories.toString();
 
-    book.authors = book.authors.split(/[,]/).map(word => word.replace(/[^a-zA-Z0-9-\s]+/g, '').trim().replace(/\s*-\s*/g, '-')).filter(Boolean);
-    book.tags = book.tags.split(/[^\w']+/).filter(Boolean)
-    book.categories = book.categories.split(/[,]/).map(word => word.replace(/[^a-zA-Z0-9-\s]+/g, '').trim().replace(/\s*-\s*/g, '-')).filter(Boolean);
+    book.authors = book.authors
+        .split(/[,]/)
+        .map((word) =>
+            word
+                .replace(/[^a-zA-Z0-9-\s]+/g, "")
+                .trim()
+                .replace(/\s*-\s*/g, "-")
+        )
+        .filter(Boolean);
+    book.tags = book.tags.split(/[^\w']+/).filter(Boolean);
+    book.categories = book.categories
+        .split(/[,]/)
+        .map((word) =>
+            word
+                .replace(/[^a-zA-Z0-9-\s]+/g, "")
+                .trim()
+                .replace(/\s*-\s*/g, "-")
+        )
+        .filter(Boolean);
 
     // Creating Form
     let formData = new FormData();
@@ -64,7 +80,7 @@ const prepareForm = (book, files) => {
         formData.append("images", files[i]);
     }
     return formData;
-}
+};
 
 // Add Book
 export const addBook = async (book, blob) => {
@@ -73,18 +89,18 @@ export const addBook = async (book, blob) => {
         method: "POST",
         body: prepareForm(book, blob),
         headers: {
-            authToken: localStorage.getItem("authToken")
-        }
+            authToken: localStorage.getItem("authToken"),
+        },
     };
     const response = await fetch(url, options);
     const json = await response.json();
 
     const obj = {
         status: response.status,
-        json
-    }
+        json,
+    };
     return obj;
-}
+};
 
 // Update Book
 export const updateBook = async (book, blob, files) => {
@@ -93,33 +109,34 @@ export const updateBook = async (book, blob, files) => {
         method: "PUT",
         body: prepareForm(book, blob),
         headers: {
-            authToken: localStorage.getItem("authToken")
-        }
+            authToken: localStorage.getItem("authToken"),
+        },
     };
     const response = await fetch(url, options);
     const json = await response.json();
 
     const obj = {
         status: response.status,
-        json
-    }
+        json,
+    };
     return obj;
-}
+};
 
 // Delete Book
 export const deleteBook = async (bookID) => {
-    const url = `${host}/api/book/delete/${bookID}`
+    const url = `${host}/api/book/delete/${bookID}`;
     const options = {
-        method: "DELETE", headers: {
-            authToken: localStorage.getItem("authToken")
-        }
-    }
+        method: "DELETE",
+        headers: {
+            authToken: localStorage.getItem("authToken"),
+        },
+    };
     const response = await fetch(url, options);
     const json = await response.json();
 
     const obj = {
         status: response.status,
-        json
-    }
+        json,
+    };
     return obj;
-}
+};

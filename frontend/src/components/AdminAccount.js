@@ -1,5 +1,5 @@
-import React from 'react'
-import { useBooksContext } from '../provider/BookProvider'
+import React from "react";
+import { useBooksContext } from "../provider/BookProvider";
 
 function AdminAccount() {
     const { accountDetail } = useBooksContext();
@@ -21,14 +21,18 @@ function AdminAccount() {
                             </tr>
                             <tr>
                                 <th scope="row">Created At:</th>
-                                <td>{new Date(accountDetail.createdAt).toString()}</td>
+                                <td>
+                                    {new Date(
+                                        accountDetail.createdAt
+                                    ).toString()}
+                                </td>
                             </tr>
                         </tbody>
                     </table>
                 </div>
             </div>
         </>
-    )
+    );
 }
 
-export default AdminAccount
+export default AdminAccount;

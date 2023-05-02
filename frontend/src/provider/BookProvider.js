@@ -17,8 +17,8 @@ const BookProvider = (props) => {
         toast(message, {
             type,
             theme: "dark",
-            position: toast.POSITION.TOP_RIGHT
-        })
+            position: toast.POSITION.TOP_RIGHT,
+        });
     };
 
     const authenticate = async () => {
@@ -27,12 +27,12 @@ const BookProvider = (props) => {
         setRolling(false);
         if (response.status) {
             setIsUser(true);
-            setAccountDetail(response.json)
+            setAccountDetail(response.json);
             return true;
         }
 
         authenticateAgain();
-    }
+    };
 
     const authenticateAgain = async () => {
         setRolling(true);
@@ -40,31 +40,52 @@ const BookProvider = (props) => {
         setRolling(false);
         if (response.status) {
             setIsAdmin(true);
-            setAccountDetail(response.json)
+            setAccountDetail(response.json);
             return true;
         }
-    }
+    };
 
     useEffect(() => {
         authenticate();
         const cartItems = localStorage.getItem("cartItems");
         if (cartItems) {
             const parseData = JSON.parse(cartItems);
-            if (typeof (parseData) === "object" && Object.keys(parseData).length) {
+            if (
+                typeof parseData === "object" &&
+                Object.keys(parseData).length
+            ) {
                 setCart(parseData);
             }
         }
 
         // eslint-disable-next-line
-    }, [])
+    }, []);
 
     return (
-        <BookContext.Provider value={{ notify, loading, setLoading, rolling, setRolling, accountDetail, setAccountDetail, isAdmin, setIsAdmin, isUser, setIsUser, books, setBooks, cart, setCart }}>
+        <BookContext.Provider
+            value={{
+                notify,
+                loading,
+                setLoading,
+                rolling,
+                setRolling,
+                accountDetail,
+                setAccountDetail,
+                isAdmin,
+                setIsAdmin,
+                isUser,
+                setIsUser,
+                books,
+                setBooks,
+                cart,
+                setCart,
+            }}
+        >
             {props.children}
         </BookContext.Provider>
-    )
-}
+    );
+};
 
-export const useBooksContext = () => useContext(BookContext)
+export const useBooksContext = () => useContext(BookContext);
 
 export default BookProvider;

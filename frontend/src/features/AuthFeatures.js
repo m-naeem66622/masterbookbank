@@ -6,13 +6,13 @@ export const signinAdmin = async (data) => {
     const options = {
         method: "POST",
         headers: {
-            "Content-Type": "application/json"
+            "Content-Type": "application/json",
         },
-        body: JSON.stringify(data)
-    }
+        body: JSON.stringify(data),
+    };
 
     const response = await fetch(url, options);
-    console.log(response)
+    console.log(response);
     if (response.status === 200) {
         const json = await response.json();
         localStorage.setItem("authToken", json.authToken);
@@ -20,7 +20,7 @@ export const signinAdmin = async (data) => {
     }
 
     return false;
-}
+};
 
 export const authenticateAdmin = async () => {
     if (localStorage.getItem("authToken")) {
@@ -28,9 +28,9 @@ export const authenticateAdmin = async () => {
         const options = {
             method: "POST",
             headers: {
-                authToken: localStorage.getItem("authToken")
-            }
-        }
+                authToken: localStorage.getItem("authToken"),
+            },
+        };
         const response = await fetch(url, options);
 
         if (response.status === 200) {
@@ -40,23 +40,23 @@ export const authenticateAdmin = async () => {
     }
 
     return { status: false };
-}
+};
 
 export const signupUser = async (data) => {
     const url = `${host}/api/auth/user/signup`;
     const options = {
         method: "POST",
         headers: {
-            "Content-Type": "application/json"
+            "Content-Type": "application/json",
         },
-        body: JSON.stringify(data)
-    }
+        body: JSON.stringify(data),
+    };
 
     const response = await fetch(url, options);
     const json = await response.json();
 
     return { json, status: response.status };
-}
+};
 
 export const updateUser = async (data) => {
     const url = `${host}/api/auth/user/update`;
@@ -64,26 +64,26 @@ export const updateUser = async (data) => {
         method: "PUT",
         headers: {
             authToken: localStorage.getItem("authToken"),
-            "Content-Type": "application/json"
+            "Content-Type": "application/json",
         },
-        body: JSON.stringify(data)
-    }
+        body: JSON.stringify(data),
+    };
 
     const response = await fetch(url, options);
     const json = await response.json();
 
     return { json, status: response.status };
-}
+};
 
 export const signinUser = async (data) => {
     const url = `${host}/api/auth/user/signin`;
     const options = {
         method: "POST",
         headers: {
-            "Content-Type": "application/json"
+            "Content-Type": "application/json",
         },
-        body: JSON.stringify(data)
-    }
+        body: JSON.stringify(data),
+    };
 
     const response = await fetch(url, options);
 
@@ -94,7 +94,7 @@ export const signinUser = async (data) => {
     }
 
     return false;
-}
+};
 
 export const authenticateUser = async () => {
     if (localStorage.getItem("authToken")) {
@@ -102,9 +102,9 @@ export const authenticateUser = async () => {
         const options = {
             method: "POST",
             headers: {
-                authToken: localStorage.getItem("authToken")
-            }
-        }
+                authToken: localStorage.getItem("authToken"),
+            },
+        };
         const response = await fetch(url, options);
         if (response.status === 200) {
             const json = await response.json();
@@ -113,4 +113,4 @@ export const authenticateUser = async () => {
     }
 
     return { status: false };
-}
+};

@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from 'react'
-import Logo from '../assets/logo.png'
-import { useBooksContext } from '../provider/BookProvider';
-import { Link, useNavigate } from 'react-router-dom';
-import { signinUser } from '../features/AuthFeatures'
-import Loader from './Loader';
+import React, { useEffect, useState } from "react";
+import Logo from "../assets/logo.png";
+import { useBooksContext } from "../provider/BookProvider";
+import { Link, useNavigate } from "react-router-dom";
+import { signinUser } from "../features/AuthFeatures";
+import Loader from "./Loader";
 
 function UserSignin() {
     const { notify, isUser, loading } = useBooksContext();
@@ -11,8 +11,11 @@ function UserSignin() {
     const [data, setData] = useState({ email: "", password: "" });
 
     const handleOnChange = (e) => {
-        setData(prevState => ({ ...prevState, [e.target.name]: e.target.value }));
-    }
+        setData((prevState) => ({
+            ...prevState,
+            [e.target.name]: e.target.value,
+        }));
+    };
 
     const handleOnSubmit = async (e) => {
         e.preventDefault();
@@ -22,9 +25,9 @@ function UserSignin() {
         if (response) {
             navigate("/");
         } else {
-            notify("error", "Wrong username or password. Try Again...")
+            notify("error", "Wrong username or password. Try Again...");
         }
-    }
+    };
 
     useEffect(() => {
         if (isUser) {
@@ -32,31 +35,63 @@ function UserSignin() {
         }
 
         // eslint-disable-next-line
-    }, [isUser])
+    }, [isUser]);
 
     return (
         <main className="form-signin w-50 m-auto">
-            {loading ?
-                <><h3 className='text-center text-light mt-5'>Verifying User...</h3> <Loader /></> :
-                <form className='text-center my-4' onSubmit={handleOnSubmit}>
+            {loading ? (
+                <>
+                    <h3 className="text-center text-light mt-5">
+                        Verifying User...
+                    </h3>{" "}
+                    <Loader />
+                </>
+            ) : (
+                <form className="text-center my-4" onSubmit={handleOnSubmit}>
                     <img className="mb-4" src={Logo} alt="" width="200px" />
-                    <h1 className="h3 mb-3 fw-normal text-light">Please sign in</h1>
+                    <h1 className="h3 mb-3 fw-normal text-light">
+                        Please sign in
+                    </h1>
 
                     <div className="form-floating form-floating-sm  mb-4">
-                        <input type="text" className="form-control" id="floatingInput" placeholder="example@abc.com" value={data.email} name='email' onChange={handleOnChange} />
+                        <input
+                            type="text"
+                            className="form-control"
+                            id="floatingInput"
+                            placeholder="example@abc.com"
+                            value={data.email}
+                            name="email"
+                            onChange={handleOnChange}
+                        />
                         <label htmlFor="floatingInput">Email</label>
                     </div>
                     <div className="form-floating mb-4">
-                        <input type="password" className="form-control" id="floatingPassword" placeholder="Password" value={data.password} name='password' onChange={handleOnChange} />
+                        <input
+                            type="password"
+                            className="form-control"
+                            id="floatingPassword"
+                            placeholder="Password"
+                            value={data.password}
+                            name="password"
+                            onChange={handleOnChange}
+                        />
                         <label htmlFor="floatingPassword">Password</label>
                     </div>
-                    <button className="w-100 btn btn-lg btn-primary mb-4" type="submit">Sign in</button>
+                    <button
+                        className="w-100 btn btn-lg btn-primary mb-4"
+                        type="submit"
+                    >
+                        Sign in
+                    </button>
                     <div className="text-center text-light">
-                        <p>Not a member? <Link to="/signup">Register</Link></p>
+                        <p>
+                            Not a member? <Link to="/signup">Register</Link>
+                        </p>
                     </div>
-                </form>}
+                </form>
+            )}
         </main>
-    )
+    );
 }
 
-export default UserSignin
+export default UserSignin;

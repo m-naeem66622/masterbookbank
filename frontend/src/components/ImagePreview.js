@@ -1,4 +1,4 @@
-import React, { useRef, useState, useEffect } from 'react'
+import React, { useRef, useState, useEffect } from "react";
 
 function ImagePreview(props) {
     const host = process.env.REACT_APP_SERVER_HOST;
@@ -6,7 +6,7 @@ function ImagePreview(props) {
     const { files, getImagesBlobURL, deleteFile, edit } = props;
     const [index, setIndex] = useState(0);
     const [src, setSrc] = useState([]);
-    const thumbRef = useRef(null)
+    const thumbRef = useRef(null);
 
     const fileReaderHandle = () => {
         setSrc([]);
@@ -14,18 +14,17 @@ function ImagePreview(props) {
             const file = files[index];
 
             if (file instanceof Blob) {
-                const fileURL = URL.createObjectURL(file)
-                setSrc(previous => [...previous, fileURL]);
+                const fileURL = URL.createObjectURL(file);
+                setSrc((previous) => [...previous, fileURL]);
             } else if (file.includes("uploads")) {
                 const fileURL = `${host}/${file}`;
-                setSrc(previous => [...previous, fileURL]);
+                setSrc((previous) => [...previous, fileURL]);
             }
-
         }
-    }
+    };
 
     const handleTab = (index) => {
-        setIndex(index)
+        setIndex(index);
         const images = thumbRef.current.children;
         for (let i = 0; i < images.length; i++) {
             images[i].classList.remove("active");
@@ -35,17 +34,17 @@ function ImagePreview(props) {
     };
 
     const delteImageHandle = (index) => {
-        setSrc(current =>
-            current.filter(element => {
-                URL.revokeObjectURL(src[index])
+        setSrc((current) =>
+            current.filter((element) => {
+                URL.revokeObjectURL(src[index]);
                 return element !== src[index];
-            }),
+            })
         );
 
         deleteFile(index);
 
-        setIndex(0)
-    }
+        setIndex(0);
+    };
 
     useEffect(() => {
         if (files.length === 0) {
@@ -61,7 +60,7 @@ function ImagePreview(props) {
             thumbRef.current.children[index].classList.add("active");
         }
 
-        const blobURLs = src.filter(url => url.includes("blob"));
+        const blobURLs = src.filter((url) => url.includes("blob"));
         if (edit) {
             getImagesBlobURL(blobURLs);
         }
@@ -70,25 +69,51 @@ function ImagePreview(props) {
 
     return (
         <div className="big-img">
-            <div className={`img-cont ${src.length === 0 ? "d-flex align-items-center justify-content-center" : ""}`}>
-                {src.length !== 0 ? <img src={src[index]} alt="book-img" /> : <h2 className="text-center">No files to show.</h2>}
+            <div
+                className={`img-cont ${
+                    src.length === 0
+                        ? "d-flex align-items-center justify-content-center"
+                        : ""
+                }`}
+            >
+                {src.length !== 0 ? (
+                    <img src={src[index]} alt="book-img" />
+                ) : (
+                    <h2 className="text-center">No files to show.</h2>
+                )}
             </div>
-            {src.length !== 0 && <div className="thumb" ref={thumbRef}>
-                {
-                    src.map((img, index) => (
+            {src.length !== 0 && (
+                <div className="thumb" ref={thumbRef}>
+                    {src.map((img, index) => (
                         <span key={index} className="position-relative">
-                            <img src={img} alt="" onClick={() => handleTab(index)} />
-                            {edit && <span className="position-absolute translate-middle badge rounded-pill bg-danger" style={{ padding: ".35em .55em", top: "17%", left: "77%", cursor: "pointer" }} onClick={() => delteImageHandle(index)}>
-                                X
-                                <span className="visually-hidden">Delete Image</span>
-                            </span>}
+                            <img
+                                src={img}
+                                alt=""
+                                onClick={() => handleTab(index)}
+                            />
+                            {edit && (
+                                <span
+                                    className="position-absolute translate-middle badge rounded-pill bg-danger"
+                                    style={{
+                                        padding: ".35em .55em",
+                                        top: "17%",
+                                        left: "77%",
+                                        cursor: "pointer",
+                                    }}
+                                    onClick={() => delteImageHandle(index)}
+                                >
+                                    X
+                                    <span className="visually-hidden">
+                                        Delete Image
+                                    </span>
+                                </span>
+                            )}
                         </span>
-                    ))
-                }
-            </div>}
+                    ))}
+                </div>
+            )}
         </div>
-    )
-
+    );
 }
 
-export default ImagePreview
+export default ImagePreview;

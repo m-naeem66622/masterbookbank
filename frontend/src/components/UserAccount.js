@@ -1,6 +1,6 @@
-import React from 'react'
-import { useBooksContext } from '../provider/BookProvider'
-import { Link } from 'react-router-dom';
+import React from "react";
+import { useBooksContext } from "../provider/BookProvider";
+import { Link } from "react-router-dom";
 
 function UserAccount() {
     const { accountDetail } = useBooksContext();
@@ -34,7 +34,9 @@ function UserAccount() {
                             </tr>
                             <tr>
                                 <th scope="row">Postal Code:</th>
-                                <td>{accountDetail.shippingAddress.postalCode}</td>
+                                <td>
+                                    {accountDetail.shippingAddress.postalCode}
+                                </td>
                             </tr>
                             <tr>
                                 <th scope="row">Address:</th>
@@ -42,19 +44,29 @@ function UserAccount() {
                             </tr>
                             <tr>
                                 <th scope="row">Created At:</th>
-                                <td>{new Date(accountDetail.createdAt).toString()}</td>
+                                <td>
+                                    {new Date(
+                                        accountDetail.createdAt
+                                    ).toString()}
+                                </td>
                             </tr>
                             <tr>
                                 <th scope="row">Updated At:</th>
-                                <td>{new Date(accountDetail.updatedAt).toString()}</td>
+                                <td>
+                                    {new Date(
+                                        accountDetail.updatedAt
+                                    ).toString()}
+                                </td>
                             </tr>
                         </tbody>
                     </table>
-                    <Link to='/user/account/edit' className='btn btn-primary'>Edit</Link>
+                    <Link to="/user/account/edit" className="btn btn-primary">
+                        Edit
+                    </Link>
                 </div>
             </div>
         </>
-    )
+    );
 }
 
-export default UserAccount
+export default UserAccount;

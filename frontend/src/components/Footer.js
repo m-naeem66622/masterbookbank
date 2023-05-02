@@ -1,4 +1,4 @@
-import React from 'react'
+import React from "react";
 import Logo from "../assets/logo.png";
 
 function Footer() {
@@ -28,29 +28,57 @@ function Footer() {
 
                 <ul className="nav col-md-6 justify-content-end list-unstyled d-flex">
                     <li className="ms-3">
-                        <a className="text-light" target="_blank" rel="noreferrer" href="https://www.facebook.com/">
-                            <svg className="bi flex-shrink-0" role="img"><use xlinkHref="#facebook-icon" /></svg>
+                        <a
+                            className="text-light"
+                            target="_blank"
+                            rel="noreferrer"
+                            href="https://www.facebook.com/"
+                        >
+                            <svg className="bi flex-shrink-0" role="img">
+                                <use xlinkHref="#facebook-icon" />
+                            </svg>
                         </a>
                     </li>
                     <li className="ms-3">
-                        <a className="text-light" target="_blank" rel="noreferrer" href="https://www.instagram.com">
-                            <svg className="bi flex-shrink-0" role="img"><use xlinkHref="#instagram-icon" /></svg>
+                        <a
+                            className="text-light"
+                            target="_blank"
+                            rel="noreferrer"
+                            href="https://www.instagram.com"
+                        >
+                            <svg className="bi flex-shrink-0" role="img">
+                                <use xlinkHref="#instagram-icon" />
+                            </svg>
                         </a>
                     </li>
                     <li className="ms-3">
-                        <a className="text-light" target="_blank" rel="noreferrer" href="https://www.twitter.com">
-                            <svg className="bi flex-shrink-0" role="img"><use xlinkHref="#twitter-icon" /></svg>
+                        <a
+                            className="text-light"
+                            target="_blank"
+                            rel="noreferrer"
+                            href="https://www.twitter.com"
+                        >
+                            <svg className="bi flex-shrink-0" role="img">
+                                <use xlinkHref="#twitter-icon" />
+                            </svg>
                         </a>
                     </li>
                     <li className="ms-3">
-                        <a className="text-light" target="_blank" rel="noreferrer" href="https://api.whatsapp.com">
-                            <svg className="bi flex-shrink-0" role="img"><use xlinkHref="#whatsapp-icon" /></svg>
+                        <a
+                            className="text-light"
+                            target="_blank"
+                            rel="noreferrer"
+                            href="https://api.whatsapp.com"
+                        >
+                            <svg className="bi flex-shrink-0" role="img">
+                                <use xlinkHref="#whatsapp-icon" />
+                            </svg>
                         </a>
                     </li>
                 </ul>
             </div>
         </footer>
-    )
+    );
 }
 
-export default Footer
+export default Footer;
