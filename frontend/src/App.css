@@ -296,3 +296,8 @@ input[type=number]::-webkit-outer-spin-button {
 .image>img {
   width: 100px;
 }
+
+.link-unstyled, .link-unstyled:link, .link-unstyled:hover {
+  color: inherit;
+  text-decoration: inherit;
+}

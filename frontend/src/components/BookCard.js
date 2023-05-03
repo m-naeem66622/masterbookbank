@@ -13,15 +13,16 @@ function BookCard(props) {
 
     const handleAddOrRemove = () => {
         if (cart[_id]) {
-            console.log("i am removed");
             setCart((prevState) => {
                 const newState = { ...prevState };
                 delete newState[_id];
-                console.log(newState);
                 return newState;
             });
         } else {
-            setCart((prevState) => ({ ...prevState, [_id]: props.book }));
+            setCart((prevState) => ({
+                ...prevState,
+                [_id]: { product: props.book, quantity: 1 },
+            }));
         }
     };
 
@@ -35,43 +36,45 @@ function BookCard(props) {
                 className="card h-100 pt-3"
                 style={{ width: "270px", minWidth: "270px" }}
             >
-                <div className="d-flex justify-content-center align-items-center">
-                    <div className="position-relative">
-                        <img
-                            src={`${host}/${images[0]}`}
-                            className="card-img-top w-auto rounded-0  border border-white border-4"
-                            style={{
-                                maxHeight: "275px",
-                                maxWidth: "210px",
-                                filter: "drop-shadow(0px 10px 10px rgba(0,0,0,.6))",
-                            }}
-                            alt="Book Cover"
-                        />
-                        <span
-                            className="position-absolute badge rounded-circle bg-danger d-flex justify-content-center align-items-center flex-column fs-normal"
-                            style={{
-                                width: "40px",
-                                height: "40px",
-                                right: "-10px",
-                                top: "-10px",
-                            }}
-                        >
-                            <span>70%</span>
-                            <span>Off</span>
-                        </span>
+                <Link className="link-unstyled" to={"/view/" + _id}>
+                    <div className="d-flex justify-content-center align-items-center">
+                        <div className="position-relative">
+                            <img
+                                src={`${host}/${images[0]}`}
+                                className="card-img-top w-auto rounded-0  border border-white border-4"
+                                style={{
+                                    maxHeight: "275px",
+                                    maxWidth: "210px",
+                                    filter: "drop-shadow(0px 10px 10px rgba(0,0,0,.6))",
+                                }}
+                                alt="Book Cover"
+                            />
+                            <span
+                                className="position-absolute badge rounded-circle bg-danger d-flex justify-content-center align-items-center flex-column fs-normal"
+                                style={{
+                                    width: "40px",
+                                    height: "40px",
+                                    right: "-10px",
+                                    top: "-10px",
+                                }}
+                            >
+                                <span>70%</span>
+                                <span>Off</span>
+                            </span>
+                        </div>
                     </div>
-                </div>
-                <div className="card-body d-flex flex-column justify-content-between pb-1">
-                    <h5 className="card-title">{title}</h5>
-                    <p className="card-subtitle">
-                        <strong>By: </strong>
-                        {authors}
-                    </p>
-                    <p className="card-text">
-                        <strong>Price: </strong>
-                        {price}
-                    </p>
-                </div>
+                    <div className="card-body d-flex flex-column justify-content-between pb-1">
+                        <h5 className="card-title">{title}</h5>
+                        <p className="card-subtitle">
+                            <strong>By: </strong>
+                            {authors}
+                        </p>
+                        <p className="card-text">
+                            <strong>Price: </strong>
+                            {price}
+                        </p>
+                    </div>
+                </Link>
                 <div className="card-footer">
                     <div className="d-flex justify-content-between">
                         <button

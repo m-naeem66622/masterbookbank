@@ -19,6 +19,7 @@ import UserAccount from './components/UserAccount';
 import UserSignup from './components/UserSignup';
 import EditUserAccount from './components/EditUserAccount';
 import AdminAccount from './components/AdminAccount';
+import Cart from './components/Cart';
 
 
 function App() {
@@ -34,6 +35,7 @@ function App() {
             <Route exact path="/signin" element={<UserSignin />} />
             <Route exact path="/signup" element={<UserSignup />} />
             <Route exact path="/" element={<Home />} />
+            <Route exact path="/cart" element={<Cart/>} />
             <Route element={<UserPrivateRoutes />}>
               <Route exact path="/user/account" element={<UserAccount />} />
               <Route exact path="/user/account/edit" element={<EditUserAccount />} />

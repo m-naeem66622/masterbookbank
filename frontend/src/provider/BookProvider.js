@@ -11,6 +11,7 @@ const BookProvider = (props) => {
     const [accountDetail, setAccountDetail] = useState({});
     const [books, setBooks] = useState([]);
     const [cart, setCart] = useState({});
+    const [order, setOrder] = useState({});
 
     // Show Push Notification
     const notify = (type, message) => {
@@ -57,6 +58,17 @@ const BookProvider = (props) => {
                 setCart(parseData);
             }
         }
+        
+        const orderItems = localStorage.getItem("orderItems");
+        if (orderItems) {
+            const parseData = JSON.parse(orderItems);
+            if (
+                typeof parseData === "object" &&
+                Object.keys(parseData).length
+            ) {
+                setOrder(parseData);
+            }
+        }
 
         // eslint-disable-next-line
     }, []);
@@ -79,6 +91,8 @@ const BookProvider = (props) => {
                 setBooks,
                 cart,
                 setCart,
+                order,
+                setOrder
             }}
         >
             {props.children}
