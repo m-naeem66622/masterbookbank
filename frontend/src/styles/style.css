@@ -11,7 +11,35 @@
     white-space: nowrap;
 }
 
-.card-title{
+.card-title {
     height: 45px;
     text-align: center;
+}
+
+/* .insta-icon{
+
+} */
+.fb-icon:hover {
+    color: #4267B2;
+    transition: all 0.3s;
+    transition: .3s ease;
+}
+
+.insta-icon:hover {
+    color: #e11d74;
+    transition: all 0.3s;
+    transition: .3s ease;
+}
+
+.twit-icon:hover {
+    color: #00acee;
+    transition: all 0.3s;
+    transition: .3s ease;
+}
+
+.wp-icon:hover {
+    color:#25D366;
+    transition: all 0.3s;
+    transition: transform .6s;
+    transition: .3s ease;
 }
