@@ -6,7 +6,7 @@ import { signinAdmin } from "../features/AuthFeatures";
 import Loader from "./Loader";
 
 function AdminSignin() {
-    const { notify, isAdmin, loading } = useBooksContext();
+    const { notify, isAdmin, setIsAdmin, loading } = useBooksContext();
     const navigate = useNavigate();
     const [data, setData] = useState({ username: "", password: "" });
 
@@ -23,6 +23,7 @@ function AdminSignin() {
         const response = await signinAdmin(data);
 
         if (response) {
+            setIsAdmin(true);
             navigate("/admin/book/add");
         } else {
             notify("error", "Wrong username or password. Try Again...");

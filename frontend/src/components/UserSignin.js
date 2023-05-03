@@ -6,7 +6,7 @@ import { signinUser } from "../features/AuthFeatures";
 import Loader from "./Loader";
 
 function UserSignin() {
-    const { notify, isUser, loading } = useBooksContext();
+    const { notify, isUser, loading, setIsUser } = useBooksContext();
     const navigate = useNavigate();
     const [data, setData] = useState({ email: "", password: "" });
 
@@ -23,6 +23,7 @@ function UserSignin() {
         const response = await signinUser(data);
 
         if (response) {
+            setIsUser(true);
             navigate("/");
         } else {
             notify("error", "Wrong username or password. Try Again...");

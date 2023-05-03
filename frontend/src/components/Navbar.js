@@ -115,7 +115,7 @@ function Navbar() {
                             {isAdmin || isUser ? (
                                 <>
                                     <Link
-                                        to="/user/account"
+                                        to={`/${isAdmin?"admin":"user"}/account`}
                                         className="btn btn-primary me-2"
                                     >
                                         Account
