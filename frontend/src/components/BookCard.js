@@ -1,6 +1,5 @@
 import React, { useEffect } from "react";
 import { Link } from "react-router-dom";
-import "../styles/style.css";
 import addCartIcon from "../assets/add-cart.svg";
 import removeCartIcon from "../assets/remove-cart.svg";
 import buyIcon from "../assets/bag-shopping-regular.svg";
