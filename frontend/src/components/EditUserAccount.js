@@ -15,7 +15,6 @@ function EditUserAccount() {
         confirmPassword: "",
     });
 
-    console.log(data);
     const handleOnChange = (e) => {
         if (
             ["address", "city", "postalCode", "country"].includes(e.target.name)
@@ -52,7 +51,6 @@ function EditUserAccount() {
             phoneNumber,
             shippingAddress,
         });
-        // console.log(response);
 
         if (status === 200) {
             navigate("/user/account");

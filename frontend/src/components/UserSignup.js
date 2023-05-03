@@ -19,7 +19,6 @@ function UserSignup() {
         if (
             ["address", "city", "postalCode", "country"].includes(e.target.name)
         ) {
-            console.log("second");
             setData((prevState) => ({
                 ...prevState,
                 shippingAddress: {
@@ -28,7 +27,6 @@ function UserSignup() {
                 },
             }));
         } else {
-            console.log("first");
             setData((prevState) => ({
                 ...prevState,
                 [e.target.name]: e.target.value,

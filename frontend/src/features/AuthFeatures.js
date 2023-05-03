@@ -1,7 +1,6 @@
 const host = process.env.REACT_APP_SERVER_HOST;
 
 export const signinAdmin = async (data) => {
-    console.log(host);
     const url = `${host}/api/auth/admin/signin`;
     const options = {
         method: "POST",
@@ -12,7 +11,7 @@ export const signinAdmin = async (data) => {
     };
 
     const response = await fetch(url, options);
-    console.log(response);
+
     if (response.status === 200) {
         const json = await response.json();
         localStorage.setItem("authToken", json.authToken);

@@ -37,7 +37,6 @@ const signup = async (req, res) => {
 
         res.json({ authToken })
     } catch (err) {
-        console.log(err)
         res.status(500).json({ message: "Server error 0x000d1" });
     }
 };
@@ -109,25 +108,15 @@ const update = async (req, res) => {
             const salt = await bcrypt.genSalt(10);
             const secPass = await bcrypt.hash(password, salt);
             toUpdate = { password: secPass };
-            console.log(password);
         }
 
         toUpdate = { ...toUpdate, phoneNumber, shippingAddress };
 
-        // console.log(toUpdate);
-
-        // Updating user data into the database
-        // User.updateOne({ _id: req.user.id }, { $set: toUpdate });
-        // const updated = await User.updateOne(
-        //     { _id: req.user.id },
-        //     { $set: { phoneNumber: toUpdate.phoneNumber }, $mergeObjects: { shippingAddress: toUpdate.shippingAddress } }
-        // );
         if (toUpdate.password) {
             await User.updateOne(
                 { _id: req.user.id },
                 { $set: { password: toUpdate.password, phoneNumber: toUpdate.phoneNumber, shippingAddress: toUpdate.shippingAddress } }
             );
-            console.log("with password");
         } else {
             await User.updateOne(
                 { _id: req.user.id },
@@ -139,7 +128,6 @@ const update = async (req, res) => {
         // res.json({ authToken })
         res.json({ message: "User sucessfully updated" });
     } catch (err) {
-        console.log(err)
         res.status(500).json({ message: "Server error 0x000d3" });
     }
 };
