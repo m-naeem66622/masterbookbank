@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import minusIcon from "../assets/minus-solid.svg";
 import plusIcon from "../assets/plus-solid.svg";
 import trashIcon from "../assets/trash-solid.svg";
@@ -33,6 +33,16 @@ function CartItem(props) {
         });
     };
 
+    const handleRemoveItem = (id) => {
+        if (cart[id]) {
+            setCart((prevState) => {
+                const newState = { ...prevState };
+                delete newState[_id];
+                return newState;
+            });
+        }
+    };
+
     useEffect(() => {
         localStorage.setItem("cartItems", JSON.stringify(cart));
     }, [cart]);
@@ -41,7 +51,7 @@ function CartItem(props) {
         <div className="row">
             <div className="col-lg-3 col-md-12 mb-4 mb-lg-0">
                 {/* <!-- Image --> */}
-                <Link to={"/view/" + _id}>
+                <Link to={"/book/view/" + _id}>
                     <img
                         src={`${host}/${images[0]}`}
                         className="w-100"
@@ -63,6 +73,7 @@ function CartItem(props) {
                     className="btn btn-primary btn-sm me-1 mb-2"
                     data-mdb-toggle="tooltip"
                     title="Remove item"
+                    onClick={() => handleRemoveItem(_id)}
                 >
                     <img width="15px" src={trashIcon} alt="trash-icon" />
                 </button>

@@ -7,7 +7,7 @@ import Books from './components/Books';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import { ToastContainer } from 'react-toastify';
-import ViewBook from './components/ViewBook';
+import AdminsViewBook from './components/AdminsViewBook';
 import EditBook from './components/EditBook';
 import AdminSignin from './components/AdminSignin';
 import AdminPrivateRoutes from './components/AdminPrivateRoutes';
@@ -20,6 +20,8 @@ import UserSignup from './components/UserSignup';
 import EditUserAccount from './components/EditUserAccount';
 import AdminAccount from './components/AdminAccount';
 import Cart from './components/Cart';
+import ViewBook from './components/ViewBook';
+import Checkout from './components/Checkout';
 
 
 function App() {
@@ -36,6 +38,8 @@ function App() {
             <Route exact path="/signup" element={<UserSignup />} />
             <Route exact path="/" element={<Home />} />
             <Route exact path="/cart" element={<Cart/>} />
+            <Route exact path="/checkout" element={<Checkout/>} />
+            <Route exact path="/book/view/:id" element={<ViewBook/>} />
             <Route element={<UserPrivateRoutes />}>
               <Route exact path="/user/account" element={<UserAccount />} />
               <Route exact path="/user/account/edit" element={<EditUserAccount />} />
@@ -44,7 +48,7 @@ function App() {
               <Route exact path="/admin/account" element={<AdminAccount />} />
               <Route exact path="/admin/book/add" element={<AddBook />} />
               <Route exact path="/admin/books" element={<Books />} />
-              <Route exact path="/admin/book/view/:id" element={<ViewBook />} />
+              <Route exact path="/admin/book/view/:id" element={<AdminsViewBook />} />
               <Route exact path="/admin/book/edit/:id" element={<EditBook />} />
             </Route>
           </Routes>

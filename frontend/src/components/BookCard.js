@@ -35,7 +35,7 @@ function BookCard(props) {
                 className="card h-100 pt-3"
                 style={{ width: "270px", minWidth: "270px" }}
             >
-                <Link className="link-unstyled" to={"/view/" + _id}>
+                <Link className="link-unstyled" to={"/book/view/" + _id}>
                     <div className="d-flex justify-content-center align-items-center">
                         <div className="position-relative">
                             <img
