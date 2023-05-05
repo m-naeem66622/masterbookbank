@@ -22,11 +22,12 @@ function Navbar() {
 
     return (
         <nav className="navbar sticky-top navbar-expand-lg bg-dark navbar-dark border-bottom border-white">
-            <div className="container-fluid">
+            <div className="container">
                 <Link
                     className="navbar-brand"
                     to={isAdmin ? "/admin/book/add" : "/"}
                 >
+            <img className="logo-img" src="/static/media/logo.faf2e34ad1c3dd9521ea.png" alt="logo"/>
                     Master Book Bank
                 </Link>
                 <button
