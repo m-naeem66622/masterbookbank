@@ -3,7 +3,9 @@
     margin: 0;
     box-sizing: border-box;
 }
-
+.logo-img{
+    width: 60px;
+}
 .card-subtitle {
     color: #7f8084;
     overflow: hidden;
@@ -20,25 +22,25 @@
 
 } */
 .fb-icon:hover {
-    color: #4267B2;
+    color: #4267B2 !important;
     transition: all 0.3s;
     transition: .3s ease;
 }
 
 .insta-icon:hover {
-    color: #e11d74;
+    color: #e11d74 !important ;
     transition: all 0.3s;
     transition: .3s ease;
 }
 
 .twit-icon:hover {
-    color: #00acee;
+    color: #00acee !important;
     transition: all 0.3s;
     transition: .3s ease;
 }
 
 .wp-icon:hover {
-    color:#25D366;
+    color:#25D366 !important;
     transition: all 0.3s;
     transition: transform .6s;
     transition: .3s ease;
