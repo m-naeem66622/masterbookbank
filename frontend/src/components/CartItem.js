@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useCallback, useEffect, useMemo } from "react";
 import minusIcon from "../assets/minus-solid.svg";
 import plusIcon from "../assets/plus-solid.svg";
 import trashIcon from "../assets/trash-solid.svg";
@@ -6,40 +6,22 @@ import { Link } from "react-router-dom";
 import { useBooksContext } from "../provider/BookProvider";
 
 function CartItem(props) {
-    const { cart, setCart } = useBooksContext();
+    const { cart, dispatchCart } = useBooksContext();
     const host = process.env.REACT_APP_SERVER_HOST;
     const { _id, title, authors, price, images, publisher, inStock } =
         props.book.product;
 
     const handleMinusQty = (id) => {
-        setCart((prevState) => {
-            const updatedCart = { ...prevState };
-            if (updatedCart[id].quantity > 1) {
-                // Decrement quantity by 1 only if it is greater than 1
-                updatedCart[id].quantity -= 1;
-            }
-            return updatedCart;
-        });
+        dispatchCart({ type: "DECREMENT_QUANTITY", id });
     };
 
-    const handlePlusQty = (id) => {
-        setCart((prevState) => {
-            const updatedCart = { ...prevState };
-            if (updatedCart[id].quantity < inStock) {
-                // Increment quantity by 1 only if it is less than inStock value
-                updatedCart[id].quantity += 1;
-            }
-            return updatedCart;
-        });
-    };
+    const handlePlusQty = useCallback((id) => {
+        dispatchCart({ type: "INCREMENT_QUANTITY", id });
+    }, []);
 
     const handleRemoveItem = (id) => {
         if (cart[id]) {
-            setCart((prevState) => {
-                const newState = { ...prevState };
-                delete newState[_id];
-                return newState;
-            });
+            dispatchCart({ type: "REMOVE_FROM_CART", id });
         }
     };
 

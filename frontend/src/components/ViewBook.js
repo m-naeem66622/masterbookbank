@@ -5,7 +5,7 @@ import { fetchBook } from "../features/BookFeatures";
 import { Link, useParams } from "react-router-dom";
 import addCartIcon from "../assets/add-cart.svg";
 import removeCartIcon from "../assets/remove-cart.svg";
-import updateCartIcon from "../assets/remove-cart.svg";
+import updateCartIcon from "../assets/update-cart.svg";
 import minusIcon from "../assets/minus-solid.svg";
 import plusIcon from "../assets/plus-solid.svg";
 import buyIcon from "../assets/bag-shopping-regular.svg";
@@ -13,7 +13,7 @@ import Page404 from "./Page404";
 import Loader from "./Loader";
 
 function ViewBook() {
-    const { loading, setLoading, cart, setCart } = useBooksContext();
+    const { loading, setLoading, cart, dispatchCart } = useBooksContext();
     const [res, setRes] = useState({});
     const [quantity, setQuantity] = useState(1);
 
@@ -46,6 +46,7 @@ function ViewBook() {
     const handlePlusQty = () => {
         setQuantity((prevState) => {
             let updatedState = prevState;
+            console.log("Setting state from ViewBook");
             if (updatedState < res.json.inStock) {
                 // Increment quantity by 1 only if it is less than inStock value
                 updatedState += 1;
@@ -57,22 +58,14 @@ function ViewBook() {
     const handleAddOrRemove = () => {
         if (cart[id]) {
             if (cart[id].quantity !== quantity && quantity !== 1) {
-                setCart((prevState) => ({
-                    ...prevState,
-                    [id]: { product: res.json, quantity },
-                }));
+                const payload = { product: res.json, quantity };
+                dispatchCart({ type: "ADD_TO_CART", payload, id });
             } else {
-                setCart((prevState) => {
-                    const newState = { ...prevState };
-                    delete newState[id];
-                    return newState;
-                });
+                dispatchCart({ type: "REMOVE_FROM_CART", id });
             }
         } else {
-            setCart((prevState) => ({
-                ...prevState,
-                [id]: { product: res.json, quantity },
-            }));
+            const payload = { product: res.json, quantity };
+            dispatchCart({ type: "ADD_TO_CART", payload, id });
         }
     };
 

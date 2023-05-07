@@ -1,6 +1,13 @@
-import React, { useContext, createContext, useState, useEffect } from "react";
+import React, {
+    useContext,
+    createContext,
+    useState,
+    useEffect,
+    useReducer,
+} from "react";
 import { toast } from "react-toastify";
 import { authenticateAdmin, authenticateUser } from "../features/AuthFeatures";
+import cartReducer from "./cartReducer";
 const BookContext = createContext();
 
 const BookProvider = (props) => {
@@ -10,7 +17,7 @@ const BookProvider = (props) => {
     const [isUser, setIsUser] = useState(false);
     const [accountDetail, setAccountDetail] = useState({});
     const [books, setBooks] = useState([]);
-    const [cart, setCart] = useState({});
+    const [cart, dispatchCart] = useReducer(cartReducer, {});
     const [order, setOrder] = useState({});
 
     // Show Push Notification
@@ -55,10 +62,10 @@ const BookProvider = (props) => {
                 typeof parseData === "object" &&
                 Object.keys(parseData).length
             ) {
-                setCart(parseData);
+                dispatchCart({ type: "SET_CART", payload: parseData });
             }
         }
-        
+
         const orderItems = localStorage.getItem("orderItems");
         if (orderItems) {
             const parseData = JSON.parse(orderItems);
@@ -90,9 +97,9 @@ const BookProvider = (props) => {
                 books,
                 setBooks,
                 cart,
-                setCart,
+                dispatchCart,
                 order,
-                setOrder
+                setOrder,
             }}
         >
             {props.children}

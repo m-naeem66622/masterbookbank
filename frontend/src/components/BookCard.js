@@ -7,21 +7,15 @@ import { useBooksContext } from "../provider/BookProvider";
 
 function BookCard(props) {
     const host = process.env.REACT_APP_SERVER_HOST;
-    const { cart, setCart } = useBooksContext();
+    const { cart, dispatchCart } = useBooksContext();
     const { _id, title, authors, price, images } = props.book;
 
     const handleAddOrRemove = () => {
         if (cart[_id]) {
-            setCart((prevState) => {
-                const newState = { ...prevState };
-                delete newState[_id];
-                return newState;
-            });
+            dispatchCart({ type: "REMOVE_FROM_CART", id:_id });
         } else {
-            setCart((prevState) => ({
-                ...prevState,
-                [_id]: { product: props.book, quantity: 1 },
-            }));
+            const payload = { product: props.book, quantity: 1 };
+            dispatchCart({ type: "ADD_TO_CART", payload, id:_id });
         }
     };
 

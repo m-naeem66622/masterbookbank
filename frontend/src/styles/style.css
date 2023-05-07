@@ -45,3 +45,7 @@
     transition: transform .6s;
     transition: .3s ease;
 }
+
+#shopping_cart:hover{
+    color: var(--bs-link-hover) !important;
+}

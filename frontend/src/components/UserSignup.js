@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { useBooksContext } from "../provider/BookProvider";
 import { Link, useNavigate } from "react-router-dom";
-import { signupUser } from "../features/AuthFeatures";
+import { authenticateUser, signupUser } from "../features/AuthFeatures";
 import Loader from "./Loader";
 
 function UserSignup() {
-    const { notify, setIsUser, isUser, loading } = useBooksContext();
+    const { notify, setIsUser, isUser, loading, setAccountDetail } = useBooksContext();
     const navigate = useNavigate();
     const [data, setData] = useState({
         name: "",
@@ -42,6 +42,8 @@ function UserSignup() {
         if (status === 200) {
             localStorage.setItem("authToken", json.authToken);
             setIsUser(true);
+            const data = await authenticateUser();
+            setAccountDetail(data.json);
             navigate("/");
             notify("success", "Account sucessfully created.");
         } else if (status === 400) {
