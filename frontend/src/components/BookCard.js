@@ -35,10 +35,10 @@ function BookCard(props) {
                 style={{ width: "270px", minWidth: "270px" }}
             >
                 <div className="d-flex justify-content-center align-items-center">
-                    <div className="position-relative">
+                    <div className="position-relative mansoor">
                         <img
                             src={`${host}/${images[0]}`}
-                            className="card-img-top w-auto rounded-0  border border-white border-4"
+                            className="card-img-top w-auto rounded-0  border border-white border-4 mansoor"
                             style={{
                                 maxHeight: "275px",
                                 maxWidth: "210px",
