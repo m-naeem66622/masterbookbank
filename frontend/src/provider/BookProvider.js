@@ -18,7 +18,6 @@ const BookProvider = (props) => {
     const [accountDetail, setAccountDetail] = useState({});
     const [books, setBooks] = useState([]);
     const [cart, dispatchCart] = useReducer(cartReducer, {});
-    const [order, setOrder] = useState({});
 
     // Show Push Notification
     const notify = (type, message) => {
@@ -66,17 +65,6 @@ const BookProvider = (props) => {
             }
         }
 
-        const orderItems = localStorage.getItem("orderItems");
-        if (orderItems) {
-            const parseData = JSON.parse(orderItems);
-            if (
-                typeof parseData === "object" &&
-                Object.keys(parseData).length
-            ) {
-                setOrder(parseData);
-            }
-        }
-
         // eslint-disable-next-line
     }, []);
 
@@ -98,8 +86,6 @@ const BookProvider = (props) => {
                 setBooks,
                 cart,
                 dispatchCart,
-                order,
-                setOrder,
             }}
         >
             {props.children}

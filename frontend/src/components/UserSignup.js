@@ -5,19 +5,28 @@ import { authenticateUser, signupUser } from "../features/AuthFeatures";
 import Loader from "./Loader";
 
 function UserSignup() {
-    const { notify, setIsUser, isUser, loading, setAccountDetail } = useBooksContext();
+    const { notify, setIsUser, isUser, loading, setAccountDetail } =
+        useBooksContext();
     const navigate = useNavigate();
     const [data, setData] = useState({
         name: "",
         email: "",
         password: "",
         confirmPassword: "",
-        shippingAddress: { address: "", city: "", postalCode: "", country: "" },
+        shippingAddress: {
+            address: "",
+            city: "",
+            postalCode: "",
+            country: "",
+            state: "",
+        },
     });
 
     const handleOnChange = (e) => {
         if (
-            ["address", "city", "postalCode", "country"].includes(e.target.name)
+            ["address", "city", "postalCode", "country", "state"].includes(
+                e.target.name
+            )
         ) {
             setData((prevState) => ({
                 ...prevState,
@@ -142,17 +151,37 @@ function UserSignup() {
                             Phone Number
                         </label>
                     </div>
-                    <div className="form-floating mb-4">
-                        <input
-                            type="text"
-                            className="form-control"
-                            id="floatingCountry"
-                            placeholder="Country"
-                            value={data.shippingAddress.country}
-                            name="country"
-                            onChange={handleOnChange}
-                        />
-                        <label htmlFor="floatingCountry">Country</label>
+                    <div className="row">
+                        <div className="col col-7">
+                            <div className="form-floating mb-4">
+                                <input
+                                    type="text"
+                                    className="form-control"
+                                    id="floatingCountry"
+                                    placeholder="Country"
+                                    value={data.shippingAddress.country}
+                                    name="country"
+                                    onChange={handleOnChange}
+                                />
+                                <label htmlFor="floatingCountry">Country</label>
+                            </div>
+                        </div>
+                        <div className="col col-5">
+                            <div className="form-floating mb-4">
+                                <input
+                                    type="text"
+                                    className="form-control"
+                                    id="floatingState"
+                                    placeholder="State/Province"
+                                    value={data.shippingAddress.state}
+                                    name="state"
+                                    onChange={handleOnChange}
+                                />
+                                <label htmlFor="floatingState">
+                                    State/Province
+                                </label>
+                            </div>
+                        </div>
                     </div>
                     <div className="row">
                         <div className="col col-4">

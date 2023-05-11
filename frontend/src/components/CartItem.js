@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo } from "react";
+import React, { useEffect } from "react";
 import minusIcon from "../assets/minus-solid.svg";
 import plusIcon from "../assets/plus-solid.svg";
 import trashIcon from "../assets/trash-solid.svg";
@@ -15,9 +15,9 @@ function CartItem(props) {
         dispatchCart({ type: "DECREMENT_QUANTITY", id });
     };
 
-    const handlePlusQty = useCallback((id) => {
+    const handlePlusQty = (id) => {
         dispatchCart({ type: "INCREMENT_QUANTITY", id });
-    }, []);
+    };
 
     const handleRemoveItem = (id) => {
         if (cart[id]) {
@@ -70,7 +70,7 @@ function CartItem(props) {
                 {/* <!-- Data --> */}
             </div>
 
-            <div className="col-lg-4 col-md-6 mb-4 mb-lg-0">
+            <div className="col-lg-4 col-md-6 mb-lg-0">
                 {/* <!-- Quantity --> */}
                 <div className="mb-4" style={{ maxWidth: "160px" }}>
                     <label className="form-label">Quantity</label>
@@ -105,7 +105,7 @@ function CartItem(props) {
                 {/* <!-- Quantity --> */}
 
                 {/* <!-- Price --> */}
-                <p className="text-start text-md-center">
+                <p className="text-start text-md-center mb-0">
                     <strong>
                         PKR {(cart[_id].quantity * price).toFixed(2)}
                     </strong>

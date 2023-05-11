@@ -25,22 +25,12 @@ function UserAccount() {
                                 <td>{accountDetail.phoneNumber}</td>
                             </tr>
                             <tr>
-                                <th scope="row">Country:</th>
-                                <td>{accountDetail.shippingAddress.country}</td>
-                            </tr>
-                            <tr>
-                                <th scope="row">City:</th>
-                                <td>{accountDetail.shippingAddress.city}</td>
-                            </tr>
-                            <tr>
-                                <th scope="row">Postal Code:</th>
+                                <th scope="row">Shipping Address:</th>
                                 <td>
-                                    {accountDetail.shippingAddress.postalCode}
+                                    {Object.values(
+                                        accountDetail.shippingAddress
+                                    ).map((value) => value + ", ")}
                                 </td>
-                            </tr>
-                            <tr>
-                                <th scope="row">Address:</th>
-                                <td>{accountDetail.shippingAddress.address}</td>
                             </tr>
                             <tr>
                                 <th scope="row">Created At:</th>

@@ -42,7 +42,7 @@ function BookCard(props) {
                                 }}
                                 alt="Book Cover"
                             />
-                            <span
+                            {/* <span
                                 className="position-absolute badge rounded-circle bg-danger d-flex justify-content-center align-items-center flex-column fs-normal"
                                 style={{
                                     width: "40px",
@@ -53,7 +53,7 @@ function BookCard(props) {
                             >
                                 <span>70%</span>
                                 <span>Off</span>
-                            </span>
+                            </span> */}
                         </div>
                     </div>
                     <div className="card-body d-flex flex-column justify-content-between pb-1">

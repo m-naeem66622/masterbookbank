@@ -4,31 +4,35 @@ import { useBooksContext } from "../provider/BookProvider";
 import { useNavigate } from "react-router-dom";
 
 function Cart() {
-    const { cart } = useBooksContext();
+    const { cart, isUser } = useBooksContext();
     const navigate = useNavigate();
 
     const handleCheckout = () => {
-        const totalOfProducts = Object.values(cart)
-            .reduce((acc, curr) => acc + curr.product.price * curr.quantity, 0)
-            .toFixed(2);
-        const totalAmount = Object.values(cart)
-            .reduce((acc, curr) => acc + curr.product.price * curr.quantity, 0)
-            .toFixed(2);
-        const discount = 0;
-        const products = Object.values(cart).map((item) => {
-            return {
-                id: item.product._id,
-                title: item.product.title,
-                images: item.product.images[0],
-                quantity: item.quantity,
-                price: item.product.price * item.quantity,
-            };
-        });
+        if (isUser) {
+            const discount = 0;
+            const products = Object.values(cart).map((item) => {
+                return {
+                    id: item.product._id,
+                    title: item.product.title,
+                    authors: item.product.authors,
+                    images: item.product.images[0],
+                    quantity: item.quantity,
+                    price: item.product.price * item.quantity,
+                };
+            });
 
-        const checkout = { products, totalOfProducts, discount, totalAmount };
-        localStorage.setItem("checkOut", JSON.stringify(checkout));
-        navigate("/checkout");
-        localStorage.removeItem("cartItems");
+            const checkout = {
+                products,
+                discount,
+                code: "",
+                shippingPrice: 0,
+                paymentMethod: "",
+            };
+            localStorage.setItem("checkoutItems", JSON.stringify(checkout));
+            navigate("/checkout");
+        } else {
+            navigate("/signin");
+        }
     };
 
     return (
@@ -125,7 +129,7 @@ function Cart() {
                                     onClick={handleCheckout}
                                     disabled={Object.keys(cart).length === 0}
                                 >
-                                    Go to checkout
+                                    {isUser ? "Go to checkout" : "Signin"}
                                 </button>
                             </div>
                         </div>
