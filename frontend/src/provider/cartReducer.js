@@ -3,10 +3,12 @@ const cartReducer = (prevState = {}, action) => {
     switch (action.type) {
         case "SET_CART":
             return action.payload;
+        
+        case "EMPTY_CART":
+            return {};
 
         case "ADD_TO_CART":
             const { payload, id } = action;
-            console.log(payload);
             return { ...updatedCart, [id]: payload };
 
         case "REMOVE_FROM_CART":

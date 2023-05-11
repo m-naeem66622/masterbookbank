@@ -20,6 +20,7 @@ app.use("/api/book", require("./routes/book"));
 app.use("/api/auth", require("./routes/admin"));
 app.use("/api/auth", require("./routes/user"));
 app.use("/api/order", require("./routes/order"));
+app.use("/api/coupon", require("./routes/coupon"));
 // app.use("/api/images", require("./routes/images"));
 
 app.get("/", (req, res) => {

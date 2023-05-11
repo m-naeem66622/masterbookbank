@@ -1,4 +1,4 @@
-const jwt = require('jsonwebtoken');
+const jwt = require("jsonwebtoken");
 const JWT_SECRET = process.env.JWT_SECRET;
 const User = require("../models/userSchema");
 
@@ -21,14 +21,13 @@ const authenticateUser = async (req, res, next) => {
             return res.status(401).send({ message: "Access denied 0x00aa2" });
         }
 
-        // Set the user id to request
-        req.user = data.user;
+        // Set the user id and shipping address to request
+        req.user = { id: data.user.id, shippingAddress: user.shippingAddress };
 
         next();
-
     } catch (error) {
         return res.status(401).send({ error: "Access denied 0x00aa3" });
     }
-}
+};
 
 module.exports = authenticateUser;

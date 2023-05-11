@@ -38,9 +38,9 @@ function App() {
             <Route exact path="/signup" element={<UserSignup />} />
             <Route exact path="/" element={<Home />} />
             <Route exact path="/cart" element={<Cart/>} />
-            <Route exact path="/checkout" element={<Checkout/>} />
             <Route exact path="/book/view/:id" element={<ViewBook/>} />
             <Route element={<UserPrivateRoutes />}>
+              <Route exact path="/checkout" element={<Checkout/>} />
               <Route exact path="/user/account" element={<UserAccount />} />
               <Route exact path="/user/account/edit" element={<EditUserAccount />} />
             </Route>
