@@ -15,3 +15,34 @@ export const placeOrder = async (obj) => {
 
     return { json, status: res.status };
 };
+
+export const fetchOrdersAdmin = async () => {
+    const url = `${host}/api/order/admin/fetchAll`;
+    const options = {
+        method: "GET",
+        headers: {
+            authToken: localStorage.getItem("authToken")
+        },
+    }
+
+    const res = await fetch(url, options);
+    const json = await res.json();
+
+    return { json, status: res.status };
+}
+
+export const updateOrderAdmin = async (id, status) => {
+    const url = `${host}/api/order/admin/update/${id}`;
+    const options = {
+        method: "POST",
+        body:status,
+        headers: {
+            authToken: localStorage.getItem("authToken")
+        },
+    }
+
+    const res = await fetch(url, options);
+    const json = await res.json();
+
+    return { json, status: res.status };
+}

@@ -1,7 +1,6 @@
 import React from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useBooksContext } from "../provider/BookProvider";
-import cartIcon from "../assets/cart-shopping-solid.svg";
 
 function Navbar() {
     const location = useLocation();
@@ -61,8 +60,7 @@ function Navbar() {
                                         }`}
                                         to="/admin/book/add"
                                     >
-                                        {" "}
-                                        Home{" "}
+                                        Home
                                     </Link>
                                 </li>
                                 <li className="nav-item">
@@ -74,19 +72,19 @@ function Navbar() {
                                         }`}
                                         to="/admin/books"
                                     >
-                                        {" "}
-                                        Books{" "}
+                                        Books
                                     </Link>
                                 </li>
                                 <li className="nav-item">
                                     <Link
                                         className={`nav-link ${
-                                            path === "/orders" ? "active" : ""
+                                            path === "/admin/orders"
+                                                ? "active"
+                                                : ""
                                         }`}
-                                        to="/orders"
+                                        to="/admin/orders"
                                     >
-                                        {" "}
-                                        Orders{" "}
+                                        Orders
                                     </Link>
                                 </li>
                             </>

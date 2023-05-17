@@ -85,10 +85,7 @@ const fetchAll = async (req, res) => {
                 "name email phoneNumber"
             );
         } else if (req.user) {
-            orders = await Order.find({ user: req.user.id }).populate(
-                "user",
-                "name email"
-            );
+            orders = await Order.find({ user: req.user.id }).select("-user");
         }
         res.json(orders);
     } catch (error) {
@@ -120,7 +117,7 @@ const update = async (req, res) => {
         if (!order) {
             return res.status(404).json({ message: "Order not found" });
         }
-        order.status = req.body.status;
+        order.orderStatus = req.body.status;
         await order.save();
         res.json(order);
     } catch (error) {
