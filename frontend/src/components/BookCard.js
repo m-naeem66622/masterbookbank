@@ -12,10 +12,10 @@ function BookCard(props) {
 
     const handleAddOrRemove = () => {
         if (cart[_id]) {
-            dispatchCart({ type: "REMOVE_FROM_CART", id:_id });
+            dispatchCart({ type: "REMOVE_FROM_CART", id: _id });
         } else {
             const payload = { product: props.book, quantity: 1 };
-            dispatchCart({ type: "ADD_TO_CART", payload, id:_id });
+            dispatchCart({ type: "ADD_TO_CART", payload, id: _id });
         }
     };
 
@@ -31,17 +31,20 @@ function BookCard(props) {
             >
                 <div className="d-flex justify-content-center align-items-center">
                     <div className="position-relative overlay">
-                      <Link className="link-unstyled" to={"/book/view/" + _id}>
-                        <img
-                            src={`${host}/${images[0]}`}
-                            className="card-img-top w-auto rounded-0  border border-white border-4 overlay"
-                            style={{
-                                maxHeight: "275px",
-                                maxWidth: "210px",
-                                filter: "drop-shadow(0px 10px 10px rgba(0,0,0,.6))",
-                            }}
-                            alt="Book Cover"
-                        />
+                        <Link
+                            className="link-unstyled"
+                            to={"/book/view/" + _id}
+                        >
+                            <img
+                                src={`${host}/${images[0]}`}
+                                className="card-img-top w-auto rounded-0  border border-white border-4 overlay"
+                                style={{
+                                    maxHeight: "275px",
+                                    maxWidth: "210px",
+                                    filter: "drop-shadow(0px 10px 10px rgba(0,0,0,.6))",
+                                }}
+                                alt="Book Cover"
+                            />
                         </Link>
                         {/* <span
                             className="position-absolute badge rounded-circle bg-danger d-flex justify-content-center align-items-center flex-column fs-normal"
@@ -56,17 +59,18 @@ function BookCard(props) {
                             <span>Off</span>
                         </span> */}
                     </div>
-                    <div className="card-body d-flex flex-column justify-content-between pb-1">
-                        <h5 className="card-title">{title}</h5>
-                        <p className="card-subtitle">
-                            <strong>By: </strong>
-                            {authors}
-                        </p>
-                        <p className="card-text">
-                            <strong>Price: </strong>
-                            {price}
-                        </p>
-                    </div>
+                </div>
+                <div className="card-body d-flex flex-column justify-content-between pb-1">
+                    <h5 className="card-title">{title}</h5>
+                    <p className="card-subtitle">
+                        <strong>By: </strong>
+                        {authors}
+                    </p>
+                    <p className="card-text">
+                        <strong>Price: </strong>
+                        {price}
+                    </p>
+                </div>
                 <div className="card-footer">
                     <div className="d-flex justify-content-between">
                         <button

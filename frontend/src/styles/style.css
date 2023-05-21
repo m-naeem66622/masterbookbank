@@ -24,40 +24,40 @@
 
 } */
 .fb-icon:hover {
-    color: #4267B2 !important;
+    color: #4267b2 !important;
     transition: all 0.3s;
-    transition: .3s ease;
+    transition: 0.3s ease;
 }
 
 .insta-icon:hover {
     color: #e11d74 !important;
     transition: all 0.3s;
-    transition: .3s ease;
+    transition: 0.3s ease;
 }
 
 .twit-icon:hover {
     color: #00acee !important;
     transition: all 0.3s;
-    transition: .3s ease;
+    transition: 0.3s ease;
 }
 
 .wp-icon:hover {
-    color: #25D366 !important;
+    color: #25d366 !important;
     transition: all 0.3s;
-    transition: transform .6s;
-    transition: .3s ease;
+    transition: transform 0.6s;
+    transition: 0.3s ease;
 }
 
-#shopping_cart:hover{
+#shopping_cart:hover {
     color: var(--bs-link-hover) !important;
 }
 
 /* overly on card image */
-.overlay{
-    transition: .5s ease;
+.overlay {
+    transition: 0.5s ease;
     background-color: #000;
-  
 }
+
 .position-relative:hover .overlay {
     opacity: 0.6;
 }
