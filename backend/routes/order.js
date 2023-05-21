@@ -5,7 +5,6 @@ const authenticateUser = require("../middleware/authenticateUser")
 const calculator = require("../middleware/calculator")
 const validationRules = require("../middleware/orderValidationRules")
 const { create, fetchAll, fetch, update, drop } = require("../controller/orderController");
-const { apply } = require("../controller/couponController");
 
 router.get('/admin/fetchAll', authenticateAdmin, fetchAll);
 router.get('/fetchAll', authenticateUser, fetchAll);

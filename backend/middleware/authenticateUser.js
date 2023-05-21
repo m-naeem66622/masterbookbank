@@ -22,7 +22,7 @@ const authenticateUser = async (req, res, next) => {
         }
 
         // Set the user id and shipping address to request
-        req.user = { id: data.user.id, shippingAddress: user.shippingAddress };
+        req.user = { id: data.user.id, shippingAddress: user.shippingAddress, phoneNumber: user.phoneNumber };
 
         next();
     } catch (error) {

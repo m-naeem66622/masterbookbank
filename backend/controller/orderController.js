@@ -9,7 +9,7 @@ const create = async (req, res) => {
     }
 
     try {
-        const { id, shippingAddress } = req.user;
+        const { id, shippingAddress, phoneNumber } = req.user;
         const { items, paymentMethod, shippingPrice, code } = req.body;
         let { totalPrice } = req;
         let discountObj = {};
@@ -62,6 +62,7 @@ const create = async (req, res) => {
             user: id,
             items,
             shippingAddress,
+            phoneNumber,
             paymentMethod,
             shippingPrice,
             discount: discountObj,
@@ -70,7 +71,6 @@ const create = async (req, res) => {
 
         res.status(201).json({ message: "Order sucessfully has been placed." });
     } catch (error) {
-        console.log(error);
         res.status(500).json({ message: "Server error 0x000c1" });
     }
 };
@@ -89,7 +89,6 @@ const fetchAll = async (req, res) => {
         }
         res.json(orders);
     } catch (error) {
-        console.log(error);
         res.status(500).json({ message: "Server error 0x000c2" });
     }
 };
@@ -132,23 +131,14 @@ const drop = async (req, res) => {
         if (!order) {
             return res.status(404).json({ message: "Order not found" });
         }
+        if (req.user && order.user != req.user.id) {
+            return res.status(401).json({ message: "Access denied 0x000c7" });
+        }
         await order.remove();
         res.json({ message: "Order removed" });
     } catch (error) {
         res.status(500).json({ message: "Server error 0x000c5" });
     }
 };
-
-// Order.findOne({ _id: orderId })
-//   .populate('user')
-//   .populate({
-//     path: 'shippingAddress',
-//     populate: {
-//       path: 'user'
-//     }
-//   })
-//   .exec((err, order) => {
-//     // handle the query result here
-//   });
 
 module.exports = { create, fetchAll, fetch, update, drop };

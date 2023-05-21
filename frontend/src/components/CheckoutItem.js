@@ -8,7 +8,7 @@ function CheckoutItem(props) {
 
     return (
         <div className="row">
-            <div className="col-lg-2 col-md-12 mb-4 mb-lg-0">
+            <div className="col-lg-3 col-md-12 mb-4 mb-lg-0">
                 {/* <!-- Image --> */}
                 <Link to={"/book/view/" + id}>
                     <img
@@ -25,7 +25,7 @@ function CheckoutItem(props) {
                 <p className="mb-1">
                     <strong>{title}</strong>
                 </p>
-                <p>By: {authors.toString().replace(",", " ")}</p>
+                <p>By: {authors.join(", ")}</p>
                 <button
                     type="button"
                     className="btn btn-primary btn-sm me-1 mb-2"
@@ -46,7 +46,7 @@ function CheckoutItem(props) {
                 {/* <!-- Data --> */}
             </div>
 
-            <div className="col-lg-4 col-md-6 mb-lg-0">
+            <div className="col-lg-3 col-md-6 mb-lg-0">
                 {/* <!-- Quantity --> */}
                 <p className="text-start text-md-center mb-1">
                     Quantity: {quantity}

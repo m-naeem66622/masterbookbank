@@ -153,9 +153,7 @@ function EditBook() {
             setLoading(false);
 
             if (response.status === 200) {
-                response.json.tags = response.json.tags
-                    .toString()
-                    .replace(/[,]/g, " ");
+                response.json.tags = response.json.tags.join(" ");
                 response.json.publishDate = response.json.publishDate.substring(
                     0,
                     10

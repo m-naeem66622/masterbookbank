@@ -48,7 +48,7 @@ function CartItem(props) {
                 <p>
                     <strong>{title}</strong>
                 </p>
-                <p>Author(s): {authors.toString().replace(",", " ")}</p>
+                <p>Author(s): {authors.join(", ")}</p>
                 <p>Publisher: {publisher}</p>
                 <button
                     type="button"

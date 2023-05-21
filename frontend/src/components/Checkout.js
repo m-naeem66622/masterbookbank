@@ -141,9 +141,7 @@ function Checkout() {
                                     <p className="mb-0">
                                         <strong>Address: </strong>
                                         {shippingAddress &&
-                                            Object.values(shippingAddress).map(
-                                                (value) => value + ", "
-                                            )}
+                                            Object.values(shippingAddress).join(", ")}
                                     </p>
                                     <Link to="/user/account/edit">
                                         Want to change Address

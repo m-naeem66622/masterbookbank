@@ -29,9 +29,7 @@ function UserAccount() {
                                 <td>
                                     {Object.values(
                                         accountDetail.shippingAddress
-                                    )
-                                        .toString()
-                                        .replace(",", ", ")}
+                                    ).join(", ")}
                                 </td>
                             </tr>
                             <tr>

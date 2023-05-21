@@ -7,7 +7,7 @@ import React, {
 } from "react";
 import { toast } from "react-toastify";
 import { authenticateAdmin, authenticateUser } from "../features/AuthFeatures";
-import cartReducer from "./cartReducer";
+import cartReducer from "../features/cartReducer";
 const BookContext = createContext();
 
 const BookProvider = (props) => {

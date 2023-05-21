@@ -17,7 +17,7 @@ function Cart() {
                     authors: item.product.authors,
                     images: item.product.images[0],
                     quantity: item.quantity,
-                    price: item.product.price * item.quantity,
+                    price: item.product.price,
                 };
             });
 

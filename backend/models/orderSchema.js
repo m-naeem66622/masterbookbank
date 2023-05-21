@@ -44,6 +44,10 @@ const Order = new mongoose.Schema(
                 required: true,
             },
         },
+        phoneNumber: {
+            type: String,
+            required: true,
+        },
         paymentMethod: {
             type: String,
             enum: ["COD", "EASYPAISA", "JAZZCASH", "MASTERCARD"],
@@ -68,7 +72,7 @@ const Order = new mongoose.Schema(
         discount: {
             type: {
                 type: String,
-                enum: ["flat", "percent"],
+                enum: ["flat", "percent", null],
                 default: null,
             },
             value: {

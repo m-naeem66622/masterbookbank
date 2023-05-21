@@ -110,9 +110,7 @@ function AdminsViewBook() {
                             </p>
                             <p>
                                 <strong>Author(s):</strong>{" "}
-                                {book.authors
-                                    ? book.authors.toString().replace(",", ", ")
-                                    : ""}
+                                {book.authors ? book.authors.join(", ") : ""}
                             </p>
                             <p>
                                 <strong>Publisher:</strong> {book.publisher}
@@ -126,9 +124,7 @@ function AdminsViewBook() {
                             <p>
                                 <strong>Category:</strong>{" "}
                                 {book.categories
-                                    ? book.categories
-                                          .toString()
-                                          .replace(",", ", ")
+                                    ? book.categories.join(", ")
                                     : ""}
                             </p>
                             <p>

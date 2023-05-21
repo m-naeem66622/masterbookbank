@@ -48,8 +48,7 @@ function Books() {
     return (
         <>
             <h1 className="text-light mt-3 mb-4 text-center">Your Books</h1>
-            {loading && <Loader />}
-            {!loading && (
+            {!loading && books.length !== 0 ? (
                 <table className="table table-dark table-hover">
                     <thead>
                         <tr>
@@ -115,6 +114,8 @@ function Books() {
                         })}
                     </tbody>
                 </table>
+            ) : (
+                <Loader />
             )}
         </>
     );
