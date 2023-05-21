@@ -17,10 +17,11 @@ const signupValidationRules = [
         }
         return true;
     }),
-    body('shippingAddress.address').not().isEmpty().withMessage('Address is required').isString().withMessage('Address must be a string').trim(),
-    body('shippingAddress.city').not().isEmpty().withMessage('City is required').isString().withMessage('City must be a string').trim(),
-    body('shippingAddress.postalCode').not().isEmpty().withMessage('Postal code is required').isString().withMessage('Postal code must be a string').trim(),
     body('shippingAddress.country').not().isEmpty().withMessage('Country is required').isString().withMessage('Country must be a string').trim(),
+    body('shippingAddress.state').not().isEmpty().withMessage('State/Province is required').isString().withMessage('State/Province must be a string').trim(),
+    body('shippingAddress.city').not().isEmpty().withMessage('City is required').isString().withMessage('City must be a string').trim(),
+    body('shippingAddress.address').not().isEmpty().withMessage('Address is required').isString().withMessage('Address must be a string').trim(),
+    body('shippingAddress.postalCode').not().isEmpty().withMessage('Postal code is required').isString().withMessage('Postal code must be a string').trim(),
     // .isStrongPassword().withMessage("Password must be strong")
 ];
 
@@ -45,10 +46,11 @@ const updateValidationRules = [
         }
         return true;
     }),
-    body('shippingAddress.address').not().isEmpty().withMessage('Address is required').isString().withMessage('Address must be a string').trim(),
-    body('shippingAddress.city').not().isEmpty().withMessage('City is required').isString().withMessage('City must be a string').trim(),
-    body('shippingAddress.postalCode').not().isEmpty().withMessage('Postal code is required').isString().withMessage('Postal code must be a string').trim(),
     body('shippingAddress.country').not().isEmpty().withMessage('Country is required').isString().withMessage('Country must be a string').trim(),
+    body('shippingAddress.state').not().isEmpty().withMessage('State/Province is required').isString().withMessage('State/Province must be a string').trim(),
+    body('shippingAddress.city').not().isEmpty().withMessage('City is required').isString().withMessage('City must be a string').trim(),
+    body('shippingAddress.address').not().isEmpty().withMessage('Address is required').isString().withMessage('Address must be a string').trim(),
+    body('shippingAddress.postalCode').not().isEmpty().withMessage('Postal code is required').isString().withMessage('Postal code must be a string').trim(),
     // .isStrongPassword().withMessage("Password must be strong")
 ];
 

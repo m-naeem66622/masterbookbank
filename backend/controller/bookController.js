@@ -55,29 +55,30 @@ const fetch = async (req, res) => {
 
 // Create a new book
 const create = async (req, res) => {
-    // Undo uploaded images if errors exist in form validation
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
+    // Check at least one image added or not
+    if (!req.files) {
+        return res.status(400).json({ errors: [{ msg: "At least one image is required", param: "images", location: "body" }] });
+    } else if (req.files.length < 1) {
         req.files.forEach(file => {
             fs.unlink(file.path, err => {
-                if (err) console.log(err);
-            });
-        });
-
-        return res.status(400).json({ errors: errors.array() });
-    }
-
-    if (req.files.length < 1) {
-        req.files.forEach(file => {
-            fs.unlink(file.path, err => {
-                if (err) console.log(err);
+                if (err) fs.writeFileSync(`files-not-deleted.txt`, file.path+"\n");
             });
         });
 
         return res.status(400).json({ errors: [{ msg: "At least one image is required", param: "images", location: "body" }] });
     }
 
+    // Undo uploaded images if errors exist in form validation
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        req.files.forEach(file => {
+            fs.unlink(file.path, err => {
+                if (err) fs.writeFileSync(`files-not-deleted.txt`, file.path+"\n");
+            });
+        });
 
+        return res.status(400).json({ errors: errors.array() });
+    }
 
     try {
         // Extract book data from request body
@@ -107,7 +108,7 @@ const update = async (req, res) => {
     if (!errors.isEmpty()) {
         req.files.forEach(file => {
             fs.unlink(file.path, err => {
-                if (err) console.log(err);
+                if (err) fs.writeFileSync(`files-not-deleted.txt`, file.path+"\n");
             });
         });
         return res.status(400).json({ errors: errors.array() });
@@ -138,7 +139,7 @@ const update = async (req, res) => {
             if (alreadyStoredImages.length + imagesFromMulter.length - validFilesToDelete.length > 3) {
                 req.files.forEach(file => {
                     fs.unlink(file.path, err => {
-                        if (err) console.log(err);
+                        if (err) fs.writeFileSync(`files-not-deleted.txt`, file.path+"\n");
                     });
                 });
 
@@ -147,7 +148,7 @@ const update = async (req, res) => {
             else if (alreadyStoredImages.length + imagesFromMulter.length - validFilesToDelete.length < 1) {
                 req.files.forEach(file => {
                     fs.unlink(file.path, err => {
-                        if (err) console.log(err);
+                        if (err) fs.writeFileSync(`files-not-deleted.txt`, file.path+"\n");
                     });
                 });
 
@@ -157,7 +158,7 @@ const update = async (req, res) => {
             if (alreadyStoredImages.length + imagesFromMulter.length > 3) {
                 req.files.forEach(file => {
                     fs.unlink(file.path, err => {
-                        if (err) console.log(err);
+                        if (err) fs.writeFileSync(`files-not-deleted.txt`, file.path+"\n");
                     });
                 });
 
@@ -170,7 +171,7 @@ const update = async (req, res) => {
         if (validFilesToDelete.length !== 0) {
             validFilesToDelete.forEach(imageUrl => {
                 fs.unlink(imageUrl, (err) => {
-                    if (err) console.log(err);
+                    if (err) fs.writeFileSync(`files-not-deleted.txt`, file.path+"\n");
                 })
             })
             filteredImages = alreadyStoredImages.filter(url => !toDelete.includes(url));
@@ -206,7 +207,7 @@ const drop = async (req, res) => {
         // Delete book images from server
         book.images.forEach(imageUrl => {
             fs.unlink(imageUrl, (err) => {
-                if (err) console.log(err);
+                if (err) fs.writeFileSync(`files-not-deleted.txt`, file.path+"\n");
             })
         })
 

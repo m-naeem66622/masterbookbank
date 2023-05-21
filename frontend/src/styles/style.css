@@ -48,12 +48,16 @@
     transition: .3s ease;
 }
 
+#shopping_cart:hover{
+    color: var(--bs-link-hover) !important;
+}
+
 /* overly on card image */
-.mansoor{
+.overlay{
     transition: .5s ease;
     background-color: #000;
   
 }
-.position-relative:hover .mansoor {
+.position-relative:hover .overlay {
     opacity: 0.6;
 }

@@ -2,11 +2,11 @@ import React, { useEffect, useState } from "react";
 import Logo from "../assets/logo.png";
 import { useBooksContext } from "../provider/BookProvider";
 import { Link, useNavigate } from "react-router-dom";
-import { signinUser } from "../features/AuthFeatures";
+import { authenticateUser, signinUser } from "../features/AuthFeatures";
 import Loader from "./Loader";
 
 function UserSignin() {
-    const { notify, isUser, loading } = useBooksContext();
+    const { notify, isUser, loading, setIsUser, setAccountDetail } = useBooksContext();
     const navigate = useNavigate();
     const [data, setData] = useState({ email: "", password: "" });
 
@@ -23,6 +23,9 @@ function UserSignin() {
         const response = await signinUser(data);
 
         if (response) {
+            setIsUser(true);
+            const data = await authenticateUser();
+            setAccountDetail(data.json);
             navigate("/");
         } else {
             notify("error", "Wrong username or password. Try Again...");

@@ -2,11 +2,11 @@ import React, { useEffect, useState } from "react";
 import Logo from "../assets/logo.png";
 import { useBooksContext } from "../provider/BookProvider";
 import { useNavigate } from "react-router-dom";
-import { signinAdmin } from "../features/AuthFeatures";
+import { authenticateAdmin, signinAdmin } from "../features/AuthFeatures";
 import Loader from "./Loader";
 
 function AdminSignin() {
-    const { notify, isAdmin, loading } = useBooksContext();
+    const { notify, isAdmin, setIsAdmin, loading, setAccountDetail } = useBooksContext();
     const navigate = useNavigate();
     const [data, setData] = useState({ username: "", password: "" });
 
@@ -23,6 +23,9 @@ function AdminSignin() {
         const response = await signinAdmin(data);
 
         if (response) {
+            setIsAdmin(true);
+            const data = await authenticateAdmin();
+            setAccountDetail(data.json);
             navigate("/admin/book/add");
         } else {
             notify("error", "Wrong username or password. Try Again...");
