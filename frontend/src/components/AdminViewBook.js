@@ -7,7 +7,7 @@ import ImagePreview from "./ImagePreview";
 import { useBooksContext } from "../provider/BookProvider";
 import { deleteBook, fetchBook } from "../features/BookFeatures";
 
-function AdminsViewBook() {
+function AdminViewBook() {
     const { loading, notify, setRolling } = useBooksContext();
 
     const params = useParams();
@@ -164,4 +164,4 @@ function AdminsViewBook() {
     );
 }
 
-export default AdminsViewBook;
+export default AdminViewBook;

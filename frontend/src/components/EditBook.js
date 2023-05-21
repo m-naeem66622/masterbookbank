@@ -276,7 +276,7 @@ function EditBook() {
                             onChange={onChangeHandle}
                         />
                     </div>
-                    <div className="col-md-6">
+                    <div className="col-md-4">
                         <label htmlFor="tags" className="form-label">
                             Tags
                         </label>
@@ -288,6 +288,20 @@ function EditBook() {
                             id="tags"
                             onChange={onChangeHandle}
                         />
+                    </div>
+                    <div className="col-md-2">
+                        <label htmlFor="inStock" className="form-label">
+                            In Stock
+                        </label>
+                        <input
+                            type="number"
+                            value={book.inStock}
+                            className="form-control text-light bg-dark"
+                            name="inStock"
+                            id="inStock"
+                            onChange={onChangeHandle}
+                        />
+                        <div className="invalid-feedback"></div>
                     </div>
                     <div className="col-md-5">
                         <label htmlFor="publisher" className="form-label">

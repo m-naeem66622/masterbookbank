@@ -3,7 +3,7 @@ const cartReducer = (prevState = {}, action) => {
     switch (action.type) {
         case "SET_CART":
             return action.payload;
-        
+
         case "EMPTY_CART":
             return {};
 

@@ -21,30 +21,30 @@ export const fetchOrdersAdmin = async () => {
     const options = {
         method: "GET",
         headers: {
-            authToken: localStorage.getItem("authToken")
+            authToken: localStorage.getItem("authToken"),
         },
-    }
+    };
 
     const res = await fetch(url, options);
     const json = await res.json();
 
     return { json, status: res.status };
-}
+};
 
 export const fetchOrderAdmin = async (id) => {
     const url = `${host}/api/order/admin/fetch/${id}`;
     const options = {
         method: "GET",
         headers: {
-            authToken: localStorage.getItem("authToken")
+            authToken: localStorage.getItem("authToken"),
         },
-    }
+    };
 
     const res = await fetch(url, options);
     const json = await res.json();
 
     return { json, status: res.status };
-}
+};
 
 export const updateOrderAdmin = async (id, orderStatus) => {
     const url = `${host}/api/order/admin/update/${id}`;
