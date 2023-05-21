@@ -1,7 +1,7 @@
 const { body } = require("express-validator");
 
 // Validation rules for the Order schema
-const orderValidationRules = [
+const createValidationRules = [
     body("items.*.product")
         .isMongoId()
         .withMessage("Product ID is required for each item"),
@@ -21,4 +21,11 @@ const orderValidationRules = [
     body("deliveredAt").optional().isISO8601().toDate(),
 ];
 
-module.exports = orderValidationRules;
+const updateValidationRules = [
+    body("orderStatus").exists().withMessage("Order status is required.")
+        .isIn(["Pending", "Processing", "Shipped", "Delivered"])
+        .withMessage("Order Status is invalid"),
+    body("deliveredAt").optional().isISO8601().toDate(),
+];
+
+module.exports = { createValidationRules, updateValidationRules };

@@ -80,12 +80,21 @@ const fetchAll = async (req, res) => {
     try {
         let orders;
         if (req.admin) {
-            orders = await Order.find().populate(
-                "user",
-                "name email phoneNumber"
-            );
+            orders = await Order.find()
+                .populate("user", "name email")
+                .populate({
+                    path: "items.product",
+                    model: "books",
+                    select: "title",
+                });
         } else if (req.user) {
-            orders = await Order.find({ user: req.user.id }).select("-user");
+            orders = await Order.find({ user: req.user.id })
+                .select("-user")
+                .populate({
+                    path: "items.product",
+                    model: "books",
+                    select: "title",
+                });
         }
         res.json(orders);
     } catch (error) {
@@ -96,10 +105,13 @@ const fetchAll = async (req, res) => {
 // Get a specific order by ID
 const fetch = async (req, res) => {
     try {
-        const order = await Order.findById(req.params.id).populate(
-            "user",
-            "name email"
-        );
+        const order = await Order.findById(req.params.id)
+            .populate("user", "name email")
+            .populate({
+                path: "items.product",
+                model: "books",
+                select: "title images authors",
+            });
         if (!order) {
             return res.status(404).json({ message: "Order not found" });
         }
@@ -111,14 +123,22 @@ const fetch = async (req, res) => {
 
 // Update an order's status (e.g. shipped, cancelled)
 const update = async (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.status(400).json({ errors: errors.array() });
+    }
+
     try {
         const order = await Order.findById(req.params.id);
         if (!order) {
             return res.status(404).json({ message: "Order not found" });
         }
-        order.orderStatus = req.body.status;
+        if (req.user && order.user != req.user.id) {
+            return res.status(401).json({ message: "Access denied 0x000c6" });
+        }
+        order.orderStatus = req.body.orderStatus;
         await order.save();
-        res.json(order);
+        res.json({ message: "Order status sucessfully updated" });
     } catch (error) {
         res.status(500).json({ message: "Server error 0x000c4" });
     }

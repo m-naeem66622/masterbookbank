@@ -31,11 +31,10 @@ export const fetchOrdersAdmin = async () => {
     return { json, status: res.status };
 }
 
-export const updateOrderAdmin = async (id, status) => {
-    const url = `${host}/api/order/admin/update/${id}`;
+export const fetchOrderAdmin = async (id) => {
+    const url = `${host}/api/order/admin/fetch/${id}`;
     const options = {
-        method: "POST",
-        body:status,
+        method: "GET",
         headers: {
             authToken: localStorage.getItem("authToken")
         },
@@ -46,3 +45,20 @@ export const updateOrderAdmin = async (id, status) => {
 
     return { json, status: res.status };
 }
+
+export const updateOrderAdmin = async (id, orderStatus) => {
+    const url = `${host}/api/order/admin/update/${id}`;
+    const options = {
+        method: "PUT",
+        body: JSON.stringify({ orderStatus }),
+        headers: {
+            authToken: localStorage.getItem("authToken"),
+            "Content-Type": "application/json",
+        },
+    };
+
+    const res = await fetch(url, options);
+    const json = await res.json();
+
+    return { json, status: res.status };
+};

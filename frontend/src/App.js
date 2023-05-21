@@ -23,6 +23,7 @@ import Cart from './components/Cart';
 import ViewBook from './components/ViewBook';
 import Checkout from './components/Checkout';
 import AdminOrders from './components/AdminOrders';
+import AdminOrder from './components/AdminOrder';
 
 
 function App() {
@@ -46,6 +47,7 @@ function App() {
               <Route exact path="/user/account/edit" element={<EditUserAccount />} />
             </Route>
             <Route element={<AdminPrivateRoutes />}>
+              <Route exact path="/admin/order/:id" element={<AdminOrder />} />
               <Route exact path="/admin/orders" element={<AdminOrders />} />
               <Route exact path="/admin/account" element={<AdminAccount />} />
               <Route exact path="/admin/book/add" element={<AddBook />} />
