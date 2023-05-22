@@ -1,12 +1,17 @@
 const host = process.env.REACT_APP_SERVER_HOST;
 
 // Fetch All Books
-export const fetchBooks = async () => {
-    const url = `${host}/api/book/fetchAll`;
-    const options = {
-        method: "GET",
-    };
-    const response = await fetch(url, options);
+export const fetchBooks = async (params = {}) => {
+    const url = `${host}/api/book/fetchAll?`;
+    const options = { method: "GET" };
+    const esc = encodeURIComponent;
+    const query = Object.keys(params)
+        .map(function (k) {
+            return esc(k) + "=" + esc(params[k]);
+        })
+        .join("&");
+
+    const response = await fetch(url + query, options);
     const json = await response.json();
 
     const obj = {
