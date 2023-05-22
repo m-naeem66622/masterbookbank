@@ -145,3 +145,15 @@ export const deleteBook = async (bookID) => {
     };
     return obj;
 };
+
+export const titleToKebab = (string) => {
+    return string.toLowerCase().split(" ").join("-");
+};
+
+export const kebabToTitle = (string) => {
+    return string
+        .toLowerCase()
+        .split("-")
+        .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+        .join(" ");
+};

@@ -22,6 +22,8 @@ function AdminOrders() {
 
     useEffect(() => {
         asyncFunc();
+
+        // eslint-disable-next-line
     }, []);
 
     return (

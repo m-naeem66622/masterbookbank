@@ -1,18 +1,20 @@
 import React, { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
 import BookCard from "./BookCard";
 import { useBooksContext } from "../provider/BookProvider";
-import { fetchBooks } from "../features/BookFeatures";
+import { fetchBooks, kebabToTitle } from "../features/BookFeatures";
 import InfiniteScroll from "react-infinite-scroll-component";
 import Loader from "./Loader";
 
-function Home() {
-    document.title = "Home | Master Book Bank";
+function BooksByX() {
+    const params = useParams();
+    const { param1, param2 } = params;
     const { books, setBooks, loading, setLoading } = useBooksContext();
     const [response, setResponse] = useState({ totalResults: 0, page: 0 });
 
     const asyncFunc = async () => {
         setLoading(true);
-        const data = await fetchBooks();
+        const data = await fetchBooks({ [param1]: kebabToTitle(param2) });
         const { totalResults, currentResults, limit, page, documents } =
             data.json;
         setLoading(false);
@@ -25,7 +27,10 @@ function Home() {
     };
 
     const fetchData = async () => {
-        const data = await fetchBooks({ page: response.page + 1 });
+        const data = await fetchBooks({
+            page: response.page + 1,
+            [param1]: param2,
+        });
         const { totalResults, currentResults, limit, page, documents } =
             data.json;
 
@@ -44,10 +49,12 @@ function Home() {
 
     return (
         <>
-            <h1 className="text-light text-center mt-3">Products</h1>
-
+            <h2 className="text-light mt-3 mb-4 text-center">
+                {param1 === "authors" && "Books of " + kebabToTitle(param2)}
+                {param1 === "language" && kebabToTitle(param2) + " Books"}
+            </h2>
             <div className="py-4">
-                {!loading && (
+                {!loading && books.length !== 0 ? (
                     <InfiniteScroll
                         dataLength={books.length} //This is important field to render the next data
                         next={fetchData}
@@ -66,10 +73,14 @@ function Home() {
                             ))}
                         </div>
                     </InfiniteScroll>
+                ) : (
+                    <h4 className="text-center text light">
+                        No Books Found :)
+                    </h4>
                 )}
             </div>
         </>
     );
 }
 
-export default Home;
+export default BooksByX;

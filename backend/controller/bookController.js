@@ -6,7 +6,7 @@ const Book = require("../models/bookSchema");
 const fetchAll = async (req, res) => {
     try {
         const { query } = req;
-        const { title, authors, categories, limit = 10, page = 1 } = query;
+        const { title, authors, categories, publisher, language, limit = 10, page = 1 } = query;
         const filters = {};
 
         if (title) {
@@ -24,7 +24,9 @@ const fetchAll = async (req, res) => {
                         .replace(/\s*-\s*/g, "-")
                 )
                 .filter(Boolean);
-            filters.authors = { $in: authorArray };
+            filters.authors = {
+                $in: authorArray.map((author) => new RegExp(author, "i")),
+            };
         }
 
         if (categories) {
@@ -37,12 +39,17 @@ const fetchAll = async (req, res) => {
                         .replace(/\s*-\s*/g, "-")
                 )
                 .filter(Boolean);
-            filters.categories = { $in: categoryArray };
+            filters.categories = {
+                $in: categoryArray.map((category) => new RegExp(category, "i")),
+            };
         }
 
-        if (categories) {
-            const categoryArray = categories.split(",");
-            filters.categories = { $in: categoryArray };
+        if (publisher) {
+            filters.publisher = new RegExp(publisher, "i");
+        }
+        
+        if (language) {
+            filters.language = new RegExp(language, "i");
         }
 
         const totalDocuments = await Book.countDocuments(filters).exec();
@@ -60,47 +67,9 @@ const fetchAll = async (req, res) => {
             documents,
         });
     } catch (err) {
-        console.error(err);
         res.status(500).json({ message: "Server error 0x000b1" });
     }
 };
-
-// const fetchAll = async (req, res) => {
-//     try {
-//         const { query } = req;
-//         const terms = query.title.split(" ").map((term) => new RegExp(term, "i"));
-
-//         const documents = await Book.find({
-//             $or: terms.map((term) => ({ title: term })),
-//         }).exec();
-
-//         console.log(req.query);
-
-//         // const books = await Book.find();
-//         res.json({ length: documents.length, documents });
-//     } catch (err) {
-//         res.status(500).json({ message: "Server error 0x000b1" });
-//     }
-// };
-
-// router.get("/books", async (req, res) => {
-//     const { page = 1, limit = 10 } = req.query;
-//     const skip = (page - 1) * limit;
-
-//     try {
-//         const count = await Book.countDocuments();
-//         const books = await Book.find().skip(skip).limit(parseInt(limit));
-
-//         res.json({
-//             totalResults: count,
-//             currentPage: page,
-//             totalPages: Math.ceil(count / limit),
-//             books: books
-//         });
-//     } catch (err) {
-//         res.status(500).json({ message: "Server error" });
-//     }
-// });
 
 // Get specific book
 const fetch = async (req, res) => {

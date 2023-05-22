@@ -50,6 +50,8 @@ function AdminOrder() {
 
     useEffect(() => {
         asyncFunc();
+
+        // eslint-disable-next-line
     }, []);
 
     // useEffect(() => {
@@ -109,7 +111,7 @@ function AdminOrder() {
                         <button
                             className="btn btn-primary col-12 col-sm-3"
                             type="submit"
-                            disabled={orderStatus == order.orderStatus}
+                            disabled={orderStatus === order.orderStatus}
                             style={{
                                 width: "fit-content",
                                 height: "fit-content",

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import ImagePreview from "./ImagePreview";
 import { useBooksContext } from "../provider/BookProvider";
-import { fetchBook } from "../features/BookFeatures";
+import { fetchBook, titleToKebab } from "../features/BookFeatures";
 import { Link, useParams } from "react-router-dom";
 import addCartIcon from "../assets/add-cart.svg";
 import removeCartIcon from "../assets/remove-cart.svg";
@@ -71,7 +71,6 @@ function ViewBook() {
     };
 
     useEffect(() => {
-        console.log(cart);
         if (Object.keys(cart).length) {
             localStorage.setItem("cartItems", JSON.stringify(cart));
         }
@@ -85,143 +84,200 @@ function ViewBook() {
 
     return (
         <>
-            <h1 className="text-light text-center mt-3">View Book</h1>
             {loading && <Loader />}
             {!loading && res.status === 200 ? (
-                <div className="container text-light">
-                    <div className="details">
-                        {<ImagePreview files={res.json.images} edit={false} />}
-                        <div className="box">
-                            <div className="row text-primary">
-                                <h2>{res.json.title}</h2>
-                                <strong>PKR {res.json.price}</strong>
-                            </div>
-                            <p>
-                                <strong>Pages:</strong> {res.json.pages}
-                            </p>
-                            <p>
-                                <strong>Author(s):</strong>{" "}
-                                {res.json.authors.map((author, index) => (
-                                    <Link className="me-2" key={index}>
-                                        {author}
-                                    </Link>
-                                ))}
-                            </p>
-                            <p>
-                                <strong>Publisher:</strong>{" "}
-                                <Link>{res.json.publisher}</Link>
-                            </p>
-                            <p>
-                                <strong>Publish Date:</strong>{" "}
-                                {res.json.publishDate}
-                            </p>
-                            <p>
-                                <strong>Language:</strong>{" "}
-                                <Link>{res.json.language}</Link>
-                            </p>
-                            <p>
-                                <strong>Category:</strong>{" "}
-                                {res.json.categories.map((category, index) => (
-                                    <Link className="me-2" key={index}>
-                                        {category}
-                                    </Link>
-                                ))}
-                            </p>
-                            <div className="mb-4 mt-2">
-                                {/* <!-- Quantity --> */}
-                                <div className="d-flex align-items-center">
-                                    <label className="form-label mb-0">
-                                        <strong>Quantity:</strong>
-                                    </label>
-                                    <div className="ms-2 d-flex">
-                                        <button
-                                            className="btn btn-primary px-3 me-2"
-                                            onClick={() => handleMinusQty()}
-                                        >
-                                            <img
-                                                width="10px"
-                                                src={minusIcon}
-                                                alt="minus-icon"
-                                            />
-                                        </button>
-                                        <input
-                                            readOnly
-                                            min="1"
-                                            max={res.json.inStock}
-                                            name="quantity"
-                                            value={quantity}
-                                            type="number"
-                                            className="form-control"
-                                        />
-                                        <button
-                                            className="btn btn-primary px-3 ms-2"
-                                            onClick={() => handlePlusQty()}
-                                        >
-                                            <img
-                                                width="10px"
-                                                src={plusIcon}
-                                                alt="plus-icon"
-                                            />
-                                        </button>
-                                    </div>
+                <>
+                    <h1 className="text-light text-center mt-3">
+                        {res.json.title}
+                    </h1>
+                    <div className="container text-light">
+                        <div className="details">
+                            {
+                                <ImagePreview
+                                    files={res.json.images}
+                                    edit={false}
+                                />
+                            }
+                            <div className="box">
+                                <div className="row text-primary">
+                                    {res.json.inStock > 0 ? (
+                                        <em className="text-success fw-bold">
+                                            In stock
+                                        </em>
+                                    ) : (
+                                        <em className="text-danger fw-bold">
+                                            Out of stock
+                                        </em>
+                                    )}
+                                    <strong>PKR {res.json.price}</strong>
                                 </div>
-                                {/* <!-- Quantity --> */}
+                                <p>
+                                    <strong>Pages:</strong> {res.json.pages}
+                                </p>
+                                <p>
+                                    <strong>Author(s): </strong>
+                                    {res.json.authors.map((author, index) => (
+                                        <Link
+                                            key={index}
+                                            to={
+                                                "/books/authors/" +
+                                                titleToKebab(author)
+                                            }
+                                            className="me-2"
+                                        >
+                                            {author}
+                                        </Link>
+                                    ))}
+                                </p>
+                                <p>
+                                    <strong>Publisher: </strong>
+                                    <Link
+                                        to={
+                                            "/books/publisher/" +
+                                            titleToKebab(res.json.publisher)
+                                        }
+                                    >
+                                        {res.json.publisher}
+                                    </Link>
+                                </p>
+                                <p>
+                                    <strong>Publish Date: </strong>
+                                    {res.json.publishDate}
+                                </p>
+                                <p>
+                                    <strong>Language: </strong>
+                                    <Link
+                                        to={
+                                            "/books/language/" +
+                                            titleToKebab(res.json.language)
+                                        }
+                                    >
+                                        {res.json.language}
+                                    </Link>
+                                </p>
+                                <p>
+                                    <strong>Categories: </strong>
+                                    {res.json.categories.map(
+                                        (category, index) => (
+                                            <Link
+                                                to={
+                                                    "/books/categories/" +
+                                                    titleToKebab(category)
+                                                }
+                                                className="me-2"
+                                                key={index}
+                                            >
+                                                {category}
+                                            </Link>
+                                        )
+                                    )}
+                                </p>
+                                <div className="mb-4 mt-2">
+                                    {/* <!-- Quantity --> */}
+                                    {res.json.inStock > 0 && (
+                                        <div className="d-flex align-items-center">
+                                            <label className="form-label mb-0">
+                                                <strong>Quantity:</strong>
+                                            </label>
+                                            <div className="ms-2 d-flex">
+                                                <button
+                                                    className="btn btn-primary px-3 me-2"
+                                                    onClick={() =>
+                                                        handleMinusQty()
+                                                    }
+                                                >
+                                                    <img
+                                                        width="10px"
+                                                        src={minusIcon}
+                                                        alt="minus-icon"
+                                                    />
+                                                </button>
+                                                <input
+                                                    readOnly
+                                                    min="1"
+                                                    max={res.json.inStock}
+                                                    name="quantity"
+                                                    value={quantity}
+                                                    type="number"
+                                                    className="form-control"
+                                                />
+                                                <button
+                                                    className="btn btn-primary px-3 ms-2"
+                                                    onClick={() =>
+                                                        handlePlusQty()
+                                                    }
+                                                >
+                                                    <img
+                                                        width="10px"
+                                                        src={plusIcon}
+                                                        alt="plus-icon"
+                                                    />
+                                                </button>
+                                            </div>
+                                        </div>
+                                    )}
+                                    {/* <!-- Quantity --> */}
 
-                                {/* <!-- Price --> */}
-                                {quantity > 1 && (
-                                    <p className="text-start m-0 fs-5">
-                                        <strong>Total: </strong>
-                                        {(quantity * res.json.price).toFixed(2)}
-                                    </p>
-                                )}
-                                {/* <!-- Price --> */}
-                            </div>
-                            <button
-                                type="button"
-                                className="btn btn-primary btn-sm d-inline-flex justify-content-center align-items-center me-2"
-                                style={{
-                                    transition: "all 0.2s",
-                                    width: cart[id] ? "110px" : "85px",
-                                }}
-                                onClick={handleAddOrRemove}
-                            >
-                                <img
-                                    width="28px"
-                                    src={
-                                        cart[id]
+                                    {/* <!-- Price --> */}
+                                    {quantity > 1 && (
+                                        <p className="text-start m-0 fs-5">
+                                            <strong>Total: </strong>
+                                            {(
+                                                quantity * res.json.price
+                                            ).toFixed(2)}
+                                        </p>
+                                    )}
+                                    {/* <!-- Price --> */}
+                                </div>
+                                <button
+                                    type="button"
+                                    disabled={res.json.inStock < 1}
+                                    className="btn btn-primary btn-sm d-inline-flex justify-content-center align-items-center me-2"
+                                    style={{
+                                        transition: "all 0.2s",
+                                        width: cart[id] ? "110px" : "85px",
+                                    }}
+                                    onClick={handleAddOrRemove}
+                                >
+                                    <img
+                                        width="28px"
+                                        src={
+                                            cart[id]
+                                                ? cart[id].quantity !==
+                                                      quantity && quantity !== 1
+                                                    ? updateCartIcon
+                                                    : removeCartIcon
+                                                : addCartIcon
+                                        }
+                                        alt="cart-icon"
+                                    />
+                                    <span className="ms-2 fs-6">
+                                        {cart[id]
                                             ? cart[id].quantity !== quantity &&
                                               quantity !== 1
-                                                ? updateCartIcon
-                                                : removeCartIcon
-                                            : addCartIcon
-                                    }
-                                    alt="cart-icon"
-                                />
-                                <span className="ms-2 fs-6">
-                                    {cart[id]
-                                        ? cart[id].quantity !== quantity &&
-                                          quantity !== 1
-                                            ? "Update"
-                                            : "Remove"
-                                        : "Add"}
-                                </span>
-                            </button>
-                            <button
-                                type="button"
-                                className="btn btn-primary btn-sm d-inline-flex justify-content-center align-items-center"
-                            >
-                                <img
-                                    width="20px"
-                                    src={buyIcon}
-                                    alt="buy-icon"
-                                />
-                                <span className="ms-2 fs-6">Buy Now</span>
-                            </button>
+                                                ? "Update"
+                                                : "Remove"
+                                            : "Add"}
+                                    </span>
+                                </button>
+                                <button
+                                    type="button"
+                                    disabled={res.json.inStock < 1}
+                                    className="btn btn-primary btn-sm d-inline-flex justify-content-center align-items-center"
+                                >
+                                    <img
+                                        width="20px"
+                                        src={buyIcon}
+                                        alt="buy-icon"
+                                    />
+                                    <span className="ms-2 fs-6">Buy Now</span>
+                                </button>
+                            </div>
                         </div>
+                        <h3>Description</h3>
+                        <p>{res.json.description}</p>
                     </div>
-                    <h3>Description</h3>
-                    <p>{res.json.description}</p>
-                </div>
+                </>
             ) : (
                 <Page404 />
             )}

@@ -4,11 +4,12 @@ import addCartIcon from "../assets/add-cart.svg";
 import removeCartIcon from "../assets/remove-cart.svg";
 import buyIcon from "../assets/bag-shopping-regular.svg";
 import { useBooksContext } from "../provider/BookProvider";
+import { titleToKebab } from "../features/BookFeatures";
 
 function BookCard(props) {
     const host = process.env.REACT_APP_SERVER_HOST;
     const { cart, dispatchCart } = useBooksContext();
-    const { _id, title, authors, price, images } = props.book;
+    const { _id, title, authors, price, images, inStock } = props.book;
 
     const handleAddOrRemove = () => {
         if (cart[_id]) {
@@ -64,7 +65,16 @@ function BookCard(props) {
                     <h5 className="card-title">{title}</h5>
                     <p className="card-subtitle">
                         <strong>By: </strong>
-                        {authors}
+                        {authors.map((author, index) => (
+                            <Link
+                                key={index}
+                                to={"/books/authors/" + titleToKebab(author)}
+                                title={author}
+                                className="card-subtitle me-2"
+                            >
+                                {author}
+                            </Link>
+                        ))}
                     </p>
                     <p className="card-text">
                         <strong>Price: </strong>
@@ -73,31 +83,47 @@ function BookCard(props) {
                 </div>
                 <div className="card-footer">
                     <div className="d-flex justify-content-between">
-                        <button
-                            type="button"
-                            className="btn btn-primary btn-sm d-inline-flex justify-content-center align-items-center"
-                            style={{
-                                transition: "all 0.2s",
-                                width: cart[_id] ? "110px" : "85px",
-                            }}
-                            onClick={handleAddOrRemove}
-                        >
-                            <img
-                                width="28px"
-                                src={cart[_id] ? removeCartIcon : addCartIcon}
-                                alt="cart-icon"
-                            />
-                            <span className="ms-2 fs-6">
-                                {cart[_id] ? "Remove" : "Add"}
-                            </span>
-                        </button>
-                        <button
-                            type="button"
-                            className="btn btn-primary btn-sm d-inline-flex justify-content-center align-items-center"
-                        >
-                            <img width="20px" src={buyIcon} alt="buy-icon" />
-                            <span className="ms-2 fs-6">Buy Now</span>
-                        </button>
+                        {inStock > 0 ? (
+                            <>
+                                <button
+                                    type="button"
+                                    className="btn btn-primary btn-sm d-inline-flex justify-content-center align-items-center"
+                                    style={{
+                                        transition: "all 0.2s",
+                                        width: cart[_id] ? "110px" : "85px",
+                                    }}
+                                    onClick={handleAddOrRemove}
+                                >
+                                    <img
+                                        width="28px"
+                                        src={
+                                            cart[_id]
+                                                ? removeCartIcon
+                                                : addCartIcon
+                                        }
+                                        alt="cart-icon"
+                                    />
+                                    <span className="ms-2 fs-6">
+                                        {cart[_id] ? "Remove" : "Add"}
+                                    </span>
+                                </button>
+                                <button
+                                    type="button"
+                                    className="btn btn-primary btn-sm d-inline-flex justify-content-center align-items-center"
+                                >
+                                    <img
+                                        width="20px"
+                                        src={buyIcon}
+                                        alt="buy-icon"
+                                    />
+                                    <span className="ms-2 fs-6">Buy Now</span>
+                                </button>
+                            </>
+                        ) : (
+                            <em className="text-danger text-center w-100 fw-bold py-1">
+                                Out of stock
+                            </em>
+                        )}
                     </div>
                 </div>
             </div>
