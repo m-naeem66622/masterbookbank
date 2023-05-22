@@ -29,6 +29,7 @@ function ViewBook() {
                 res.json.publishDate
             ).toLocaleString("default", { month: "long", year: "numeric" });
             setRes(res);
+            document.title = res.json.title + " | Master Book Bank";
         }
     };
 

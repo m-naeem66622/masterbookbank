@@ -5,6 +5,7 @@ import Loader from "./Loader";
 import { useBooksContext } from "../provider/BookProvider";
 
 function AdminOrder() {
+    document.title = "Admin Order Details | Master Book Bank";
     const host = process.env.REACT_APP_SERVER_HOST;
     const { loading, setLoading, notify } = useBooksContext();
     const params = useParams();

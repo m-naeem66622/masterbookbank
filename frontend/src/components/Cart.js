@@ -4,6 +4,7 @@ import { useBooksContext } from "../provider/BookProvider";
 import { useNavigate } from "react-router-dom";
 
 function Cart() {
+    document.title = "Cart | Master Book Bank";
     const { cart, isUser } = useBooksContext();
     const navigate = useNavigate();
 

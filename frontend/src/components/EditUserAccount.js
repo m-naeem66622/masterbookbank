@@ -5,6 +5,7 @@ import { updateUser } from "../features/AuthFeatures";
 import Loader from "./Loader";
 
 function EditUserAccount() {
+    document.title = "Edit Account Details | Master Book Bank";
     const { notify, loading, accountDetail } = useBooksContext();
     const navigate = useNavigate();
     const [isPasswordWillChange, setIsPasswordWillChange] = useState(false);
@@ -17,7 +18,9 @@ function EditUserAccount() {
 
     const handleOnChange = (e) => {
         if (
-            ["address", "city", "postalCode", "country", "state"].includes(e.target.name)
+            ["address", "city", "postalCode", "country", "state"].includes(
+                e.target.name
+            )
         ) {
             setData((prevState) => ({
                 ...prevState,

@@ -1,6 +1,7 @@
 import React from "react";
 
 function Page404() {
+    document.title = "Page Not Found | Master Book Bank";
     const pTagStyle = {
         fontSize: "1.5rem",
     };

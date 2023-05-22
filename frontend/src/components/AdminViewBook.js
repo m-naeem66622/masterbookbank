@@ -8,6 +8,7 @@ import { useBooksContext } from "../provider/BookProvider";
 import { deleteBook, fetchBook } from "../features/BookFeatures";
 
 function AdminViewBook() {
+    document.title = "Admin Book Details | Master Book Bank";
     const { loading, notify, setRolling } = useBooksContext();
 
     const params = useParams();

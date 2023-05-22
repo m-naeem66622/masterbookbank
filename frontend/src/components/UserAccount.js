@@ -3,6 +3,7 @@ import { useBooksContext } from "../provider/BookProvider";
 import { Link } from "react-router-dom";
 
 function UserAccount() {
+    document.title = "Account Details | Master Book Bank";
     const { accountDetail } = useBooksContext();
 
     return (

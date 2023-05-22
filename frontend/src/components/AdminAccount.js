@@ -2,6 +2,7 @@ import React from "react";
 import { useBooksContext } from "../provider/BookProvider";
 
 function AdminAccount() {
+    document.title = "Admin Account Details | Master Book Bank";
     const { accountDetail } = useBooksContext();
 
     return (

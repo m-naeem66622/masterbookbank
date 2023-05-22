@@ -6,7 +6,9 @@ import { authenticateAdmin, signinAdmin } from "../features/AuthFeatures";
 import Loader from "./Loader";
 
 function AdminSignin() {
-    const { notify, isAdmin, setIsAdmin, loading, setAccountDetail } = useBooksContext();
+    document.title = "Admin Signin | Master Book Bank";
+    const { notify, isAdmin, setIsAdmin, loading, setAccountDetail } =
+        useBooksContext();
     const navigate = useNavigate();
     const [data, setData] = useState({ username: "", password: "" });
 

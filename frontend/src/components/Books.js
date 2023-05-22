@@ -6,6 +6,7 @@ import { fetchBooks } from "../features/BookFeatures";
 import InfiniteScroll from "react-infinite-scroll-component";
 
 function Books() {
+    document.title = "Books | Master Book Bank";
     const navigate = useNavigate();
     const { rolling, setRolling, notify } = useBooksContext();
     const [books, setBooks] = useState([]);

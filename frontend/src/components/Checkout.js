@@ -10,6 +10,7 @@ import jazzcashIcon from "../assets/jazzcash.png";
 import mastercardIcon from "../assets/mastercard.svg";
 
 function Checkout() {
+    document.title = "Checkout | Master Book Bank";
     const { accountDetail, notify, dispatchCart } = useBooksContext();
     const couponRef = useRef();
     const navigate = useNavigate();
@@ -141,7 +142,9 @@ function Checkout() {
                                     <p className="mb-0">
                                         <strong>Address: </strong>
                                         {shippingAddress &&
-                                            Object.values(shippingAddress).join(", ")}
+                                            Object.values(shippingAddress).join(
+                                                ", "
+                                            )}
                                     </p>
                                     <Link to="/user/account/edit">
                                         Want to change Address

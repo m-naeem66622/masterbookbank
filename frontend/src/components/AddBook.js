@@ -7,6 +7,7 @@ import { useBooksContext } from "../provider/BookProvider";
 import { addBook } from "../features/BookFeatures";
 
 function AddBook() {
+    document.title = "Add Book | Master Book Bank";
     // Context
     const { notify, rolling, setRolling } = useBooksContext();
 

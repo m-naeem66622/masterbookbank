@@ -60,7 +60,7 @@ function Navbar() {
                                         }`}
                                         to="/admin/book/add"
                                     >
-                                        Home
+                                        Add Book
                                     </Link>
                                 </li>
                                 <li className="nav-item">

@@ -5,6 +5,7 @@ import { fetchOrdersAdmin } from "../features/OrderFeatures";
 import Loader from "./Loader";
 
 function AdminOrders() {
+    document.title = "Admin Orders | Master Book Bank";
     const { loading, setLoading } = useBooksContext();
     const [orders, setOrders] = useState([]);
 

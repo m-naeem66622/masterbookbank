@@ -6,7 +6,9 @@ import { authenticateUser, signinUser } from "../features/AuthFeatures";
 import Loader from "./Loader";
 
 function UserSignin() {
-    const { notify, isUser, loading, setIsUser, setAccountDetail } = useBooksContext();
+    document.title = "Signin | Master Book Bank";
+    const { notify, isUser, loading, setIsUser, setAccountDetail } =
+        useBooksContext();
     const navigate = useNavigate();
     const [data, setData] = useState({ email: "", password: "" });
 

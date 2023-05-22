@@ -6,6 +6,7 @@ import InfiniteScroll from "react-infinite-scroll-component";
 import Loader from "./Loader";
 
 function Home() {
+    document.title = "Home | Master Book Bank";
     const { books, setBooks, loading, setLoading } = useBooksContext();
     const [response, setResponse] = useState({ totalResults: 0, page: 0 });
 
