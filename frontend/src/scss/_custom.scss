@@ -1,0 +1,215 @@
+@import "../../node_modules/bootstrap/scss/functions";
+
+// scss-docs-start gray-color-variables
+$gray-100: #f5edf0 !default;
+// $gray-100: #fcfcfc !default;
+$gray-200: #ececed !default;
+$gray-300: #ddddde !default;
+$gray-400: #cdcdce !default;
+$gray-400: #bdbdbd !default;
+$gray-500: #acacad !default;
+$gray-600: #707071 !default;
+$gray-700: #4d4d4e !default;
+$gray-800: #383839 !default;
+$gray-900: #252526 !default;
+// scss-docs-end gray-color-variables
+
+// scss-docs-start color-variables
+$sea-green: #17c3b2 !default;
+$amaranth-purple: #a4243b !default;
+// scss-docs-end color-variables
+
+// Settings for the `<body>` element start.
+$body-color: $gray-600 !default;
+$body-bg: $gray-100 !default;
+// Settings for the `<body>` element end.
+
+// Style anchor elements start.
+$link-color: $gray-600 !default;
+$link-hover-color: #a4243b !default;
+// Style anchor elements end.
+
+// scss-docs-start navbar-variables
+$navbar-light-color: $gray-600 !default;
+$navbar-light-hover-color: $amaranth-purple !default;
+$navbar-light-active-color: $amaranth-purple !default;
+$navbar-light-brand-color: $navbar-light-color !default;
+$navbar-light-brand-hover-color: $navbar-light-active-color !default;
+// scss-docs-end navbar-variables
+
+$component-active-bg: $sea-green !default;
+
+// scss-docs-start focus-ring-variables
+$focus-ring-color: rgba($sea-green, 0.25) !default;
+// scss-docs-end focus-ring-variables
+
+// scss-docs-start border-variables
+$border-color: $sea-green !default;
+// scss-docs-end border-variables
+
+// Import _variables.scss
+@import "../../node_modules/bootstrap/scss/variables";
+
+// scss-docs-start colors-map
+$colors: map-merge(
+    $colors,
+    (
+        "gray-light": $gray-500,
+        // "sea-green": $sea-green,
+        "amaranth-purple": $amaranth-purple,
+    )
+);
+// scss-docs-end colors-map
+
+// scss-docs-start theme-colors-map
+$theme-colors: map-merge(
+    $theme-colors,
+    (
+        "sea-green": $sea-green,
+    )
+);
+// scss-docs-end theme-colors-map
+
+// scss-docs-start font-sizes
+$font-sizes: map-merge(
+    $font-sizes,
+    (
+        7: $font-size-base * 0.875,
+    )
+);
+// scss-docs-end font-sizes
+
+// make a map to extend utilities
+$custom-colors: map-remove($colors, "sea-green");
+$custom-colors-rgb: map-loop($custom-colors, to-rgb, "$value");
+$custom-text-colors: map-loop($custom-colors-rgb, rgba-css-var, "$key", "text");
+$custom-border-colors: map-loop(
+    $custom-colors-rgb,
+    rgba-css-var,
+    "$key",
+    "border"
+);
+
+// generate css variables for $custom-colors
+:root,
+[data-bs-theme="light"] {
+    @each $color, $value in $custom-colors-rgb {
+        --#{$prefix}#{$color}-rgb: #{$value};
+    }
+}
+
+// import requred files to extend original utilties map
+@import "../../node_modules/bootstrap/scss/variables-dark";
+@import "../../node_modules/bootstrap/scss/maps";
+$utilities-border-colors: map-merge(
+    $utilities-border-colors,
+    $custom-border-colors
+);
+$utilities-text-colors: map-merge($utilities-text-colors, $custom-text-colors);
+$utilities-bg-colors: map-merge($utilities-bg-colors, $custom-text-colors);
+@import "../../node_modules/bootstrap/scss/mixins";
+@import "../../node_modules/bootstrap/scss/utilities";
+/* extend the original $utilities map */
+$utilities: (
+    "text-align": (
+        responsive: true,
+        property: text-align,
+        class: text,
+        values: (
+            start: left,
+            end: right,
+            center: center,
+        ),
+    ),
+    "width": (
+        property: width,
+        class: w,
+        values: (
+            25: 25%,
+            50: 50%,
+            75: 75%,
+            100: 100%,
+            auto: auto,
+            fit: fit-content,
+        ),
+    ),
+);
+$utilities: map-merge(
+    $utilities,
+    (
+        "grid-template-columns": (
+            property: grid-template-columns,
+            class: g-cols,
+            responsive: true,
+            values: (
+                1: repeat(1, minmax(0, 1fr)),
+                2: repeat(2, minmax(0, 1fr)),
+                3: repeat(3, minmax(0, 1fr)),
+                4: repeat(4, minmax(0, 1fr)),
+                5: repeat(5, minmax(0, 1fr)),
+            ),
+        ),
+    )
+);
+// $utilities: map-merge(
+//         "width":
+//             map-merge(
+//                 map-get($utilities, "width"),
+//                 (
+//                     values:
+//                         map-merge(
+//                             map-get(map-get($utilities, "width"), "values"),
+//                             (
+//                                 fit: fit-content,
+//                             )
+//                         ),
+//                 )
+//             ),
+//     )
+// );
+
+// @import "../../node_modules/bootstrap/scss/buttons";
+@mixin button-fill-variant(
+    $color,
+    $color-hover: $color,
+    $active-background: $light,
+    $active-border: $amaranth-purple,
+    $active-color: $amaranth-purple
+) {
+    --#{$prefix}btn-color: #{$active-background};
+    --#{$prefix}btn-bg: #{$color};
+    --#{$prefix}btn-border-color: #{$color};
+    --#{$prefix}btn-hover-color: #{$color-hover};
+    --#{$prefix}btn-hover-bg: #{$active-background};
+    --#{$prefix}btn-hover-border-color: #{$color};
+    --#{$prefix}btn-focus-shadow-rgb: #{to-rgb($color)};
+    --#{$prefix}btn-active-color: #{$active-color};
+    --#{$prefix}btn-active-bg: #{$active-background};
+    --#{$prefix}btn-active-border-color: #{$active-border};
+    --#{$prefix}btn-active-shadow: #{$btn-active-box-shadow};
+    --#{$prefix}btn-disabled-color: #{$active-background};
+    --#{$prefix}btn-disabled-bg: #{$gray-500};
+    --#{$prefix}btn-disabled-border-color: #{$gray-500};
+    --#{$prefix}gradient: none;
+}
+
+// Import Bootstrap core styles
+@import "../../node_modules/bootstrap/scss/bootstrap";
+@each $color, $value in $theme-colors {
+    .btn-fill-#{$color} {
+        @include button-fill-variant($value);
+    }
+}
+
+// Button for toggling the navbar when in its collapsed state
+.navbar-toggler {
+    border: none;
+
+    &:focus {
+        box-shadow: none;
+    }
+}
+
+.text-bg-sea-green {
+    color: $light !important;
+}
