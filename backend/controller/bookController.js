@@ -6,7 +6,18 @@ const Book = require("../models/bookSchema");
 const fetchAll = async (req, res) => {
     try {
         const { query } = req;
-        const { title, authors, categories, publisher, language, limit = 10, page = 1 } = query;
+        const {
+            title,
+            authors,
+            categories,
+            publisher,
+            language,
+            limit = 10,
+            page = 1,
+            from,
+            to,
+            random,
+        } = query;
         const filters = {};
 
         if (title) {
@@ -47,17 +58,38 @@ const fetchAll = async (req, res) => {
         if (publisher) {
             filters.publisher = new RegExp(publisher, "i");
         }
-        
+
         if (language) {
             filters.language = new RegExp(language, "i");
         }
 
-        const totalDocuments = await Book.countDocuments(filters).exec();
+        if (from) {
+            filters.createdAt = { $gte: new Date(from) };
+        }
 
-        const documents = await Book.find(filters)
-            .limit(Number(limit))
-            .skip((page - 1) * limit)
-            .exec();
+        if (to) {
+            if (filters.createdAt) {
+                filters.createdAt.$lte = new Date(to);
+            } else {
+                filters.createdAt = { $lte: new Date(to) };
+            }
+        }
+
+        let totalDocuments;
+        let documents;
+        if (random === "true") {
+            documents = await Book.aggregate([
+                { $match: filters },
+                { $sample: { size: Number(limit) } },
+            ]).exec();
+            totalDocuments = documents.length;
+        } else {
+            totalDocuments = await Book.countDocuments(filters).exec();
+            documents = await Book.find(filters)
+                .limit(Number(limit))
+                .skip((page - 1) * limit)
+                .exec();
+        }
 
         res.json({
             limit: Number(limit),
