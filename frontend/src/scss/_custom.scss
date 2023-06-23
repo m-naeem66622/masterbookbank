@@ -47,6 +47,12 @@ $focus-ring-color: rgba($sea-green, 0.25) !default;
 $border-color: $sea-green !default;
 // scss-docs-end border-variables
 
+// scss-docs-start nav-variables
+$nav-tabs-link-active-color: $amaranth-purple !default;
+$nav-tabs-link-hover-border-color: transparent !default;
+$nav-tabs-link-active-border-color: transparent transparent $amaranth-purple !default;
+// scss-docs-end nav-variables
+
 // Import _variables.scss
 @import "../../node_modules/bootstrap/scss/variables";
 

@@ -1,8 +1,5 @@
 import React, { useEffect } from "react";
 import { Link } from "react-router-dom";
-import addCartIcon from "../assets/add-cart.svg";
-import removeCartIcon from "../assets/remove-cart.svg";
-import buyIcon from "../assets/bag-shopping-regular.svg";
 import { useBooksContext } from "../provider/BookProvider";
 import { titleToKebab } from "../features/BookFeatures";
 
@@ -25,106 +22,85 @@ function BookCard(props) {
     }, [cart]);
 
     return (
-        <div className="col col-lg-4 col-xl-3 col-md-6 col-sm-12 d-flex">
-            <div
-                className="card h-100 pt-3"
-                style={{ width: "270px", minWidth: "270px" }}
-            >
-                <div className="d-flex justify-content-center align-items-center">
-                    <div className="position-relative overlay">
-                        <Link
-                            className="link-unstyled"
-                            to={"/book/view/" + _id}
-                        >
-                            <img
-                                src={`${host}/${images[0]}`}
-                                className="card-img-top w-auto rounded-0  border border-white border-4 overlay"
-                                style={{
-                                    maxHeight: "275px",
-                                    maxWidth: "210px",
-                                    filter: "drop-shadow(0px 10px 10px rgba(0,0,0,.6))",
-                                }}
-                                alt="Book Cover"
-                            />
-                        </Link>
-                        {/* <span
-                            className="position-absolute badge rounded-circle bg-danger d-flex justify-content-center align-items-center flex-column fs-normal"
+        <div
+            className="card h-100 pt-3 text-gray"
+            style={{ width: "270px", minWidth: "270px" }}
+        >
+            <div className="d-flex justify-content-center align-items-center">
+                <div className="position-relative">
+                    <Link className="link-unstyled" to={"/book/view/" + _id}>
+                        <img
+                            src={host + "/" + images[0]}
+                            className="card-img-top w-auto rounded-0  border border-white border-4 shadow-disperse"
                             style={{
-                                width: "40px",
-                                height: "40px",
-                                right: "-10px",
-                                top: "-10px",
+                                maxHeight: "275px",
+                                maxWidth: "210px",
                             }}
+                            alt={title + " Cover"}
+                        />
+                    </Link>
+                </div>
+            </div>
+            <div className="card-body d-flex flex-column justify-content-between pb-1">
+                <h5
+                    className="card-title text-center"
+                    style={{ height: "45px" }}
+                >
+                    {title}
+                </h5>
+                <p className="card-subtitle text-truncate">
+                    <strong>By: </strong>
+                    {authors.map((author, index) => (
+                        <Link
+                            key={index}
+                            title={author}
+                            className="me-1"
+                            to={"/books/authors/" + titleToKebab(author)}
                         >
-                            <span>70%</span>
-                            <span>Off</span>
-                        </span> */}
-                    </div>
-                </div>
-                <div className="card-body d-flex flex-column justify-content-between pb-1">
-                    <h5 className="card-title">{title}</h5>
-                    <p className="card-subtitle">
-                        <strong>By: </strong>
-                        {authors.map((author, index) => (
-                            <Link
-                                key={index}
-                                to={"/books/authors/" + titleToKebab(author)}
-                                title={author}
-                                className="card-subtitle me-2"
+                            {author}
+                        </Link>
+                    ))}
+                </p>
+                <p className="card-text">
+                    <strong>Price: </strong>
+                    {price}
+                </p>
+            </div>
+            <div className="card-footer">
+                <div className="d-flex justify-content-between">
+                    {inStock ? (
+                        <>
+                            <button
+                                onClick={handleAddOrRemove}
+                                type="button"
+                                className="btn btn-fill-sea-green btn-sm d-inline-flex justify-content-center align-items-center"
+                                style={{
+                                    transition: "all 0.2s",
+                                    width: "110px",
+                                }}
                             >
-                                {author}
-                            </Link>
-                        ))}
-                    </p>
-                    <p className="card-text">
-                        <strong>Price: </strong>
-                        {price}
-                    </p>
-                </div>
-                <div className="card-footer">
-                    <div className="d-flex justify-content-between">
-                        {inStock > 0 ? (
-                            <>
-                                <button
-                                    type="button"
-                                    className="btn btn-primary btn-sm d-inline-flex justify-content-center align-items-center"
-                                    style={{
-                                        transition: "all 0.2s",
-                                        width: cart[_id] ? "110px" : "85px",
-                                    }}
-                                    onClick={handleAddOrRemove}
-                                >
-                                    <img
-                                        width="28px"
-                                        src={
-                                            cart[_id]
-                                                ? removeCartIcon
-                                                : addCartIcon
-                                        }
-                                        alt="cart-icon"
-                                    />
-                                    <span className="ms-2 fs-6">
-                                        {cart[_id] ? "Remove" : "Add"}
-                                    </span>
-                                </button>
-                                <button
-                                    type="button"
-                                    className="btn btn-primary btn-sm d-inline-flex justify-content-center align-items-center"
-                                >
-                                    <img
-                                        width="20px"
-                                        src={buyIcon}
-                                        alt="buy-icon"
-                                    />
-                                    <span className="ms-2 fs-6">Buy Now</span>
-                                </button>
-                            </>
-                        ) : (
-                            <em className="text-danger text-center w-100 fw-bold py-1">
-                                Out of stock
-                            </em>
-                        )}
-                    </div>
+                                {cart[_id] ? (
+                                    <i className="fa-solid fa-cart-xmark fs-5"></i>
+                                ) : (
+                                    <i className="fa-solid fa-cart-plus fs-5"></i>
+                                )}
+                                <span className="ms-2 fs-6">
+                                    {cart[_id] ? "Remove" : "Add"}
+                                </span>
+                            </button>
+                            <button
+                                type="button"
+                                className="btn btn-fill-sea-green btn-sm d-inline-flex justify-content-center align-items-center"
+                            >
+                                <i className="fas fa-bag-shopping fs-5"></i>
+                                <span className="ms-2 fs-6">Buy Now</span>
+                            </button>
+                        </>
+                    ) : (
+                        <em className="text-danger text-center w-100 fw-bold py-1">
+                            Out of Stock
+                        </em>
+                    )}
                 </div>
             </div>
         </div>

@@ -1,21 +1,17 @@
 import React, { useEffect, useState } from "react";
 import ImagePreview from "./ImagePreview";
 import { useBooksContext } from "../provider/BookProvider";
-import { fetchBook, titleToKebab } from "../features/BookFeatures";
+import { fetchBook, fetchBooks, titleToKebab } from "../features/BookFeatures";
 import { Link, useParams } from "react-router-dom";
-import addCartIcon from "../assets/add-cart.svg";
-import removeCartIcon from "../assets/remove-cart.svg";
-import updateCartIcon from "../assets/update-cart.svg";
-import minusIcon from "../assets/minus-solid.svg";
-import plusIcon from "../assets/plus-solid.svg";
-import buyIcon from "../assets/bag-shopping-regular.svg";
 import Page404 from "./Page404";
 import Loader from "./Loader";
+import BookCard from "./BookCard";
 
 function ViewBook() {
     const { loading, setLoading, cart, dispatchCart } = useBooksContext();
-    const [res, setRes] = useState({});
+    const [response, setResponse] = useState({});
     const [quantity, setQuantity] = useState(1);
+    const [relatedBooks, setRelatedBooks] = useState([]);
 
     const params = useParams();
     const { id } = params;
@@ -28,8 +24,21 @@ function ViewBook() {
             res.json.publishDate = new Date(
                 res.json.publishDate
             ).toLocaleString("default", { month: "long", year: "numeric" });
-            setRes(res);
+            setResponse(res);
             document.title = res.json.title + " | Master Book Bank";
+        }
+    };
+
+    const fetchRelated = async () => {
+        const res = await fetchBooks({
+            limit: 4,
+            categories: response.json.categories,
+        });
+        if (res.status === 200) {
+            setRelatedBooks(
+                // filter the opened document
+                res.json.documents.filter((document) => document._id !== id)
+            );
         }
     };
 
@@ -47,8 +56,7 @@ function ViewBook() {
     const handlePlusQty = () => {
         setQuantity((prevState) => {
             let updatedState = prevState;
-            console.log("Setting state from ViewBook");
-            if (updatedState < res.json.inStock) {
+            if (updatedState < response.json.inStock) {
                 // Increment quantity by 1 only if it is less than inStock value
                 updatedState += 1;
             }
@@ -59,13 +67,13 @@ function ViewBook() {
     const handleAddOrRemove = () => {
         if (cart[id]) {
             if (cart[id].quantity !== quantity && quantity !== 1) {
-                const payload = { product: res.json, quantity };
+                const payload = { product: response.json, quantity };
                 dispatchCart({ type: "ADD_TO_CART", payload, id });
             } else {
                 dispatchCart({ type: "REMOVE_FROM_CART", id });
             }
         } else {
-            const payload = { product: res.json, quantity };
+            const payload = { product: response.json, quantity };
             dispatchCart({ type: "ADD_TO_CART", payload, id });
         }
     };
@@ -82,206 +90,354 @@ function ViewBook() {
         // eslint-disable-next-line
     }, []);
 
+    useEffect(() => {
+        asyncFunc();
+        window.scrollTo(0, 0);
+
+        // eslint-disable-next-line
+    }, [params]);
+
+    useEffect(() => {
+        if (response.status === 200) {
+            fetchRelated();
+        }
+
+        // eslint-disable-next-line
+    }, [response]);
+
+    const reviews = [
+        { name: "Muhammad Naeem", rating: 2.3 },
+        { name: "Sajjad Ali", rating: 3.5 },
+        { name: "Malik Ahsan", rating: 4.6 },
+    ];
+
     return (
         <>
             {loading && <Loader />}
-            {!loading && res.status === 200 ? (
+            {!loading && response.status === 200 ? (
                 <>
-                    <h1 className="text-light text-center mt-3">
-                        {res.json.title}
-                    </h1>
-                    <div className="container text-light">
-                        <div className="details">
-                            {
-                                <ImagePreview
-                                    files={res.json.images}
-                                    edit={false}
-                                />
-                            }
-                            <div className="box">
-                                <div className="row text-primary">
-                                    {res.json.inStock > 0 ? (
-                                        <em className="text-success fw-bold">
-                                            In stock
-                                        </em>
-                                    ) : (
-                                        <em className="text-danger fw-bold">
-                                            Out of stock
-                                        </em>
-                                    )}
-                                    <strong>PKR {res.json.price}</strong>
+                    <div className="row">
+                        <div className="col-12 col-md-6">
+                            <div className="product-images-container position-relative">
+                                <div className="product-label rounded-circle position-absolute center text-bg-sea-green">
+                                    <span>-29%</span>
                                 </div>
-                                <p>
-                                    <strong>Pages:</strong> {res.json.pages}
+                                <div className="product-image-wrap">
+                                    <ImagePreview
+                                        files={response.json.images}
+                                        edit={false}
+                                    />
+                                </div>
+                            </div>
+                        </div>
+                        <div className="col-12 col-md-6 mt-4 mt-md-0">
+                            <div className="product-summary-wrap text-gray">
+                                <h1>{response.json.title}</h1>
+                                <h4>
+                                    By{" "}
+                                    {response.json.authors.map(
+                                        (author, index) => (
+                                            <Link
+                                                key={index}
+                                                to={
+                                                    "/books/authors/" +
+                                                    titleToKebab(author)
+                                                }
+                                                className="me-2"
+                                            >
+                                                {author}
+                                            </Link>
+                                        )
+                                    )}
+                                </h4>
+                                <hr className="my-2" />
+                                <p className="h5 text-success">
+                                    <span
+                                        className={`badge bg-${
+                                            response.json.inStock
+                                                ? "success"
+                                                : "danger"
+                                        }`}
+                                    >
+                                        {response.json.inStock
+                                            ? "In Stock"
+                                            : "Out of Stock"}
+                                    </span>
                                 </p>
-                                <p>
-                                    <strong>Author(s): </strong>
-                                    {res.json.authors.map((author, index) => (
-                                        <Link
-                                            key={index}
-                                            to={
-                                                "/books/authors/" +
-                                                titleToKebab(author)
-                                            }
-                                            className="me-2"
-                                        >
-                                            {author}
-                                        </Link>
-                                    ))}
+                                <p className="price fs-4 fw-semibold">
+                                    <del
+                                        aria-hidden="true"
+                                        className="text-gray-light me-2"
+                                    >
+                                        ₨{response.json.price}
+                                    </del>
+                                    <ins className="text-sea-green">
+                                        ₨
+                                        {(
+                                            response.json.price *
+                                            (1 - 29 / 100)
+                                        ).toFixed(2)}
+                                    </ins>
                                 </p>
-                                <p>
-                                    <strong>Publisher: </strong>
+                                <h6 className="">
+                                    Publisher:{" "}
                                     <Link
                                         to={
                                             "/books/publisher/" +
-                                            titleToKebab(res.json.publisher)
+                                            titleToKebab(
+                                                response.json.publisher
+                                            )
                                         }
                                     >
-                                        {res.json.publisher}
+                                        {response.json.publisher}
                                     </Link>
-                                </p>
-                                <p>
-                                    <strong>Publish Date: </strong>
-                                    {res.json.publishDate}
-                                </p>
-                                <p>
-                                    <strong>Language: </strong>
+                                </h6>
+                                <h6 className="">
+                                    Language:{" "}
                                     <Link
                                         to={
                                             "/books/language/" +
-                                            titleToKebab(res.json.language)
+                                            titleToKebab(response.json.language)
                                         }
                                     >
-                                        {res.json.language}
+                                        {response.json.language}
                                     </Link>
-                                </p>
-                                <p>
-                                    <strong>Categories: </strong>
-                                    {res.json.categories.map(
+                                </h6>
+                                <h6 className="">
+                                    Categories:{" "}
+                                    {response.json.categories.map(
                                         (category, index) => (
                                             <Link
+                                                key={index}
+                                                className="me-2"
                                                 to={
                                                     "/books/categories/" +
                                                     titleToKebab(category)
                                                 }
-                                                className="me-2"
-                                                key={index}
                                             >
                                                 {category}
                                             </Link>
                                         )
                                     )}
-                                </p>
-                                <div className="mb-4 mt-2">
-                                    {/* <!-- Quantity --> */}
-                                    {res.json.inStock > 0 && (
-                                        <div className="d-flex align-items-center">
-                                            <label className="form-label mb-0">
-                                                <strong>Quantity:</strong>
-                                            </label>
-                                            <div className="ms-2 d-flex">
-                                                <button
-                                                    className="btn btn-primary px-3 me-2"
-                                                    onClick={() =>
-                                                        handleMinusQty()
-                                                    }
-                                                >
-                                                    <img
-                                                        width="10px"
-                                                        src={minusIcon}
-                                                        alt="minus-icon"
-                                                    />
-                                                </button>
-                                                <input
-                                                    readOnly
-                                                    min="1"
-                                                    max={res.json.inStock}
-                                                    name="quantity"
-                                                    value={quantity}
-                                                    type="number"
-                                                    className="form-control"
-                                                />
-                                                <button
-                                                    className="btn btn-primary px-3 ms-2"
-                                                    onClick={() =>
-                                                        handlePlusQty()
-                                                    }
-                                                >
-                                                    <img
-                                                        width="10px"
-                                                        src={plusIcon}
-                                                        alt="plus-icon"
-                                                    />
-                                                </button>
-                                            </div>
-                                        </div>
-                                    )}
-                                    {/* <!-- Quantity --> */}
-
-                                    {/* <!-- Price --> */}
-                                    {quantity > 1 && (
-                                        <p className="text-start m-0 fs-5">
-                                            <strong>Total: </strong>
-                                            {(
-                                                quantity * res.json.price
-                                            ).toFixed(2)}
-                                        </p>
-                                    )}
-                                    {/* <!-- Price --> */}
-                                </div>
-                                <button
-                                    type="button"
-                                    disabled={res.json.inStock < 1}
-                                    className="btn btn-primary btn-sm d-inline-flex justify-content-center align-items-center me-2"
-                                    style={{
-                                        transition: "all 0.2s",
-                                        width: cart[id] ? "110px" : "85px",
-                                    }}
-                                    onClick={handleAddOrRemove}
-                                >
-                                    <img
-                                        width="28px"
-                                        src={
-                                            cart[id]
+                                </h6>
+                                <h6 className="">Publish Date: July 2006</h6>
+                                <hr className="mt-2 mb-3" />
+                                <label className="h6 mb-0">Quantity:</label>
+                                <span className="d-flex flex-wrap">
+                                    <button
+                                        disabled={response.json.inStock < 1}
+                                        onClick={handleMinusQty}
+                                        className="btn btn-fill-sea-green px-3 me-2 center mt-2"
+                                    >
+                                        <i className="fa fa-minus"></i>
+                                    </button>
+                                    <input
+                                        disabled={response.json.inStock < 1}
+                                        readOnly
+                                        min="1"
+                                        max="6"
+                                        name="quantity"
+                                        type="number"
+                                        className="form-control w-auto mt-2"
+                                        value={quantity}
+                                    />
+                                    <button
+                                        disabled={response.json.inStock < 1}
+                                        onClick={handlePlusQty}
+                                        className="btn btn-fill-sea-green px-3 ms-2 me-3 mt-2"
+                                    >
+                                        <i className="fa fa-plus"></i>
+                                    </button>
+                                    <button
+                                        disabled={response.json.inStock < 1}
+                                        onClick={handleAddOrRemove}
+                                        className="btn btn-fill-sea-green mt-2"
+                                    >
+                                        {response.json.inStock > 0
+                                            ? cart[id]
                                                 ? cart[id].quantity !==
                                                       quantity && quantity !== 1
-                                                    ? updateCartIcon
-                                                    : removeCartIcon
-                                                : addCartIcon
-                                        }
-                                        alt="cart-icon"
-                                    />
-                                    <span className="ms-2 fs-6">
-                                        {cart[id]
-                                            ? cart[id].quantity !== quantity &&
-                                              quantity !== 1
-                                                ? "Update"
-                                                : "Remove"
-                                            : "Add"}
-                                    </span>
-                                </button>
-                                <button
-                                    type="button"
-                                    disabled={res.json.inStock < 1}
-                                    className="btn btn-primary btn-sm d-inline-flex justify-content-center align-items-center"
-                                >
-                                    <img
-                                        width="20px"
-                                        src={buyIcon}
-                                        alt="buy-icon"
-                                    />
-                                    <span className="ms-2 fs-6">Buy Now</span>
-                                </button>
+                                                    ? "Update Cart"
+                                                    : "Remove from Cart"
+                                                : "Add to Cart"
+                                            : "Add to Cart"}
+                                    </button>
+                                </span>
+                                {/* <!-- Price --> */}
+                                {quantity > 1 && (
+                                    <p className="h5 fw-semibold mt-2">
+                                        Total:{" "}
+                                        {(
+                                            quantity *
+                                            (response.json.price *
+                                                (1 - 29 / 100))
+                                        ).toFixed(2)}
+                                    </p>
+                                )}
+                                {/* <!-- Price --> */}
                             </div>
                         </div>
-                        <h3>Description</h3>
-                        <p>{res.json.description}</p>
+                    </div>
+                    <div className="mt-5">
+                        <ul
+                            className="nav nav-tabs justify-content-center"
+                            id="descriptionAndReview"
+                            role="tablist"
+                        >
+                            <li className="nav-item" role="presentation">
+                                <button
+                                    className="nav-link active"
+                                    id="description"
+                                    data-bs-toggle="tab"
+                                    data-bs-target="#description-pane"
+                                    type="button"
+                                    role="tab"
+                                    aria-controls="description-pane"
+                                    aria-selected="true"
+                                >
+                                    Description
+                                </button>
+                            </li>
+                            <li className="nav-item" role="presentation">
+                                <button
+                                    className="nav-link"
+                                    id="reviews"
+                                    data-bs-toggle="tab"
+                                    data-bs-target="#reviews-pane"
+                                    type="button"
+                                    role="tab"
+                                    aria-controls="reviews-pane"
+                                    aria-selected="false"
+                                >
+                                    Reviews ({reviews.length})
+                                </button>
+                            </li>
+                        </ul>
+                        <div
+                            className="tab-content mt-4"
+                            id="descriptionAndReviewContent"
+                        >
+                            <div
+                                className="tab-pane fade show active"
+                                id="description-pane"
+                                role="tabpanel"
+                                aria-labelledby="description"
+                            >
+                                <p className="text-justify">
+                                    Lorem, ipsum dolor sit amet consectetur
+                                    adipisicing elit. Inventore facilis quod
+                                    esse dignissimos, consectetur, molestiae
+                                    corrupti ab eaque sapiente, repellat totam
+                                    molestias omnis hic incidunt est provident!
+                                    Eligendi ex inventore modi provident,
+                                    exercitationem voluptatum corrupti
+                                    asperiores recusandae saepe assumenda et
+                                    maxime, a reiciendis magni ipsa incidunt,
+                                    laborum quis totam molestiae excepturi sit
+                                    adipisci. Veniam nostrum obcaecati ab saepe
+                                    quaerat possimus asperiores tenetur
+                                    exercitationem adipisci similique
+                                    reprehenderit, ratione ut animi, quam iusto
+                                    voluptatibus eligendi earum quidem modi.
+                                    Dolore sequi repudiandae enim cupiditate
+                                    culpa velit facere perspiciatis quod id a
+                                    eius voluptatem ex ipsum autem recusandae,
+                                    earum quibusdam maiores minima quae nam!
+                                </p>
+                            </div>
+                            <div
+                                className="tab-pane fade mx-2 mx-sm-3 mx-md-5"
+                                id="reviews-pane"
+                                role="tabpanel"
+                                aria-labelledby="reviews"
+                                tabIndex="0"
+                            >
+                                {reviews.length ? (
+                                    reviews.map((review, index) => (
+                                        <div key={index}>
+                                            <Review data={review} />
+                                            {review.length !== index + 1 && (
+                                                <hr className="my-2" />
+                                            )}
+                                        </div>
+                                    ))
+                                ) : (
+                                    <h4 className="mt-3 mb-5 text-center">
+                                        This book has no reviews yet...
+                                    </h4>
+                                )}
+                            </div>
+                        </div>
+                    </div>
+                    <h2 className="py-2 border-top border-bottom mb-4 text-gray fw-bold text-center">
+                        You may also like
+                    </h2>
+                    <div className="d-flex justify-content-center">
+                        <div
+                            className="d-grid g-cols-1 g-cols-md-2 g-cols-lg-3 g-cols-xl-4 w-fit"
+                            style={{ rowGap: "1.5rem", columnGap: "0.75rem" }}
+                        >
+                            {relatedBooks.map((book) => (
+                                <BookCard key={book._id} book={book} />
+                            ))}
+                        </div>
                     </div>
                 </>
             ) : (
                 <Page404 />
             )}
         </>
+    );
+}
+
+function Review(props) {
+    const { name, rating } = props.data;
+    return (
+        <div className="my-3 text-gray">
+            <div className="d-flex align-items-center">
+                <img
+                    className="rounded-circle"
+                    style={{
+                        width: "3rem",
+                        height: "3rem",
+                    }}
+                    src="https://www.gravatar.com/avatar/?d=mp&f=y"
+                    alt={name}
+                />
+                <div className="ms-3">
+                    <p className="fw-bold mb-0">{name}</p>
+                    <div className="d-flex align-items-center mt-1">
+                        {Array.from({ length: 5 }, (_, index) => {
+                            if (index < Math.round(rating)) {
+                                // Render rated stars
+                                return (
+                                    <i
+                                        key={index}
+                                        style={{ color: "#facc15" }}
+                                        className="fas fa-star"
+                                    ></i>
+                                );
+                            } else {
+                                // Render unrated stars
+                                return (
+                                    <i
+                                        key={index}
+                                        className="fas fa-star text-gray-light"
+                                    ></i>
+                                );
+                            }
+                        })}
+                    </div>
+                </div>
+            </div>
+            <div className="fst-italic mt-2">
+                <p>
+                    This is the bag of my dreams. I took it on my last vacation
+                    and was able to fit an absurd amount of snacks for the many
+                    long and hungry flights.
+                </p>
+            </div>
+        </div>
     );
 }
 

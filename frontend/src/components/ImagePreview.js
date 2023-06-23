@@ -68,7 +68,7 @@ function ImagePreview(props) {
     }, [src]);
 
     return (
-        <div className="big-img">
+        <>
             <div
                 className={`img-cont ${
                     src.length === 0
@@ -77,7 +77,7 @@ function ImagePreview(props) {
                 }`}
             >
                 {src.length !== 0 ? (
-                    <img src={src[index]} alt="book-img" />
+                    <img className="w-100" src={src[index]} alt="book-img" />
                 ) : (
                     <h2 className="text-center">No files to show.</h2>
                 )}
@@ -112,7 +112,7 @@ function ImagePreview(props) {
                     ))}
                 </div>
             )}
-        </div>
+        </>
     );
 }
 
