@@ -4,7 +4,7 @@ import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import BookProvider from './provider/BookProvider';
 import Home from './components/Home';
 import Books from './components/Books';
-import Navbar from './components/Navbar';
+import Header from './components/Header';
 import Footer from './components/Footer';
 import { ToastContainer } from 'react-toastify';
 import AdminViewBook from './components/AdminViewBook';
@@ -32,8 +32,8 @@ function App() {
     <BookProvider>
       <Router>
         <ToastContainer />
-        <Navbar />
-        <div className="container" id="content">
+        <Header />
+        <div className="container py-5" id="content">
           <Routes>
             <Route path='*' element={<Page404 />} />
             <Route exact path="/admin/signin" element={<AdminSignin />} />
