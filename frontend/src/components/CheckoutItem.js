@@ -1,5 +1,4 @@
 import React from "react";
-import trashIcon from "../assets/trash-solid.svg";
 import { Link } from "react-router-dom";
 
 function CheckoutItem(props) {
@@ -28,12 +27,12 @@ function CheckoutItem(props) {
                 <p>By: {authors.join(", ")}</p>
                 <button
                     type="button"
-                    className="btn btn-primary btn-sm me-1 mb-2"
+                    className="btn btn-fill-sea-green btn-sm me-1 mb-2 center py-1"
                     data-mdb-toggle="tooltip"
                     title="Remove item"
                     onClick={() => props.handleRemoveItem(id)}
                 >
-                    <img width="15px" src={trashIcon} alt="trash-icon" />
+                    <i className="fa-solid fa-trash fs-5"></i>
                 </button>
                 {/* <button
                     type="button"

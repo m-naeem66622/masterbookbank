@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import Logo from "../assets/logo.png";
 import { useBooksContext } from "../provider/BookProvider";
 import { Link, useNavigate } from "react-router-dom";
 import { authenticateUser, signinUser } from "../features/AuthFeatures";
@@ -26,8 +25,8 @@ function UserSignin() {
 
         if (response) {
             setIsUser(true);
-            const data = await authenticateUser();
-            setAccountDetail(data.json);
+            const { json } = await authenticateUser();
+            setAccountDetail(json.data);
             navigate("/");
         } else {
             notify("error", "Wrong username or password. Try Again...");
@@ -43,59 +42,117 @@ function UserSignin() {
     }, [isUser]);
 
     return (
-        <main className="form-signin w-50 m-auto">
+        <>
             {loading ? (
-                <>
-                    <h3 className="text-center text-light mt-5">
-                        Verifying User...
-                    </h3>{" "}
-                    <Loader />
-                </>
+                <Loader />
             ) : (
-                <form className="text-center my-4" onSubmit={handleOnSubmit}>
-                    <img className="mb-4" src={Logo} alt="" width="200px" />
-                    <h1 className="h3 mb-3 fw-normal text-light">
-                        Please sign in
-                    </h1>
-
-                    <div className="form-floating form-floating-sm  mb-4">
-                        <input
-                            type="text"
-                            className="form-control"
-                            id="floatingInput"
-                            placeholder="example@abc.com"
-                            value={data.email}
-                            name="email"
-                            onChange={handleOnChange}
-                        />
-                        <label htmlFor="floatingInput">Email</label>
-                    </div>
-                    <div className="form-floating mb-4">
-                        <input
-                            type="password"
-                            className="form-control"
-                            id="floatingPassword"
-                            placeholder="Password"
-                            value={data.password}
-                            name="password"
-                            onChange={handleOnChange}
-                        />
-                        <label htmlFor="floatingPassword">Password</label>
-                    </div>
-                    <button
-                        className="w-100 btn btn-lg btn-primary mb-4"
-                        type="submit"
-                    >
-                        Sign in
-                    </button>
-                    <div className="text-center text-light">
+                <div
+                    className="text-gray mx-auto"
+                    style={{ maxWidth: "400px" }}
+                >
+                    <h2 className="fw-bold fs-4 text-center">
+                        Signin to your account
+                    </h2>
+                    <form className="mt-5" onSubmit={handleOnSubmit}>
+                        <div className="mb-4">
+                            <label
+                                htmlFor="userEmail"
+                                className="form-label fw-medium"
+                            >
+                                Email address
+                            </label>
+                            <input
+                                type="email"
+                                className="form-control"
+                                id="userEmail"
+                                placeholder="example@abc.com"
+                                value={data.email}
+                                name="email"
+                                onChange={handleOnChange}
+                            />
+                            <div className="valid-feedback">Looks good!</div>
+                        </div>
+                        <div className="mb-4">
+                            <label
+                                htmlFor="userPassword"
+                                className="form-label fw-medium"
+                            >
+                                Password
+                            </label>
+                            <input
+                                type="password"
+                                className="form-control"
+                                id="userPassword"
+                                placeholder="Password"
+                                value={data.password}
+                                name="password"
+                                onChange={handleOnChange}
+                            />
+                        </div>
+                        <div className="mb-4">
+                            <div className="d-flex justify-content-between align-items-center">
+                                <div className="form-check mb-0">
+                                    <input
+                                        className="form-check-input me-2"
+                                        type="checkbox"
+                                        value=""
+                                        id="form2Example3"
+                                    />
+                                    <label
+                                        className="form-check-label"
+                                        htmlFor="form2Example3"
+                                    >
+                                        Remember me
+                                    </label>
+                                </div>
+                                <a href="/">Forgot password?</a>
+                            </div>
+                        </div>
+                        <div className="mb-4">
+                            <button
+                                type="submit"
+                                className="btn btn-fill-sea-green w-100"
+                            >
+                                Sign in
+                            </button>
+                        </div>
+                        <div className="mb-4">
+                            <div className="divider d-flex align-items-center">
+                                <p className="text-center fw-medium mx-3 mb-0">
+                                    Or continue with
+                                </p>
+                            </div>
+                        </div>
+                        <div className="mb-4">
+                            <div className="d-flex">
+                                <button
+                                    type="button"
+                                    className="w-50 me-1 btn btn-fill-sea-green btn-sm d-inline-flex justify-content-center align-items-center"
+                                >
+                                    <i className="fab fa-google fs-5"></i>
+                                    <span className="ms-2 fs-6">Google</span>
+                                </button>
+                                <button
+                                    type="button"
+                                    className="w-50 ms-1 btn btn-fill-sea-green btn-sm d-inline-flex justify-content-center align-items-center"
+                                >
+                                    <i className="fab fa-facebook fs-5"></i>
+                                    <span className="ms-2 fs-6">Facebook</span>
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                    <div className="mt-5 text-center">
                         <p>
-                            Not a member? <Link to="/signup">Register</Link>
+                            Not a member?{" "}
+                            <Link className="fw-bold" to="/signup">
+                                Signup
+                            </Link>
                         </p>
                     </div>
-                </form>
+                </div>
             )}
-        </main>
+        </>
     );
 }
 

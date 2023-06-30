@@ -7,10 +7,10 @@ function AdminAccount() {
 
     return (
         <>
-            <h1 className="text-center my-4 text-light">User Information</h1>
+            <h1 className="text-center my-4">User Information</h1>
             <div className="row justify-content-center pb-4">
                 <div className="col-md-8">
-                    <table className="table table-dark">
+                    <table className="table">
                         <tbody>
                             <tr>
                                 <th scope="row">Name:</th>
@@ -21,11 +21,14 @@ function AdminAccount() {
                                 <td>{accountDetail.username}</td>
                             </tr>
                             <tr>
-                                <th scope="row">Created At:</th>
+                                <th scope="row">Joined On:</th>
                                 <td>
                                     {new Date(
                                         accountDetail.createdAt
-                                    ).toString()}
+                                    ).toLocaleString("default", {
+                                        month: "long",
+                                        year: "numeric",
+                                    })}
                                 </td>
                             </tr>
                         </tbody>

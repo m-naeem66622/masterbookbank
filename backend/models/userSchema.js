@@ -40,6 +40,11 @@ const User = new mongoose.Schema(
         phoneNumber: {
             type: String,
             required: true,
+            unique: true,
+        },
+        verifiedAccount: {
+            type: Boolean,
+            default: false,
         },
     },
     {

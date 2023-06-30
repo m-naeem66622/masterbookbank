@@ -37,10 +37,13 @@ function Cart() {
     };
 
     return (
-        <div className="py-5">
+        <>
             {Object.keys(cart).length !== 0 ? (
-                <div className="row d-flex justify-content-center my-4">
-                    <div className="col-md-8">
+                <div
+                    id="cartContainer"
+                    className="row d-flex justify-content-center"
+                >
+                    <div className="col-md-7">
                         <div className="card mb-4">
                             <div className="card-header py-3">
                                 <h5 className="mb-0">
@@ -65,7 +68,7 @@ function Cart() {
                             </div>
                         </div>
                     </div>
-                    <div className="col-md-4">
+                    <div className="col-md-5">
                         <div
                             className="card mb-4 position-sticky"
                             style={{ top: "65px" }}
@@ -126,7 +129,7 @@ function Cart() {
 
                                 <button
                                     type="button"
-                                    className="btn btn-primary btn-block"
+                                    className="btn btn-fill-sea-green btn-block"
                                     onClick={handleCheckout}
                                     disabled={Object.keys(cart).length === 0}
                                 >
@@ -137,9 +140,11 @@ function Cart() {
                     </div>
                 </div>
             ) : (
-                <h1 className="text-light text-center">Your cart is empty.</h1>
+                <h2 className="fw-bold fs-4 text-center">
+                    Your cart is empty.
+                </h2>
             )}
-        </div>
+        </>
     );
 }
 

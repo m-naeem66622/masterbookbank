@@ -1,22 +1,20 @@
 import React, { useEffect, useState } from "react";
 import { useBooksContext } from "../provider/BookProvider";
 import { Link } from "react-router-dom";
-import { fetchOrdersAdmin } from "../features/OrderFeatures";
+import { fetchOrdersUser } from "../features/OrderFeatures";
 import Loader from "./Loader";
 
-function AdminOrders() {
+function Orders() {
     document.title = "Admin Orders | Master Book Bank";
     const { loading, setLoading } = useBooksContext();
     const [orders, setOrders] = useState([]);
 
     const asyncFunc = async () => {
         setLoading(true);
-        const res = await fetchOrdersAdmin();
+        const res = await fetchOrdersUser();
         setLoading(false);
         if (res.status === 200) {
-            setOrders(
-                res.json.filter((order) => order.orderStatus !== "delivered")
-            );
+            setOrders(res.json);
         }
     };
 
@@ -30,9 +28,18 @@ function AdminOrders() {
         <>
             {loading && <Loader />}
             {!loading && orders.length === 0 ? (
-                <h4 className="text-center">
-                    There is nothing to do here. You are free to go...
-                </h4>
+                <div className="text-center">
+                    <h4 className="mb-4">
+                        Oops! You still had nothing ordered..
+                    </h4>
+                    <Link
+                        className="btn btn-fill-sea-green"
+                        style={{ width: "250px" }}
+                        to="/"
+                    >
+                        Shop Now
+                    </Link>
+                </div>
             ) : null}
             {!loading &&
                 orders.length !== 0 &&
@@ -58,7 +65,7 @@ function AdminOrders() {
                                 <Link
                                     className="btn btn-sm btn-fill-sea-green"
                                     style={{ height: "fit-content" }}
-                                    to={"/admin/order/" + order._id}
+                                    to={"/order/" + order._id}
                                 >
                                     Manage
                                 </Link>
@@ -92,4 +99,4 @@ function AdminOrders() {
     );
 }
 
-export default AdminOrders;
+export default Orders;

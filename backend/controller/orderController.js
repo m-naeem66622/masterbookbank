@@ -129,6 +129,7 @@ const update = async (req, res) => {
     }
 
     try {
+        const { orderStatus } = req.body;
         const order = await Order.findById(req.params.id);
         if (!order) {
             return res.status(404).json({ message: "Order not found" });
@@ -136,7 +137,12 @@ const update = async (req, res) => {
         if (req.user && order.user != req.user.id) {
             return res.status(401).json({ message: "Access denied 0x000c6" });
         }
-        order.orderStatus = req.body.orderStatus;
+        order.orderStatus = orderStatus;
+        if (orderStatus === "delivered") {
+            order.deliveredAt = Date.now();
+        } else {
+            order.deliveredAt = null;
+        }
         await order.save();
         res.json({ message: "Order status sucessfully updated" });
     } catch (error) {

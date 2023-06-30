@@ -8,6 +8,7 @@ import React, {
 import { toast } from "react-toastify";
 import { authenticateAdmin, authenticateUser } from "../features/AuthFeatures";
 import cartReducer from "../features/cartReducer";
+
 const BookContext = createContext();
 
 const BookProvider = (props) => {
@@ -30,11 +31,11 @@ const BookProvider = (props) => {
 
     const authenticate = async () => {
         setRolling(true);
-        const response = await authenticateUser();
+        const { status, json } = await authenticateUser();
         setRolling(false);
-        if (response.status) {
+        if (status === 200) {
             setIsUser(true);
-            setAccountDetail(response.json);
+            setAccountDetail(json.data);
             return true;
         }
 

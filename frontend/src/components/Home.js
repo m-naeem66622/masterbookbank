@@ -18,7 +18,6 @@ function Home() {
         setLoading(false);
 
         if (data.status === 200) {
-            console.log(data);
             setBooks(documents);
             setResponse({ totalResults, currentResults, limit, page });
         }
@@ -30,7 +29,6 @@ function Home() {
             data.json;
 
         if (data.status === 200 && data.json.currentResults !== 0) {
-            console.log(data);
             setBooks((prevState) => [...prevState, ...documents]);
             setResponse({ totalResults, currentResults, limit, page });
         }
@@ -44,30 +42,32 @@ function Home() {
 
     return (
         <>
-            <h1 className="text-light text-center mt-3">Products</h1>
-
-            <div className="py-4">
-                {!loading && (
-                    <InfiniteScroll
-                        dataLength={books.length} //This is important field to render the next data
-                        next={fetchData}
-                        hasMore={response.totalResults !== books.length}
-                        loader={<Loader />}
-                        endMessage={
-                            <h4 className="text-center text-light">
-                                This is all what we have...
-                            </h4>
-                        }
-                        style={{ overflow: "initial" }}
-                    >
-                        <div className="row g-4 mb-5">
+            {loading && <Loader />}
+            {!loading && (
+                <InfiniteScroll
+                    dataLength={books.length} //This is important field to render the next data
+                    next={fetchData}
+                    hasMore={response.totalResults !== books.length}
+                    loader={<Loader />}
+                    endMessage={
+                        <h4 className="text-center py-4">
+                            This is all what we have...
+                        </h4>
+                    }
+                    style={{ overflow: "initial" }}
+                >
+                    <div className="d-flex justify-content-center">
+                        <div
+                            className="d-grid g-cols-1 g-cols-md-2 g-cols-lg-3 g-cols-xl-4 w-fit"
+                            style={{ rowGap: "1.5rem", columnGap: "0.75rem" }}
+                        >
                             {books.map((book) => (
                                 <BookCard key={book._id} book={book} />
                             ))}
                         </div>
-                    </InfiniteScroll>
-                )}
-            </div>
+                    </div>
+                </InfiniteScroll>
+            )}
         </>
     );
 }

@@ -36,7 +36,7 @@ const signup = async (req, res) => {
         const authToken = jwt.sign(data, JWT_SECRET);
 
         res.json({ authToken })
-    } catch (err) {
+    } catch (error) {
         res.status(500).json({ message: "Server error 0x000a1" });
     }
 };

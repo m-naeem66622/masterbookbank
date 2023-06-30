@@ -19,7 +19,6 @@ function ViewBook() {
     const asyncFunc = async () => {
         setLoading(true);
         const res = await fetchBook(id);
-        setLoading(false);
         if (res.status === 200) {
             res.json.publishDate = new Date(
                 res.json.publishDate
@@ -27,6 +26,7 @@ function ViewBook() {
             setResponse(res);
             document.title = res.json.title + " | Master Book Bank";
         }
+        setLoading(false);
     };
 
     const fetchRelated = async () => {
@@ -113,284 +113,302 @@ function ViewBook() {
 
     return (
         <>
-            {loading && <Loader />}
-            {!loading && response.status === 200 ? (
-                <>
-                    <div className="row">
-                        <div className="col-12 col-md-6">
-                            <div className="product-images-container position-relative">
-                                <div className="product-label rounded-circle position-absolute center text-bg-sea-green">
-                                    <span>-29%</span>
-                                </div>
-                                <div className="product-image-wrap">
-                                    <ImagePreview
-                                        files={response.json.images}
-                                        edit={false}
-                                    />
+            {!loading ? (
+                response.status === 200 ? (
+                    <>
+                        <div className="row">
+                            <div className="col-12 col-md-6">
+                                <div className="product-images-container position-relative">
+                                    <div className="product-label rounded-circle position-absolute center text-bg-sea-green">
+                                        <span>-29%</span>
+                                    </div>
+                                    <div className="product-image-wrap">
+                                        <ImagePreview
+                                            files={response.json.images}
+                                            edit={false}
+                                        />
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                        <div className="col-12 col-md-6 mt-4 mt-md-0">
-                            <div className="product-summary-wrap text-gray">
-                                <h1>{response.json.title}</h1>
-                                <h4>
-                                    By{" "}
-                                    {response.json.authors.map(
-                                        (author, index) => (
-                                            <Link
-                                                key={index}
-                                                to={
-                                                    "/books/authors/" +
-                                                    titleToKebab(author)
-                                                }
-                                                className="me-2"
-                                            >
-                                                {author}
-                                            </Link>
-                                        )
-                                    )}
-                                </h4>
-                                <hr className="my-2" />
-                                <p className="h5 text-success">
-                                    <span
-                                        className={`badge bg-${
-                                            response.json.inStock
-                                                ? "success"
-                                                : "danger"
-                                        }`}
-                                    >
-                                        {response.json.inStock
-                                            ? "In Stock"
-                                            : "Out of Stock"}
-                                    </span>
-                                </p>
-                                <p className="price fs-4 fw-semibold">
-                                    <del
-                                        aria-hidden="true"
-                                        className="text-gray-light me-2"
-                                    >
-                                        ₨{response.json.price}
-                                    </del>
-                                    <ins className="text-sea-green">
-                                        ₨
-                                        {(
-                                            response.json.price *
-                                            (1 - 29 / 100)
-                                        ).toFixed(2)}
-                                    </ins>
-                                </p>
-                                <h6 className="">
-                                    Publisher:{" "}
-                                    <Link
-                                        to={
-                                            "/books/publisher/" +
-                                            titleToKebab(
-                                                response.json.publisher
+                            <div className="col-12 col-md-6 mt-4 mt-md-0">
+                                <div className="product-summary-wrap text-gray">
+                                    <h1>{response.json.title}</h1>
+                                    <h4>
+                                        By{" "}
+                                        {response.json.authors.map(
+                                            (author, index) => (
+                                                <Link
+                                                    key={index}
+                                                    to={
+                                                        "/books/authors/" +
+                                                        titleToKebab(author)
+                                                    }
+                                                    className="me-2"
+                                                >
+                                                    {author}
+                                                </Link>
                                             )
-                                        }
-                                    >
-                                        {response.json.publisher}
-                                    </Link>
-                                </h6>
-                                <h6 className="">
-                                    Language:{" "}
-                                    <Link
-                                        to={
-                                            "/books/language/" +
-                                            titleToKebab(response.json.language)
-                                        }
-                                    >
-                                        {response.json.language}
-                                    </Link>
-                                </h6>
-                                <h6 className="">
-                                    Categories:{" "}
-                                    {response.json.categories.map(
-                                        (category, index) => (
-                                            <Link
-                                                key={index}
-                                                className="me-2"
-                                                to={
-                                                    "/books/categories/" +
-                                                    titleToKebab(category)
-                                                }
-                                            >
-                                                {category}
-                                            </Link>
-                                        )
-                                    )}
-                                </h6>
-                                <h6 className="">Publish Date: July 2006</h6>
-                                <hr className="mt-2 mb-3" />
-                                <label className="h6 mb-0">Quantity:</label>
-                                <span className="d-flex flex-wrap">
-                                    <button
-                                        disabled={response.json.inStock < 1}
-                                        onClick={handleMinusQty}
-                                        className="btn btn-fill-sea-green px-3 me-2 center mt-2"
-                                    >
-                                        <i className="fa fa-minus"></i>
-                                    </button>
-                                    <input
-                                        disabled={response.json.inStock < 1}
-                                        readOnly
-                                        min="1"
-                                        max="6"
-                                        name="quantity"
-                                        type="number"
-                                        className="form-control w-auto mt-2"
-                                        value={quantity}
-                                    />
-                                    <button
-                                        disabled={response.json.inStock < 1}
-                                        onClick={handlePlusQty}
-                                        className="btn btn-fill-sea-green px-3 ms-2 me-3 mt-2"
-                                    >
-                                        <i className="fa fa-plus"></i>
-                                    </button>
-                                    <button
-                                        disabled={response.json.inStock < 1}
-                                        onClick={handleAddOrRemove}
-                                        className="btn btn-fill-sea-green mt-2"
-                                    >
-                                        {response.json.inStock > 0
-                                            ? cart[id]
-                                                ? cart[id].quantity !==
-                                                      quantity && quantity !== 1
-                                                    ? "Update Cart"
-                                                    : "Remove from Cart"
-                                                : "Add to Cart"
-                                            : "Add to Cart"}
-                                    </button>
-                                </span>
-                                {/* <!-- Price --> */}
-                                {quantity > 1 && (
-                                    <p className="h5 fw-semibold mt-2">
-                                        Total:{" "}
-                                        {(
-                                            quantity *
-                                            (response.json.price *
-                                                (1 - 29 / 100))
-                                        ).toFixed(2)}
-                                    </p>
-                                )}
-                                {/* <!-- Price --> */}
-                            </div>
-                        </div>
-                    </div>
-                    <div className="mt-5">
-                        <ul
-                            className="nav nav-tabs justify-content-center"
-                            id="descriptionAndReview"
-                            role="tablist"
-                        >
-                            <li className="nav-item" role="presentation">
-                                <button
-                                    className="nav-link active"
-                                    id="description"
-                                    data-bs-toggle="tab"
-                                    data-bs-target="#description-pane"
-                                    type="button"
-                                    role="tab"
-                                    aria-controls="description-pane"
-                                    aria-selected="true"
-                                >
-                                    Description
-                                </button>
-                            </li>
-                            <li className="nav-item" role="presentation">
-                                <button
-                                    className="nav-link"
-                                    id="reviews"
-                                    data-bs-toggle="tab"
-                                    data-bs-target="#reviews-pane"
-                                    type="button"
-                                    role="tab"
-                                    aria-controls="reviews-pane"
-                                    aria-selected="false"
-                                >
-                                    Reviews ({reviews.length})
-                                </button>
-                            </li>
-                        </ul>
-                        <div
-                            className="tab-content mt-4"
-                            id="descriptionAndReviewContent"
-                        >
-                            <div
-                                className="tab-pane fade show active"
-                                id="description-pane"
-                                role="tabpanel"
-                                aria-labelledby="description"
-                            >
-                                <p className="text-justify">
-                                    Lorem, ipsum dolor sit amet consectetur
-                                    adipisicing elit. Inventore facilis quod
-                                    esse dignissimos, consectetur, molestiae
-                                    corrupti ab eaque sapiente, repellat totam
-                                    molestias omnis hic incidunt est provident!
-                                    Eligendi ex inventore modi provident,
-                                    exercitationem voluptatum corrupti
-                                    asperiores recusandae saepe assumenda et
-                                    maxime, a reiciendis magni ipsa incidunt,
-                                    laborum quis totam molestiae excepturi sit
-                                    adipisci. Veniam nostrum obcaecati ab saepe
-                                    quaerat possimus asperiores tenetur
-                                    exercitationem adipisci similique
-                                    reprehenderit, ratione ut animi, quam iusto
-                                    voluptatibus eligendi earum quidem modi.
-                                    Dolore sequi repudiandae enim cupiditate
-                                    culpa velit facere perspiciatis quod id a
-                                    eius voluptatem ex ipsum autem recusandae,
-                                    earum quibusdam maiores minima quae nam!
-                                </p>
-                            </div>
-                            <div
-                                className="tab-pane fade mx-2 mx-sm-3 mx-md-5"
-                                id="reviews-pane"
-                                role="tabpanel"
-                                aria-labelledby="reviews"
-                                tabIndex="0"
-                            >
-                                {reviews.length ? (
-                                    reviews.map((review, index) => (
-                                        <div key={index}>
-                                            <Review data={review} />
-                                            {review.length !== index + 1 && (
-                                                <hr className="my-2" />
-                                            )}
-                                        </div>
-                                    ))
-                                ) : (
-                                    <h4 className="mt-3 mb-5 text-center">
-                                        This book has no reviews yet...
+                                        )}
                                     </h4>
-                                )}
+                                    <hr className="my-2" />
+                                    <p className="h5 text-success">
+                                        <span
+                                            className={`badge bg-${
+                                                response.json.inStock
+                                                    ? "success"
+                                                    : "danger"
+                                            }`}
+                                        >
+                                            {response.json.inStock
+                                                ? "In Stock"
+                                                : "Out of Stock"}
+                                        </span>
+                                    </p>
+                                    <p className="price fs-4 fw-semibold">
+                                        <del
+                                            aria-hidden="true"
+                                            className="text-gray-light me-2"
+                                        >
+                                            ₨{response.json.price}
+                                        </del>
+                                        <ins className="text-sea-green">
+                                            ₨
+                                            {(
+                                                response.json.price *
+                                                (1 - 29 / 100)
+                                            ).toFixed(2)}
+                                        </ins>
+                                    </p>
+                                    <h6 className="">
+                                        Publisher:{" "}
+                                        <Link
+                                            to={
+                                                "/books/publisher/" +
+                                                titleToKebab(
+                                                    response.json.publisher
+                                                )
+                                            }
+                                        >
+                                            {response.json.publisher}
+                                        </Link>
+                                    </h6>
+                                    <h6 className="">
+                                        Language:{" "}
+                                        <Link
+                                            to={
+                                                "/books/language/" +
+                                                titleToKebab(
+                                                    response.json.language
+                                                )
+                                            }
+                                        >
+                                            {response.json.language}
+                                        </Link>
+                                    </h6>
+                                    <h6 className="">
+                                        No. of Pages: {response.json.pages}
+                                    </h6>
+                                    <h6 className="">
+                                        Categories:{" "}
+                                        {response.json.categories.map(
+                                            (category, index) => (
+                                                <Link
+                                                    key={index}
+                                                    className="me-2"
+                                                    to={
+                                                        "/books/categories/" +
+                                                        titleToKebab(category)
+                                                    }
+                                                >
+                                                    {category}
+                                                </Link>
+                                            )
+                                        )}
+                                    </h6>
+                                    <h6 className="">
+                                        Publish Date:{" "}
+                                        {response.json.publishDate}
+                                    </h6>
+                                    <hr className="mt-2 mb-3" />
+                                    <label className="h6 mb-0">Quantity:</label>
+                                    <span className="d-flex flex-wrap">
+                                        <button
+                                            disabled={response.json.inStock < 1}
+                                            onClick={handleMinusQty}
+                                            className="btn btn-fill-sea-green px-3 me-2 center mt-2"
+                                        >
+                                            <i className="fa fa-minus"></i>
+                                        </button>
+                                        <input
+                                            disabled={response.json.inStock < 1}
+                                            readOnly
+                                            min="1"
+                                            max="6"
+                                            name="quantity"
+                                            type="number"
+                                            className="form-control w-auto mt-2"
+                                            value={quantity}
+                                        />
+                                        <button
+                                            disabled={response.json.inStock < 1}
+                                            onClick={handlePlusQty}
+                                            className="btn btn-fill-sea-green px-3 ms-2 me-3 mt-2"
+                                        >
+                                            <i className="fa fa-plus"></i>
+                                        </button>
+                                        <button
+                                            disabled={response.json.inStock < 1}
+                                            onClick={handleAddOrRemove}
+                                            className="btn btn-fill-sea-green mt-2"
+                                        >
+                                            {response.json.inStock > 0
+                                                ? cart[id]
+                                                    ? cart[id].quantity !==
+                                                          quantity &&
+                                                      quantity !== 1
+                                                        ? "Update Cart"
+                                                        : "Remove from Cart"
+                                                    : "Add to Cart"
+                                                : "Add to Cart"}
+                                        </button>
+                                    </span>
+                                    {/* <!-- Price --> */}
+                                    {quantity > 1 && (
+                                        <p className="h5 fw-semibold mt-2">
+                                            Total:{" "}
+                                            {(
+                                                quantity *
+                                                (response.json.price *
+                                                    (1 - 29 / 100))
+                                            ).toFixed(2)}
+                                        </p>
+                                    )}
+                                    {/* <!-- Price --> */}
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <h2 className="py-2 border-top border-bottom mb-4 text-gray fw-bold text-center">
-                        You may also like
-                    </h2>
-                    <div className="d-flex justify-content-center">
-                        <div
-                            className="d-grid g-cols-1 g-cols-md-2 g-cols-lg-3 g-cols-xl-4 w-fit"
-                            style={{ rowGap: "1.5rem", columnGap: "0.75rem" }}
-                        >
-                            {relatedBooks.map((book) => (
-                                <BookCard key={book._id} book={book} />
-                            ))}
+                        <div className="mt-5">
+                            <ul
+                                className="nav nav-tabs justify-content-center"
+                                id="descriptionAndReview"
+                                role="tablist"
+                            >
+                                <li className="nav-item" role="presentation">
+                                    <button
+                                        className="nav-link active"
+                                        id="description"
+                                        data-bs-toggle="tab"
+                                        data-bs-target="#description-pane"
+                                        type="button"
+                                        role="tab"
+                                        aria-controls="description-pane"
+                                        aria-selected="true"
+                                    >
+                                        Description
+                                    </button>
+                                </li>
+                                <li className="nav-item" role="presentation">
+                                    <button
+                                        className="nav-link"
+                                        id="reviews"
+                                        data-bs-toggle="tab"
+                                        data-bs-target="#reviews-pane"
+                                        type="button"
+                                        role="tab"
+                                        aria-controls="reviews-pane"
+                                        aria-selected="false"
+                                    >
+                                        Reviews ({reviews.length})
+                                    </button>
+                                </li>
+                            </ul>
+                            <div
+                                className="tab-content mt-4"
+                                id="descriptionAndReviewContent"
+                            >
+                                <div
+                                    className="tab-pane fade show active"
+                                    id="description-pane"
+                                    role="tabpanel"
+                                    aria-labelledby="description"
+                                >
+                                    <p className="text-justify">
+                                        Lorem, ipsum dolor sit amet consectetur
+                                        adipisicing elit. Inventore facilis quod
+                                        esse dignissimos, consectetur, molestiae
+                                        corrupti ab eaque sapiente, repellat
+                                        totam molestias omnis hic incidunt est
+                                        provident! Eligendi ex inventore modi
+                                        provident, exercitationem voluptatum
+                                        corrupti asperiores recusandae saepe
+                                        assumenda et maxime, a reiciendis magni
+                                        ipsa incidunt, laborum quis totam
+                                        molestiae excepturi sit adipisci. Veniam
+                                        nostrum obcaecati ab saepe quaerat
+                                        possimus asperiores tenetur
+                                        exercitationem adipisci similique
+                                        reprehenderit, ratione ut animi, quam
+                                        iusto voluptatibus eligendi earum quidem
+                                        modi. Dolore sequi repudiandae enim
+                                        cupiditate culpa velit facere
+                                        perspiciatis quod id a eius voluptatem
+                                        ex ipsum autem recusandae, earum
+                                        quibusdam maiores minima quae nam!
+                                    </p>
+                                </div>
+                                <div
+                                    className="tab-pane fade mx-2 mx-sm-3 mx-md-5"
+                                    id="reviews-pane"
+                                    role="tabpanel"
+                                    aria-labelledby="reviews"
+                                    tabIndex="0"
+                                >
+                                    {reviews.length ? (
+                                        reviews.map((review, index) => (
+                                            <div key={index}>
+                                                <Review data={review} />
+                                                {review.length !==
+                                                    index + 1 && (
+                                                    <hr className="my-2" />
+                                                )}
+                                            </div>
+                                        ))
+                                    ) : (
+                                        <h4 className="mt-3 mb-5 text-center">
+                                            This book has no reviews yet...
+                                        </h4>
+                                    )}
+                                </div>
+                            </div>
                         </div>
-                    </div>
-                </>
+                        <h2 className="py-2 border-top border-bottom mb-4 text-gray fw-bold text-center">
+                            You may also like
+                        </h2>
+                        <div className="d-flex justify-content-center">
+                            <div
+                                className="d-grid g-cols-1 g-cols-md-2 g-cols-lg-3 g-cols-xl-4 w-fit"
+                                style={{
+                                    rowGap: "1.5rem",
+                                    columnGap: "0.75rem",
+                                }}
+                            >
+                                {relatedBooks.map((book) => (
+                                    <BookCard key={book._id} book={book} />
+                                ))}
+                            </div>
+                        </div>
+                    </>
+                ) : response.status === 404 ? (
+                    <Page404 />
+                ) : null
             ) : (
-                <Page404 />
+                <Loader />
             )}
         </>
     );
 }
 
-function Review(props) {
+export function Review(props) {
     const { name, rating } = props.data;
     return (
         <div className="my-3 text-gray">

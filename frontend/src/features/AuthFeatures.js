@@ -105,10 +105,8 @@ export const authenticateUser = async () => {
             },
         };
         const response = await fetch(url, options);
-        if (response.status === 200) {
-            const json = await response.json();
-            return { json: json.data, status: true };
-        }
+        const json = await response.json();
+        return { json, status: response.status };
     }
 
     return { status: false };

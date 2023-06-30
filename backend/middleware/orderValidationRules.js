@@ -16,14 +16,14 @@ const createValidationRules = [
         .withMessage("Shipping price must be a number"),
     body("orderStatus")
         .optional()
-        .isIn(["Pending", "Processing", "Shipped", "Delivered"])
+        .isIn(["pending", "processing", "shipped", "delivered"])
         .withMessage("Order Status is invalid"),
     body("deliveredAt").optional().isISO8601().toDate(),
 ];
 
 const updateValidationRules = [
     body("orderStatus").exists().withMessage("Order status is required.")
-        .isIn(["Pending", "Processing", "Shipped", "Delivered"])
+        .isIn(["pending", "processing", "shipped", "delivered"])
         .withMessage("Order Status is invalid"),
     body("deliveredAt").optional().isISO8601().toDate(),
 ];

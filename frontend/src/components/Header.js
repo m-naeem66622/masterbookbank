@@ -1,22 +1,33 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useBooksContext } from "../provider/BookProvider";
+import { kebabToTitle } from "../features/BookFeatures";
 
 function Header() {
     // const location = useLocation();
     // const path = location.pathname;
-    const naviagte = useNavigate();
+    const navigate = useNavigate();
     const { isAdmin, setIsAdmin, isUser, setIsUser, cart, accountDetail } =
         useBooksContext();
+    const [searchData, setSearchData] = useState({
+        option: "title",
+        value: "",
+    });
 
     const handleLogoutOnClick = () => {
         localStorage.removeItem("authToken");
         if (isAdmin) {
             setIsAdmin(false);
-            naviagte("/admin/signin");
+            navigate("/admin/signin");
         } else if (isUser) {
             setIsUser(false);
-            naviagte("/");
+            navigate("/");
+        }
+    };
+
+    const handleSubmitSearch = () => {
+        if (searchData.value.trim()) {
+            navigate(`/books/${searchData.option}/${searchData.value}`);
         }
     };
 
@@ -71,43 +82,90 @@ function Header() {
                                     style={{ zIndex: "2000" }}
                                     aria-labelledby="navbarDropdownMenuLink"
                                 >
-                                    <li>
-                                        <Link
-                                            className="dropdown-item"
-                                            to="/user/account"
-                                        >
-                                            My Account
-                                        </Link>
-                                    </li>
-                                    <li>
-                                        <Link className="dropdown-item" to="/">
-                                            My Orders
-                                        </Link>
-                                    </li>
-                                    <li>
-                                        <Link
-                                            className="dropdown-item"
-                                            to="/cart"
-                                        >
-                                            Cart
-                                        </Link>
-                                    </li>
-                                    <li>
-                                        <Link
-                                            className="dropdown-item"
-                                            to="/checkout"
-                                        >
-                                            Checkout
-                                        </Link>
-                                    </li>
-                                    <li>
-                                        <button
-                                            className="dropdown-item"
-                                            onClick={handleLogoutOnClick}
-                                        >
-                                            Logout
-                                        </button>
-                                    </li>
+                                    {isUser && (
+                                        <>
+                                            <li>
+                                                <Link
+                                                    className="dropdown-item"
+                                                    to="/user/account"
+                                                >
+                                                    Account Info
+                                                </Link>
+                                            </li>
+                                            <li>
+                                                <Link
+                                                    className="dropdown-item"
+                                                    to="/orders"
+                                                >
+                                                    My Orders
+                                                </Link>
+                                            </li>
+                                            <li>
+                                                <Link
+                                                    className="dropdown-item"
+                                                    to="/"
+                                                >
+                                                    My Reviews
+                                                </Link>
+                                            </li>
+                                            <li>
+                                                <Link
+                                                    className="dropdown-item"
+                                                    to="/cart"
+                                                >
+                                                    My Cart
+                                                </Link>
+                                            </li>
+                                            <li>
+                                                <button
+                                                    className="dropdown-item"
+                                                    onClick={
+                                                        handleLogoutOnClick
+                                                    }
+                                                >
+                                                    Logout
+                                                </button>
+                                            </li>
+                                        </>
+                                    )}
+                                    {isAdmin && (
+                                        <>
+                                            <li>
+                                                <Link
+                                                    className="dropdown-item"
+                                                    to="/admin/account"
+                                                >
+                                                    Account Info
+                                                </Link>
+                                            </li>
+                                            <li>
+                                                <Link
+                                                    className="dropdown-item"
+                                                    to="/admin/orders"
+                                                >
+                                                    Orders
+                                                </Link>
+                                            </li>
+                                            <li>
+                                                <Link
+                                                    className="dropdown-item"
+                                                    to="/"
+                                                >
+                                                    Reviews
+                                                </Link>
+                                            </li>
+                                            <li>
+                                                <button
+                                                    className="dropdown-item"
+                                                    onClick={
+                                                        handleLogoutOnClick
+                                                    }
+                                                >
+                                                    Logout
+                                                </button>
+                                            </li>
+                                        </>
+                                    )}
                                 </ul>
                             </li>
                         </>
@@ -145,26 +203,86 @@ function Header() {
                             </div>
                             <div className="offcanvas-body">
                                 <ul className="navbar-nav justify-content-center flex-grow-1 pe-3">
-                                    <li className="nav-item fw-medium">
-                                        <Link className="nav-link" to="/">
-                                            Novels
-                                        </Link>
-                                    </li>
-                                    <li className="nav-item fw-medium">
-                                        <Link className="nav-link" to="/">
-                                            Academic Books
-                                        </Link>
-                                    </li>
-                                    <li className="nav-item fw-medium">
-                                        <Link className="nav-link" to="/">
-                                            PPSC
-                                        </Link>
-                                    </li>
-                                    <li className="nav-item fw-medium">
-                                        <Link className="nav-link" to="/">
-                                            Fictions
-                                        </Link>
-                                    </li>
+                                    {!isAdmin && (
+                                        <>
+                                            <li className="nav-item fw-medium">
+                                                <Link
+                                                    className="nav-link"
+                                                    to="/books/categories/novel"
+                                                >
+                                                    Novel
+                                                </Link>
+                                            </li>
+                                            <li className="nav-item fw-medium">
+                                                <Link
+                                                    className="nav-link"
+                                                    to="/books/categories/academic"
+                                                >
+                                                    Academic Books
+                                                </Link>
+                                            </li>
+                                            <li className="nav-item fw-medium">
+                                                <Link
+                                                    className="nav-link"
+                                                    to="/books/categories/ppsc"
+                                                >
+                                                    PPSC
+                                                </Link>
+                                            </li>
+                                            <li className="nav-item fw-medium">
+                                                <Link
+                                                    className="nav-link"
+                                                    to="/books/categories/fiction"
+                                                >
+                                                    Fiction
+                                                </Link>
+                                            </li>
+                                        </>
+                                    )}
+                                    {isAdmin && (
+                                        <>
+                                            <li className="nav-item fw-medium">
+                                                <Link
+                                                    className="nav-link"
+                                                    to="/admin/book/add"
+                                                >
+                                                    Add Book
+                                                </Link>
+                                            </li>
+                                            <li className="nav-item fw-medium">
+                                                <Link
+                                                    className="nav-link"
+                                                    to="/admin/books"
+                                                >
+                                                    Books
+                                                </Link>
+                                            </li>
+                                            <li className="nav-item fw-medium">
+                                                <Link
+                                                    className="nav-link"
+                                                    to="/admin/orders"
+                                                >
+                                                    Orders
+                                                </Link>
+                                            </li>
+                                            <li className="nav-item fw-medium">
+                                                <Link
+                                                    className="nav-link"
+                                                    to="/"
+                                                >
+                                                    Discounts
+                                                </Link>
+                                            </li>
+                                            <li className="nav-item fw-medium">
+                                                <Link
+                                                    className="nav-link"
+                                                    to="/"
+                                                >
+                                                    Coupons
+                                                </Link>
+                                            </li>
+                                        </>
+                                    )}
                                     <div className="d-lg-none d-flex">
                                         {isUser || isAdmin ? (
                                             <button
@@ -258,21 +376,42 @@ function Header() {
                             type="text"
                             className="form-control search-wrap "
                             style={{ padding: "0.75rem" }}
-                            placeholder="Search By Book Title"
+                            placeholder={`Search By Book ${kebabToTitle(
+                                searchData.option
+                            )}`}
                             aria-label=""
+                            onChange={(e) =>
+                                setSearchData({
+                                    ...searchData,
+                                    value: e.target.value,
+                                })
+                            }
                         />
                         <select
-                            name=""
+                            name="search-options"
                             id=""
                             className="form-select"
                             style={{ maxWidth: "130px" }}
+                            value={searchData.option}
+                            onChange={(e) =>
+                                setSearchData({
+                                    ...searchData,
+                                    option: e.target.value,
+                                })
+                            }
                         >
-                            <option value="">Title</option>
-                            <option value="">Author</option>
-                            <option value="">Category</option>
-                            <option value="">Publisher</option>
+                            <option value="title">Title</option>
+                            <option value="authors">Author</option>
+                            <option value="categories">Category</option>
+                            <option value="publisher">Publisher</option>
                         </select>
-                        <div className="btn btn-light center px-3 border">
+                        <div
+                            data-bs-dismiss="offcanvas"
+                            data-bs-target="#searchToggle"
+                            aria-label="Close"
+                            onClick={handleSubmitSearch}
+                            className="btn btn-light center px-3 border"
+                        >
                             <i className="fas fa-magnifying-glass fs-5 text-gray"></i>
                         </div>
                     </div>

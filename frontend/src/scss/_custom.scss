@@ -139,6 +139,13 @@ $utilities: (
             fit: fit-content,
         ),
     ),
+    "font-size": (
+        responsive: true,
+        rfs: true,
+        property: font-size,
+        class: fs,
+        values: $font-sizes,
+    ),
 );
 $utilities: map-merge(
     $utilities,

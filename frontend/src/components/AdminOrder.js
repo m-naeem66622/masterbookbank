@@ -54,23 +54,18 @@ function AdminOrder() {
         // eslint-disable-next-line
     }, []);
 
-    // useEffect(() => {
-    //     console.log(order);
-    // }, [order]);
-
     return (
         <>
-            <h1 className="text-light mt-3 mb-4 text-center">Manage Order</h1>
             {!loading && Object.values(order).length !== 0 ? (
-                <div className="row d-flex justify-content-center pb-4 text-light">
+                <div className="row d-flex justify-content-center pb-4">
                     <div className="row justify-space-between">
                         <p className="col-md-6 col-lg-4">
                             <strong>Name: </strong>
-                            {order.user.name}
+                            {order.user?.name}
                         </p>
                         <p className="col-md-6 col-lg-4">
                             <strong>Email: </strong>
-                            {order.user.email}
+                            {order.user?.email}
                         </p>
                         <p className="col-md-12 col-lg-4">
                             <strong>Phone Number: </strong>
@@ -102,14 +97,14 @@ function AdminOrder() {
                                 id="orderStatus"
                                 defaultValue={order.orderStatus}
                             >
-                                <option value="Pending">Pending</option>
-                                <option value="Processing">Processing</option>
-                                <option value="Shipped">Shipped</option>
-                                <option value="Delivered">Delivered</option>
+                                <option value="pending">Pending</option>
+                                <option value="processing">Processing</option>
+                                <option value="shipped">Shipped</option>
+                                <option value="delivered">Delivered</option>
                             </select>
                         </div>
                         <button
-                            className="btn btn-primary col-12 col-sm-3"
+                            className="btn btn-fill-sea-green col-12 col-sm-3"
                             type="submit"
                             disabled={orderStatus === order.orderStatus}
                             style={{
@@ -124,7 +119,7 @@ function AdminOrder() {
                     <div className="col-md-7">
                         {order.items.map((item) => (
                             <div className="row mb-2 mx-2" key={item._id}>
-                                <div className="rounded p-2 d-flex flex-wrap bg-light text-dark">
+                                <div className="rounded p-2 d-flex flex-wrap">
                                     <div className="col-lg-3 col-md-12 mb-4 mb-lg-0">
                                         {/* <!-- Image --> */}
                                         <Link
@@ -177,13 +172,17 @@ function AdminOrder() {
                             style={{ top: "65px" }}
                         >
                             <div className="card-header py-3">
-                                <h5 className="mb-0 text-dark">Summary</h5>
+                                <h5 className="mb-0">Summary</h5>
                             </div>
                             <div className="card-body">
                                 <ul className="list-group list-group-flush">
                                     <li className="list-group-item d-flex justify-content-between align-items-center border-0 px-0 pb-0">
                                         Products
-                                        <span>{order.totalPrice}</span>
+                                        <span>
+                                            {Number(order.totalPrice).toFixed(
+                                                2
+                                            )}
+                                        </span>
                                     </li>
                                     <li className="list-group-item d-flex justify-content-between align-items-center border-0 px-0 pb-0">
                                         Discount

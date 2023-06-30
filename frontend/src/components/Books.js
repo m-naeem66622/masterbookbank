@@ -26,10 +26,10 @@ function Books() {
         const asyncFunction = async () => {
             setRolling(true);
             const data = await fetchBooks();
-            setRolling(false);
 
             if (data.status === 200) {
                 if (data.json.length === 0) {
+                    setRolling(false);
                     navigate("/admin/book/add");
                     notify("warning", "No books found! Try to add.");
                 } else {
@@ -38,9 +38,8 @@ function Books() {
                         delete data.json.documents;
                         setResponse(data.json);
                     }
+                    setRolling(false);
                 }
-            } else {
-                notify("error", `${data.json.message}! Please try again...`);
             }
         };
 
@@ -54,7 +53,7 @@ function Books() {
 
     return (
         <>
-            <h1 className="text-light mt-3 mb-4 text-center">Your Books</h1>
+            {rolling && <Loader />}
             {!rolling && (
                 <InfiniteScroll
                     dataLength={books.length} //This is important field to render the next data
@@ -62,43 +61,39 @@ function Books() {
                     hasMore={response.totalResults !== books.length}
                     loader={<Loader />}
                     endMessage={
-                        <h4 className="text-center text-light p-4">
-                            This is all what we have...
-                        </h4>
+                        books.length > 0 && (
+                            <h4 className="text-center py-4">
+                                This is all what we have...
+                            </h4>
+                        )
                     }
                     style={{ overflow: "initial" }}
                 >
-                    <table className="table table-dark table-hover">
+                    <table className="table table-hover">
                         <thead>
                             <tr>
-                                <th style={{ backgroundColor: "#2c3034" }}>
+                                <th className="bg-sea-green text-light">
                                     Title
                                 </th>
-                                <th style={{ backgroundColor: "#2c3034" }}>
+                                <th className="bg-sea-green text-light">
                                     Author(s)
                                 </th>
-                                <th
-                                    style={{ backgroundColor: "#2c3034" }}
-                                    className="text-center"
-                                >
+                                <th className="bg-sea-green text-light text-center">
                                     Price
                                 </th>
-                                <th style={{ backgroundColor: "#2c3034" }}>
+                                <th className="bg-sea-green text-light">
                                     Publisher
                                 </th>
-                                <th
-                                    style={{ backgroundColor: "#2c3034" }}
-                                    className="text-center"
-                                >
+                                <th className="bg-sea-green text-light text-center">
                                     Pages
                                 </th>
-                                <th style={{ backgroundColor: "#2c3034" }}>
+                                <th className="bg-sea-green text-light">
                                     Language
                                 </th>
                                 <th
+                                    className="bg-sea-green text-light"
                                     style={{
                                         width: "1rem",
-                                        backgroundColor: "#2c3034",
                                     }}
                                 ></th>
                             </tr>

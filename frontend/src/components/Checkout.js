@@ -41,7 +41,6 @@ function Checkout() {
             return;
         }
 
-        console.log(checkout);
         const res = await placeOrder({
             code,
             items,
@@ -97,7 +96,6 @@ function Checkout() {
     };
 
     const updateState = (obj) => {
-        console.log(obj.paymentMethod);
         setCheckout(obj);
         localStorage.setItem("checkoutItems", JSON.stringify(obj));
     };
@@ -167,15 +165,15 @@ function Checkout() {
                                 ))}
                             </div>
                         </div>
-                        <div class="card mb-4 mb-lg-0">
-                            <div class="card-body">
+                        <div className="card mb-4 mb-lg-0">
+                            <div className="card-body">
                                 <p>
                                     <strong>Select Payment Method</strong>
                                 </p>
                                 <button
                                     className={`border-${
                                         checkout.paymentMethod === "EASYPAISA"
-                                            ? "primary"
+                                            ? "sea-green"
                                             : "white"
                                     } border-1 me-2 rounded`}
                                     type="button"
@@ -197,7 +195,7 @@ function Checkout() {
                                 <button
                                     className={`border-${
                                         checkout.paymentMethod === "JAZZCASH"
-                                            ? "primary"
+                                            ? "sea-green"
                                             : "white"
                                     } border-1 me-2 rounded`}
                                     type="button"
@@ -218,7 +216,7 @@ function Checkout() {
                                 <button
                                     className={`border-${
                                         checkout.paymentMethod === "MASTERCARD"
-                                            ? "primary"
+                                            ? "sea-green"
                                             : "white"
                                     } border-1 me-2 rounded`}
                                     type="button"
@@ -296,7 +294,7 @@ function Checkout() {
                                         <div className="col-4 ps-1">
                                             <button
                                                 type="button"
-                                                className="btn btn-primary w-100"
+                                                className="btn btn-fill-sea-green w-100"
                                                 onClick={handleApplyCoupon}
                                             >
                                                 Apply
@@ -331,7 +329,7 @@ function Checkout() {
 
                                 <button
                                     type="button"
-                                    className="btn btn-primary btn-block"
+                                    className="btn btn-fill-sea-green btn-block"
                                     onClick={handlePlaceOrder}
                                 >
                                     Place Order

@@ -1,7 +1,4 @@
 import React, { useEffect } from "react";
-import minusIcon from "../assets/minus-solid.svg";
-import plusIcon from "../assets/plus-solid.svg";
-import trashIcon from "../assets/trash-solid.svg";
 import { Link } from "react-router-dom";
 import { useBooksContext } from "../provider/BookProvider";
 
@@ -31,7 +28,7 @@ function CartItem(props) {
 
     return (
         <div className="row">
-            <div className="col-lg-3 col-md-12 mb-4 mb-lg-0">
+            <div className="col-lg-3 col-md-12 mb-4 mb-lg-0 cart-item-image-wrapper">
                 {/* <!-- Image --> */}
                 <Link to={"/book/view/" + _id}>
                     <img
@@ -52,12 +49,12 @@ function CartItem(props) {
                 <p>Publisher: {publisher}</p>
                 <button
                     type="button"
-                    className="btn btn-primary btn-sm me-1 mb-2"
+                    className="btn btn-fill-sea-green btn-sm me-1 mb-2 center py-1"
                     data-mdb-toggle="tooltip"
                     title="Remove item"
                     onClick={() => handleRemoveItem(_id)}
                 >
-                    <img width="15px" src={trashIcon} alt="trash-icon" />
+                    <i className="fa-solid fa-trash fs-5"></i>
                 </button>
                 {/* <button
                     type="button"
@@ -76,14 +73,10 @@ function CartItem(props) {
                     <label className="form-label">Quantity</label>
                     <div className="d-flex">
                         <button
-                            className="btn btn-primary px-3 me-2"
                             onClick={() => handleMinusQty(_id)}
+                            className="btn btn-fill-sea-green px-3 me-2 center"
                         >
-                            <img
-                                width="10px"
-                                src={minusIcon}
-                                alt="minus-icon"
-                            />
+                            <i className="fa fa-minus"></i>
                         </button>
                         <input
                             readOnly
@@ -95,10 +88,10 @@ function CartItem(props) {
                             className="form-control"
                         />
                         <button
-                            className="btn btn-primary px-3 ms-2"
                             onClick={() => handlePlusQty(_id)}
+                            className="btn btn-fill-sea-green px-3 ms-2 center"
                         >
-                            <img width="10px" src={plusIcon} alt="plus-icon" />
+                            <i className="fa fa-plus"></i>
                         </button>
                     </div>
                 </div>

@@ -100,12 +100,13 @@ const Order = new mongoose.Schema(
         // },
         orderStatus: {
             type: String,
-            enum: ["Pending", "Processing", "Shipped", "Delivered"],
-            default: "Pending",
+            enum: ["pending", "processing", "shipped", "delivered"],
+            default: "pending",
             required: true,
         },
         deliveredAt: {
             type: Date,
+            default: null,
         },
     },
     { timestamps: true }

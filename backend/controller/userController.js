@@ -12,12 +12,24 @@ const signup = async (req, res) => {
     }
 
     try {
-        const { name, email, password, phoneNumber, shippingAddress } = req.body;
+        const { name, email, password, phoneNumber, shippingAddress } =
+            req.body;
 
         // Check whether the user already exist or not
         let user = await User.findOne({ email });
         if (user) {
-            return res.status(400).send({ errors: [{ msg: "Email already exist", param: "email" }] });
+            return res.status(400).send({
+                errors: [{ msg: "Email already exist", param: "email" }],
+            });
+        }
+
+        user = await User.findOne({ phoneNumber });
+        if (user) {
+            return res.status(400).send({
+                errors: [
+                    { msg: "Phone number already exist", param: "phoneNumber" },
+                ],
+            });
         }
 
         // Salt and Hash the password
@@ -26,17 +38,21 @@ const signup = async (req, res) => {
 
         // Saving user data into the database
         user = await User.create({
-            name, email, password: secPass, phoneNumber, shippingAddress
+            name,
+            email,
+            password: secPass,
+            phoneNumber,
+            shippingAddress,
         });
 
         // Get User ID to authenticate token
         const data = {
-            user: { id: user.id }
+            user: { id: user.id },
         };
         const authToken = jwt.sign(data, JWT_SECRET);
 
-        res.json({ authToken })
-    } catch (err) {
+        res.json({ authToken });
+    } catch (error) {
         res.status(500).json({ message: "Server error 0x000d1" });
     }
 };
@@ -49,24 +65,37 @@ const signin = async (req, res) => {
     }
 
     try {
-
         // Get user information from request body
         const { email, password } = req.body;
 
         // Check whether the username or password correct or not
         const user = await User.findOne({ email });
         if (!user) {
-            return res.status(400).send({ errors: [{ msg: "Wrong credentials! Try again.", param: "email" }] });
+            return res.status(400).send({
+                errors: [
+                    {
+                        msg: "Wrong credentials! Try again.",
+                        param: "email",
+                    },
+                ],
+            });
         }
 
-        const secPass = bcrypt.compareSync(password, user.password);
+        const secPass = await bcrypt.compare(password, user.password);
         if (!secPass) {
-            return res.status(400).send({ errors: [{ msg: "Wrong credentials! Try again.", param: "password" }] });
+            return res.status(400).send({
+                errors: [
+                    {
+                        msg: "Wrong credentials! Try again.",
+                        param: "password",
+                    },
+                ],
+            });
         }
 
         // Get User ID to authenticate token
         const data = {
-            user: { id: user.id, }
+            user: { id: user.id },
         };
         const authToken = jwt.sign(data, JWT_SECRET);
 
@@ -83,7 +112,8 @@ const update = async (req, res) => {
     }
 
     try {
-        const { password, phoneNumber, shippingAddress, oldPassword } = req.body;
+        const { password, phoneNumber, shippingAddress, oldPassword } =
+            req.body;
 
         // Check whether the user already exist or not
         const user = await User.findById(req.user.id);
@@ -94,14 +124,34 @@ const update = async (req, res) => {
         let toUpdate = {};
 
         if (oldPassword && password) {
-            const passwordMatch1 = await bcrypt.compare(oldPassword, user.password);
+            const passwordMatch1 = await bcrypt.compare(
+                oldPassword,
+                user.password
+            );
             if (!passwordMatch1) {
-                return res.status(400).send({ errors: [{ msg: "Old password is incorrect", param: "oldPassword" }] });
+                return res.status(400).send({
+                    errors: [
+                        {
+                            msg: "Old password is incorrect",
+                            param: "oldPassword",
+                        },
+                    ],
+                });
             }
 
-            const passwordMatch2 = await bcrypt.compare(password, user.password);
+            const passwordMatch2 = await bcrypt.compare(
+                password,
+                user.password
+            );
             if (passwordMatch2) {
-                return res.status(400).send({ errors: [{ msg: "Old password and new password are the same.", param: "oldPassword" }] });
+                return res.status(400).send({
+                    errors: [
+                        {
+                            msg: "Old password and new password are the same.",
+                            param: "oldPassword",
+                        },
+                    ],
+                });
             }
 
             // Salt and Hash the password
@@ -115,19 +165,28 @@ const update = async (req, res) => {
         if (toUpdate.password) {
             await User.updateOne(
                 { _id: req.user.id },
-                { $set: { password: toUpdate.password, phoneNumber: toUpdate.phoneNumber, shippingAddress: toUpdate.shippingAddress } }
+                {
+                    $set: {
+                        password: toUpdate.password,
+                        phoneNumber: toUpdate.phoneNumber,
+                        shippingAddress: toUpdate.shippingAddress,
+                    },
+                }
             );
         } else {
             await User.updateOne(
                 { _id: req.user.id },
-                { $set: { phoneNumber: toUpdate.phoneNumber, shippingAddress: toUpdate.shippingAddress } }
+                {
+                    $set: {
+                        phoneNumber: toUpdate.phoneNumber,
+                        shippingAddress: toUpdate.shippingAddress,
+                    },
+                }
             );
         }
 
-
-        // res.json({ authToken })
         res.json({ message: "User sucessfully updated" });
-    } catch (err) {
+    } catch (error) {
         res.status(500).json({ message: "Server error 0x000d3" });
     }
 };
@@ -153,5 +212,4 @@ const fetch = async (req, res) => {
     }
 };
 
-
-module.exports = { signin, signup, fetch, update }
+module.exports = { signin, signup, fetch, update };

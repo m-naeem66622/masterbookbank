@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import Logo from "../assets/logo.png";
 import { useBooksContext } from "../provider/BookProvider";
 import { useNavigate } from "react-router-dom";
 import { authenticateAdmin, signinAdmin } from "../features/AuthFeatures";
@@ -43,54 +42,63 @@ function AdminSignin() {
     }, [isAdmin]);
 
     return (
-        <main className="form-signin w-50 m-auto">
+        <>
             {loading ? (
-                <>
-                    <h3 className="text-center text-light mt-5">
-                        Verifying Admin...
-                    </h3>{" "}
-                    <Loader />
-                </>
+                <Loader />
             ) : (
-                <form className="text-center my-4" onSubmit={handleOnSubmit}>
-                    <img className="mb-4" src={Logo} alt="" width="200px" />
-                    <h1 className="h3 mb-3 fw-normal text-light">
-                        Please sign in
-                    </h1>
-
-                    <div className="form-floating form-floating-sm  mb-4">
-                        <input
-                            type="text"
-                            className="form-control"
-                            id="floatingInput"
-                            placeholder="Username"
-                            value={data.username}
-                            name="username"
-                            onChange={handleOnChange}
-                        />
-                        <label htmlFor="floatingInput">Username</label>
-                    </div>
-                    <div className="form-floating mb-4">
-                        <input
-                            type="password"
-                            className="form-control"
-                            id="floatingPassword"
-                            placeholder="Password"
-                            value={data.password}
-                            name="password"
-                            onChange={handleOnChange}
-                        />
-                        <label htmlFor="floatingPassword">Password</label>
-                    </div>
-                    <button
-                        className="w-100 btn btn-lg btn-primary"
-                        type="submit"
-                    >
-                        Sign in
-                    </button>
-                </form>
+                <div
+                    className="text-gray mx-auto"
+                    style={{ maxWidth: "400px" }}
+                >
+                    <h2 className="fw-bold fs-4 text-center">
+                        Signin to your account
+                    </h2>
+                    <form className="mt-5" onSubmit={handleOnSubmit}>
+                        <div className="mb-4">
+                            <label
+                                htmlFor="adminUsername"
+                                className="form-label fw-medium"
+                            >
+                                Username
+                            </label>
+                            <input
+                                type="text"
+                                className="form-control"
+                                id="adminUsername"
+                                value={data.username}
+                                name="username"
+                                onChange={handleOnChange}
+                            />
+                            <div className="valid-feedback">Looks good!</div>
+                        </div>
+                        <div className="mb-4">
+                            <label
+                                htmlFor="adminPassword"
+                                className="form-label fw-medium"
+                            >
+                                Password
+                            </label>
+                            <input
+                                type="password"
+                                className="form-control"
+                                id="adminPassword"
+                                value={data.password}
+                                name="password"
+                                onChange={handleOnChange}
+                            />
+                        </div>
+                        <div className="mb-4">
+                            <button
+                                type="submit"
+                                className="btn btn-fill-sea-green w-100"
+                            >
+                                Sign in
+                            </button>
+                        </div>
+                    </form>
+                </div>
             )}
-        </main>
+        </>
     );
 }
 

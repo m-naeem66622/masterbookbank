@@ -4,6 +4,11 @@ const Book = require("../models/bookSchema");
 
 // Get all books
 const fetchAll = async (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.status(400).json({ errors: errors.array() });
+    }
+
     try {
         const { query } = req;
         const {
@@ -12,17 +17,22 @@ const fetchAll = async (req, res) => {
             categories,
             publisher,
             language,
-            limit = 10,
-            page = 1,
             from,
             to,
             random,
         } = query;
+        let { page = 1, limit = 12 } = query;
+        page = Number(page);
         const filters = {};
 
         if (title) {
-            const terms = title.split(" ").map((term) => new RegExp(term, "i"));
-            filters.$or = terms.map((term) => ({ title: term }));
+            const pattern = title
+                .split(" ")
+                .filter(Boolean)
+                .map((keyword) => `(?=.*${keyword})`)
+                .join("");
+            const regex = new RegExp(pattern, "i");
+            filters.title = { $regex: regex };
         }
 
         if (authors) {
@@ -35,9 +45,10 @@ const fetchAll = async (req, res) => {
                         .replace(/\s*-\s*/g, "-")
                 )
                 .filter(Boolean);
-            filters.authors = {
-                $in: authorArray.map((author) => new RegExp(author, "i")),
-            };
+            const terms = authorArray.map(
+                (term) => new RegExp(`(?=.*${term})`, "i")
+            );
+            filters.$or = terms.map((term) => ({ authors: term }));
         }
 
         if (categories) {
@@ -50,17 +61,31 @@ const fetchAll = async (req, res) => {
                         .replace(/\s*-\s*/g, "-")
                 )
                 .filter(Boolean);
-            filters.categories = {
-                $in: categoryArray.map((category) => new RegExp(category, "i")),
-            };
+
+            const terms = categoryArray.map(
+                (term) => new RegExp(`(?=.*${term})`, "i")
+            );
+            filters.$or = terms.map((term) => ({ categories: term }));
         }
 
         if (publisher) {
-            filters.publisher = new RegExp(publisher, "i");
+            const pattern = publisher
+                .split(" ")
+                .filter(Boolean)
+                .map((keyword) => `(?=.*${keyword})`)
+                .join("");
+            const regex = new RegExp(pattern, "i");
+            filters.publisher = { $regex: regex };
         }
 
         if (language) {
-            filters.language = new RegExp(language, "i");
+            const pattern = language
+                .split(" ")
+                .filter(Boolean)
+                .map((keyword) => `(?=.*${keyword})`)
+                .join("");
+            const regex = new RegExp(pattern, "i");
+            filters.language = { $regex: regex };
         }
 
         if (from) {
@@ -98,7 +123,7 @@ const fetchAll = async (req, res) => {
             currentResults: documents.length,
             documents,
         });
-    } catch (err) {
+    } catch (error) {
         res.status(500).json({ message: "Server error 0x000b1" });
     }
 };
@@ -113,7 +138,7 @@ const fetch = async (req, res) => {
         }
 
         res.json(book);
-    } catch (err) {
+    } catch (error) {
         if (err.reason.toString().includes("string of 24 hex characters")) {
             return res.status(404).json({ message: "Book not found" });
         }
@@ -136,8 +161,8 @@ const create = async (req, res) => {
         });
     } else if (req.files.length < 1) {
         req.files.forEach((file) => {
-            fs.unlink(file.path, (err) => {
-                if (err)
+            fs.unlink(file.path, (error) => {
+                if (error)
                     fs.writeFileSync(`files-not-deleted.txt`, file.path + "\n");
             });
         });
@@ -157,8 +182,8 @@ const create = async (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
         req.files.forEach((file) => {
-            fs.unlink(file.path, (err) => {
-                if (err)
+            fs.unlink(file.path, (error) => {
+                if (error)
                     fs.writeFileSync(`files-not-deleted.txt`, file.path + "\n");
             });
         });
@@ -204,7 +229,7 @@ const create = async (req, res) => {
         // Save new book object to database
         const newBook = await book.save();
         res.status(201).json({ message: "Book sucessfully added" });
-    } catch (err) {
+    } catch (error) {
         res.status(500).json({ message: "Server error 0x000b3" });
     }
 };
@@ -215,8 +240,8 @@ const update = async (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
         req.files.forEach((file) => {
-            fs.unlink(file.path, (err) => {
-                if (err)
+            fs.unlink(file.path, (error) => {
+                if (error)
                     fs.writeFileSync(`files-not-deleted.txt`, file.path + "\n");
             });
         });
@@ -265,8 +290,8 @@ const update = async (req, res) => {
                 3
             ) {
                 req.files.forEach((file) => {
-                    fs.unlink(file.path, (err) => {
-                        if (err)
+                    fs.unlink(file.path, (error) => {
+                        if (error)
                             fs.writeFileSync(
                                 `files-not-deleted.txt`,
                                 file.path + "\n"
@@ -290,8 +315,8 @@ const update = async (req, res) => {
                 1
             ) {
                 req.files.forEach((file) => {
-                    fs.unlink(file.path, (err) => {
-                        if (err)
+                    fs.unlink(file.path, (error) => {
+                        if (error)
                             fs.writeFileSync(
                                 `files-not-deleted.txt`,
                                 file.path + "\n"
@@ -312,8 +337,8 @@ const update = async (req, res) => {
         } else {
             if (alreadyStoredImages.length + imagesFromMulter.length > 3) {
                 req.files.forEach((file) => {
-                    fs.unlink(file.path, (err) => {
-                        if (err)
+                    fs.unlink(file.path, (error) => {
+                        if (error)
                             fs.writeFileSync(
                                 `files-not-deleted.txt`,
                                 file.path + "\n"
@@ -337,11 +362,11 @@ const update = async (req, res) => {
         // Delete book images from server if any
         if (validFilesToDelete.length !== 0) {
             validFilesToDelete.forEach((imageUrl) => {
-                fs.unlink(imageUrl, (err) => {
-                    if (err)
+                fs.unlink(imageUrl, (error) => {
+                    if (error)
                         fs.writeFileSync(
                             `files-not-deleted.txt`,
-                            file.path + "\n"
+                            imageUrl + "\n"
                         );
                 });
             });
@@ -374,7 +399,7 @@ const update = async (req, res) => {
         );
 
         res.json({ message: "Book successfully updated" });
-    } catch (err) {
+    } catch (error) {
         if (err.reason.toString().includes("string of 24 hex characters")) {
             return res.status(404).json({ message: "Book not found" });
         }
@@ -392,9 +417,9 @@ const drop = async (req, res) => {
 
         // Delete book images from server
         book.images.forEach((imageUrl) => {
-            fs.unlink(imageUrl, (err) => {
-                if (err)
-                    fs.writeFileSync(`files-not-deleted.txt`, file.path + "\n");
+            fs.unlink(imageUrl, (error) => {
+                if (error)
+                    fs.writeFileSync(`files-not-deleted.txt`, imageUrl + "\n");
             });
         });
 
@@ -405,8 +430,8 @@ const drop = async (req, res) => {
         }
 
         res.status(200).json({ message: "Book successfully deleted" });
-    } catch (err) {
-        if (err) {
+    } catch (error) {
+        if (error) {
             if (err.reason.toString().includes("string of 24 hex characters")) {
                 return res.status(404).json({ message: "Book not found" });
             }

@@ -8,10 +8,10 @@ function UserAccount() {
 
     return (
         <>
-            <h1 className="text-center my-4 text-light">User Information</h1>
+            <h2 className="fw-bold fs-4 text-center">Account Information</h2>
             <div className="row justify-content-center pb-4">
                 <div className="col-md-8">
-                    <table className="table table-dark">
+                    <table className="table">
                         <tbody>
                             <tr>
                                 <th scope="row">Name:</th>
@@ -34,24 +34,30 @@ function UserAccount() {
                                 </td>
                             </tr>
                             <tr>
-                                <th scope="row">Created At:</th>
+                                <th scope="row">Joined On:</th>
                                 <td>
                                     {new Date(
                                         accountDetail.createdAt
-                                    ).toString()}
+                                    ).toLocaleString("default", {
+                                        month: "long",
+                                        year: "numeric",
+                                    })}
                                 </td>
                             </tr>
-                            <tr>
+                            {/* <tr>
                                 <th scope="row">Updated At:</th>
                                 <td>
                                     {new Date(
                                         accountDetail.updatedAt
                                     ).toString()}
                                 </td>
-                            </tr>
+                            </tr> */}
                         </tbody>
                     </table>
-                    <Link to="/user/account/edit" className="btn btn-primary">
+                    <Link
+                        to="/user/account/edit"
+                        className="btn btn-fill-sea-green"
+                    >
                         Edit
                     </Link>
                 </div>

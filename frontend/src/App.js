@@ -25,6 +25,8 @@ import Checkout from './components/Checkout';
 import AdminOrders from './components/AdminOrders';
 import AdminOrder from './components/AdminOrder';
 import BooksByX from './components/BooksByX';
+import Orders from './components/Orders';
+import Order from './components/Order';
 
 
 function App() {
@@ -45,6 +47,8 @@ function App() {
             <Route exact path="/book/view/:id" element={<ViewBook/>} />
             <Route element={<UserPrivateRoutes />}>
               <Route exact path="/checkout" element={<Checkout/>} />
+              <Route exact path="/orders" element={<Orders/>} />
+              <Route exact path="/order/:id" element={<Order/>} />
               <Route exact path="/user/account" element={<UserAccount />} />
               <Route exact path="/user/account/edit" element={<EditUserAccount />} />
             </Route>

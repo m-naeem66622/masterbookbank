@@ -77,9 +77,24 @@ function ImagePreview(props) {
                 }`}
             >
                 {src.length !== 0 ? (
-                    <img className="w-100" src={src[index]} alt="book-img" />
+                    edit ? (
+                        <img
+                            className="w-100"
+                            src={src[index]}
+                            alt="book-img"
+                            style={{ maxHeight: "250px" }}
+                        />
+                    ) : (
+                        <img
+                            className="w-100"
+                            src={src[index]}
+                            alt="book-img"
+                        />
+                    )
                 ) : (
-                    <h2 className="text-center">No files to show.</h2>
+                    <p className="text-center fs-5">
+                        <strong>No files to show.</strong>
+                    </p>
                 )}
             </div>
             {src.length !== 0 && (

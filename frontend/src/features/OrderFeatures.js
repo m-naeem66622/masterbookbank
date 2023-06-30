@@ -16,6 +16,44 @@ export const placeOrder = async (obj) => {
     return { json, status: res.status };
 };
 
+export const fetchOrdersUser = async () => {
+    if (localStorage.getItem("authToken")) {
+        const url = `${host}/api/order/fetchAll`;
+        const options = {
+            method: "GET",
+            headers: {
+                authToken: localStorage.getItem("authToken"),
+            },
+        };
+
+        const res = await fetch(url, options);
+        const json = await res.json();
+
+        return { json, status: res.status };
+    } else {
+        return { json: { message: "Access denied 0x00aa2" }, status: 401 };
+    }
+};
+
+export const fetchOrderUser = async (id) => {
+    if (localStorage.getItem("authToken")) {
+        const url = `${host}/api/order/fetch/${id}`;
+        const options = {
+            method: "GET",
+            headers: {
+                authToken: localStorage.getItem("authToken"),
+            },
+        };
+
+        const res = await fetch(url, options);
+        const json = await res.json();
+
+        return { json, status: res.status };
+    } else {
+        return { json: { message: "Access denied 0x00aa2" }, status: 401 };
+    }
+};
+
 export const fetchOrdersAdmin = async () => {
     const url = `${host}/api/order/admin/fetchAll`;
     const options = {
