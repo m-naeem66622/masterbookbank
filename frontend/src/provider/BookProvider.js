@@ -6,8 +6,9 @@ import React, {
     useReducer,
 } from "react";
 import { toast } from "react-toastify";
-import { authenticateAdmin, authenticateUser } from "../features/AuthFeatures";
 import cartReducer from "../features/cartReducer";
+import { auth } from "../firebase";
+import { authenticateUser } from "../features/AuthFeatures";
 
 const BookContext = createContext();
 
@@ -30,31 +31,30 @@ const BookProvider = (props) => {
     };
 
     const authenticate = async () => {
-        setRolling(true);
-        const { status, json } = await authenticateUser();
-        setRolling(false);
+        const { status, json } = await authenticateUser(
+            await auth.currentUser.getIdToken()
+        );
         if (status === 200) {
-            setIsUser(true);
+            localStorage.setItem("accountDetail", JSON.stringify(json.data));
             setAccountDetail(json.data);
-            return true;
-        }
-
-        authenticateAgain();
-    };
-
-    const authenticateAgain = async () => {
-        setRolling(true);
-        const response = await authenticateAdmin();
-        setRolling(false);
-        if (response.status) {
-            setIsAdmin(true);
-            setAccountDetail(response.json);
-            return true;
         }
     };
 
     useEffect(() => {
-        authenticate();
+        const unsubscribe = auth.onAuthStateChanged((user) => {
+            if (user) {
+                const detail = localStorage.getItem("accountDetail");
+                if (detail) {
+                    setAccountDetail(JSON.parse(detail));
+                } else {
+                    authenticate();
+                }
+                setIsUser(true);
+            } else {
+                setIsUser(false);
+            }
+        });
+
         const cartItems = localStorage.getItem("cartItems");
         if (cartItems) {
             const parseData = JSON.parse(cartItems);
@@ -66,7 +66,9 @@ const BookProvider = (props) => {
             }
         }
 
-        // eslint-disable-next-line
+        return () => {
+            unsubscribe();
+        };
     }, []);
 
     return (

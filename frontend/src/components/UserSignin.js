@@ -1,12 +1,14 @@
 import React, { useEffect, useState } from "react";
 import { useBooksContext } from "../provider/BookProvider";
 import { Link, useNavigate } from "react-router-dom";
-import { authenticateUser, signinUser } from "../features/AuthFeatures";
+import { signinUser } from "../features/AuthFeatures";
 import Loader from "./Loader";
+import { auth } from "../firebase";
+import { signInWithCustomToken } from "firebase/auth";
 
 function UserSignin() {
     document.title = "Signin | Master Book Bank";
-    const { notify, isUser, loading, setIsUser, setAccountDetail } =
+    const { notify, isUser, loading } =
         useBooksContext();
     const navigate = useNavigate();
     const [data, setData] = useState({ email: "", password: "" });
@@ -21,13 +23,17 @@ function UserSignin() {
     const handleOnSubmit = async (e) => {
         e.preventDefault();
 
-        const response = await signinUser(data);
+        const { json, status } = await signinUser(data);
 
-        if (response) {
-            setIsUser(true);
-            const { json } = await authenticateUser();
-            setAccountDetail(json.data);
-            navigate("/");
+        if (status === 200) {
+            signInWithCustomToken(auth, json.customToken)
+                .then((userCredential) => {
+                    // Signed in
+                    navigate("/");
+                })
+                .catch((error) => {
+                    notify("error", "Something went wrong! Try again.");
+                });
         } else {
             notify("error", "Wrong username or password. Try Again...");
         }

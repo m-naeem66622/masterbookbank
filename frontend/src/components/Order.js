@@ -8,7 +8,7 @@ import { kebabToTitle } from "../features/BookFeatures";
 function Order() {
     document.title = "Admin Order Details | Master Book Bank";
     const host = process.env.REACT_APP_SERVER_HOST;
-    const { loading, setLoading, notify } = useBooksContext();
+    const { loading, setLoading } = useBooksContext();
     const params = useParams();
     const { id } = params;
     const [order, setOrder] = useState({});

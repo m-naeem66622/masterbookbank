@@ -85,23 +85,18 @@ export const signinUser = async (data) => {
     };
 
     const response = await fetch(url, options);
+    const json = await response.json();
 
-    if (response.status === 200) {
-        const json = await response.json();
-        localStorage.setItem("authToken", json.authToken);
-        return true;
-    }
-
-    return false;
+    return { json, status: response.status };
 };
 
-export const authenticateUser = async () => {
-    if (localStorage.getItem("authToken")) {
+export const authenticateUser = async (token) => {
+    if (token) {
         const url = `${host}/api/auth/user`;
         const options = {
             method: "POST",
             headers: {
-                authToken: localStorage.getItem("authToken"),
+                idToken: token,
             },
         };
         const response = await fetch(url, options);
@@ -109,5 +104,5 @@ export const authenticateUser = async () => {
         return { json, status: response.status };
     }
 
-    return { status: false };
+    return { status: 401 };
 };

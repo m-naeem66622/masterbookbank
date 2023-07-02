@@ -2,27 +2,42 @@ import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useBooksContext } from "../provider/BookProvider";
 import { kebabToTitle } from "../features/BookFeatures";
+import { signOut } from "firebase/auth";
+import { auth } from "../firebase";
 
 function Header() {
     // const location = useLocation();
     // const path = location.pathname;
     const navigate = useNavigate();
-    const { isAdmin, setIsAdmin, isUser, setIsUser, cart, accountDetail } =
-        useBooksContext();
+    const {
+        isAdmin,
+        setIsAdmin,
+        isUser,
+        setIsUser,
+        cart,
+        accountDetail,
+        notify,
+    } = useBooksContext();
     const [searchData, setSearchData] = useState({
         option: "title",
         value: "",
     });
 
     const handleLogoutOnClick = () => {
-        localStorage.removeItem("authToken");
-        if (isAdmin) {
-            setIsAdmin(false);
-            navigate("/admin/signin");
-        } else if (isUser) {
-            setIsUser(false);
-            navigate("/");
-        }
+        signOut(auth)
+            .then(() => {
+                localStorage.removeItem("accountDetail");
+                if (isAdmin) {
+                    setIsAdmin(false);
+                    navigate("/admin/signin");
+                } else if (isUser) {
+                    setIsUser(false);
+                    navigate("/");
+                }
+            })
+            .catch((error) => {
+                notify("error", "Something went wrong! Try again.");
+            });
     };
 
     const handleSubmitSearch = () => {

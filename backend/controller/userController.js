@@ -1,9 +1,7 @@
 const { validationResult } = require("express-validator");
 const bcrypt = require("bcryptjs");
-const jwt = require("jsonwebtoken");
 const User = require("../models/userSchema");
-
-const JWT_SECRET = process.env.JWT_SECRET;
+const adminAuth = require("../firebase/firebase-admin");
 
 const signup = async (req, res) => {
     const errors = validationResult(req);
@@ -45,13 +43,10 @@ const signup = async (req, res) => {
             shippingAddress,
         });
 
-        // Get User ID to authenticate token
-        const data = {
-            user: { id: user.id },
-        };
-        const authToken = jwt.sign(data, JWT_SECRET);
+        // Create and Send custom token to firebase for signin
+        const customToken = await adminAuth.createCustomToken(user.id);
 
-        res.json({ authToken });
+        res.send({ customToken });
     } catch (error) {
         res.status(500).json({ message: "Server error 0x000d1" });
     }
@@ -93,13 +88,9 @@ const signin = async (req, res) => {
             });
         }
 
-        // Get User ID to authenticate token
-        const data = {
-            user: { id: user.id },
-        };
-        const authToken = jwt.sign(data, JWT_SECRET);
+        const customToken = await adminAuth.createCustomToken(user.id);
 
-        res.send({ authToken });
+        res.send({ customToken });
     } catch (error) {
         return res.status(500).send({ message: "Server error 0x000d2" });
     }

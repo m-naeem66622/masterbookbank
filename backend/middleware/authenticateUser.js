@@ -1,29 +1,28 @@
-const jwt = require("jsonwebtoken");
-const JWT_SECRET = process.env.JWT_SECRET;
 const User = require("../models/userSchema");
+const auth = require("../firebase/firebase-admin");
 
 // Middleware functin used where login is required
 const authenticateUser = async (req, res, next) => {
     try {
         // Get authentication token from header
-        const authToken = req.header("authToken");
+        const idToken = req.header("idToken");
 
-        // Check whether the authToken exist or not
-        if (!authToken) {
+        // Check whether the idToken exist or not
+        if (!idToken) {
             return res.status(401).send({ message: "Access denied 0x00aa1" });
         }
 
         // Verify the token and get payload from it
-        const data = jwt.verify(authToken, JWT_SECRET);
+        const decodedToken = await auth.verifyIdToken(idToken);
 
-        const user = await User.findById(data.user.id);
+        const user = await User.findById(decodedToken.uid);
         if (!user) {
             return res.status(401).send({ message: "Access denied 0x00aa2" });
         }
 
         // Set the user id and shipping address to request
         req.user = {
-            id: data.user.id,
+            id: decodedToken.uid,
             shippingAddress: user.shippingAddress,
             phoneNumber: user.phoneNumber,
         };

@@ -3,6 +3,13 @@ import { useBooksContext } from "../provider/BookProvider";
 import { Link, useNavigate } from "react-router-dom";
 import { authenticateUser, signupUser } from "../features/AuthFeatures";
 import Loader from "./Loader";
+import {
+    sendEmailVerification,
+    signInWithCustomToken,
+    updateEmail,
+    updatePassword,
+} from "firebase/auth";
+import { auth } from "../firebase";
 
 function UserSignup() {
     document.title = "Signup | Master Book Bank";
@@ -50,12 +57,21 @@ function UserSignup() {
         const { json, status } = await signupUser(data);
 
         if (status === 200) {
-            localStorage.setItem("authToken", json.authToken);
-            setIsUser(true);
-            const response = await authenticateUser();
-            setAccountDetail(response.json.data);
-            navigate("/");
-            notify("success", "Account sucessfully created.");
+            // signInWithCustomToken(auth, json.customToken).then(userCredetial);
+            signInWithCustomToken(auth, json.customToken)
+                .then(async (userCredential) => {
+                    // Signed in
+                    // Append user email and and password
+                    const firebaseUser = userCredential.user;
+                    await updateEmail(firebaseUser, data.email);
+                    await updatePassword(firebaseUser, data.password);
+                    await sendEmailVerification(firebaseUser);
+                    navigate("/");
+                    notify("success", "Account sucessfully created.");
+                })
+                .catch((error) => {
+                    notify("error", "Something went wrong! Try again.");
+                });
         } else if (status === 400) {
             notify("warning", json.errors[0].msg);
         } else {

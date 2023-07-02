@@ -9,7 +9,7 @@ import { fetchBook, updateBook } from "../features/BookFeatures";
 function EditBook() {
     document.title = "Edit Book Details | Master Book Bank";
     // Context
-    const { loading, setLoading, notify, rolling, setRolling } =
+    const { setLoading, notify, rolling, setRolling } =
         useBooksContext();
 
     // Get book ID from url
