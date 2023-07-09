@@ -10,8 +10,10 @@ const signup = async (req, res) => {
     }
 
     try {
-        const { name, email, password, phoneNumber, shippingAddress } =
+        const { uid, name, email, password, phoneNumber, shippingAddress } =
             req.body;
+        const { signupWith, check, create } = req.query;
+        console.log(req.query);
 
         // Check whether the user already exist or not
         let user = await User.findOne({ email });
@@ -30,12 +32,23 @@ const signup = async (req, res) => {
             });
         }
 
+        if (check && check === "true") {
+            return res.send({ message: "Credentials successfully checked." });
+        }
+
         // Salt and Hash the password
         const salt = await bcrypt.genSalt(10);
         const secPass = await bcrypt.hash(password, salt);
 
+        if (!signupWith || create !== "true") {
+            return res
+                .status(400)
+                .send({ errors: [{ msg: "Bad request. Try again" }] });
+        }
+
         // Saving user data into the database
         user = await User.create({
+            _id: uid,
             name,
             email,
             password: secPass,
@@ -43,11 +56,19 @@ const signup = async (req, res) => {
             shippingAddress,
         });
 
-        // Create and Send custom token to firebase for signin
-        const customToken = await adminAuth.createCustomToken(user.id);
+        const userDetails = { ...user._doc };
+        delete userDetails.password;
 
-        res.send({ customToken });
+        // Create and Send custom token to firebase for signin
+        let customToken;
+        if (signupWith === "email") {
+            customToken = await adminAuth.createCustomToken(user.id);
+            return res.send({ customToken, userDetails });
+        }
+
+        res.send({ userDetails });
     } catch (error) {
+        console.log(error);
         res.status(500).json({ message: "Server error 0x000d1" });
     }
 };

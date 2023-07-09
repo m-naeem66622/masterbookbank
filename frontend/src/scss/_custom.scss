@@ -162,6 +162,12 @@ $utilities: map-merge(
                 5: repeat(5, minmax(0, 1fr)),
             ),
         ),
+        "cursor": (
+            property: cursor,
+            class: cursor,
+            responsive: true,
+            values: auto pointer grab,
+        ),
     )
 );
 // $utilities: map-merge(

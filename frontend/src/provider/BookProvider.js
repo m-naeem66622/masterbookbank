@@ -8,7 +8,7 @@ import React, {
 import { toast } from "react-toastify";
 import cartReducer from "../features/cartReducer";
 import { auth } from "../firebase";
-import { authenticateUser } from "../features/AuthFeatures";
+// import { authenticateUser } from "../features/AuthFeatures";
 
 const BookContext = createContext();
 
@@ -30,25 +30,28 @@ const BookProvider = (props) => {
         });
     };
 
-    const authenticate = async () => {
-        const { status, json } = await authenticateUser(
-            await auth.currentUser.getIdToken()
-        );
-        if (status === 200) {
-            localStorage.setItem("accountDetail", JSON.stringify(json.data));
-            setAccountDetail(json.data);
-        }
-    };
+    // const authenticate = async () => {
+    //     console.log("I am going from authenticate");
+    //     const { status, json } = await authenticateUser(
+    //         await auth.currentUser.getIdToken()
+    //     );
+    //     console.log("I am done from authenticate");
+    //     if (status === 200) {
+    //         localStorage.setItem("accountDetail", JSON.stringify(json.data));
+    //         setAccountDetail(json.data);
+    //     }
+    // };
 
     useEffect(() => {
         const unsubscribe = auth.onAuthStateChanged((user) => {
             if (user) {
+                console.log("User Signed In");
                 const detail = localStorage.getItem("accountDetail");
                 if (detail) {
                     setAccountDetail(JSON.parse(detail));
-                } else {
-                    authenticate();
-                }
+                } // else {
+                //     authenticate();
+                // }
                 setIsUser(true);
             } else {
                 setIsUser(false);

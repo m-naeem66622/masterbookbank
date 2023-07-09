@@ -27,6 +27,7 @@ import AdminOrder from './components/AdminOrder';
 import BooksByX from './components/BooksByX';
 import Orders from './components/Orders';
 import Order from './components/Order';
+import UserSignupForm from './components/UserSignupForm';
 
 
 function App() {
@@ -41,6 +42,7 @@ function App() {
             <Route exact path="/admin/signin" element={<AdminSignin />} />
             <Route exact path="/signin" element={<UserSignin />} />
             <Route exact path="/signup" element={<UserSignup />} />
+            <Route exact path="/signup/form" element={<UserSignupForm />} />
             <Route exact path="/" element={<Home />} />
             <Route exact path="/books/:param1/:param2" element={<BooksByX />} />
             <Route exact path="/cart" element={<Cart/>} />

@@ -1,5 +1,16 @@
 const host = process.env.REACT_APP_SERVER_HOST;
 
+const queryMaker = (params) => {
+    var esc = encodeURIComponent;
+    var query = Object.keys(params)
+        .map((k) => {
+            return esc(k) + "=" + esc(params[k]);
+        })
+        .join("&");
+    console.log(query);
+    return query;
+};
+
 export const signinAdmin = async (data) => {
     const url = `${host}/api/auth/admin/signin`;
     const options = {
@@ -41,8 +52,8 @@ export const authenticateAdmin = async () => {
     return { status: false };
 };
 
-export const signupUser = async (data) => {
-    const url = `${host}/api/auth/user/signup`;
+export const signupUser = async (data, query) => {
+    const url = `${host}/api/auth/user/signup?${queryMaker(query)}`;
     const options = {
         method: "POST",
         headers: {

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useBooksContext } from "../provider/BookProvider";
 import { Link, useNavigate } from "react-router-dom";
-import { authenticateUser, signupUser } from "../features/AuthFeatures";
+import { signupUser } from "../features/AuthFeatures";
 import Loader from "./Loader";
 import {
     sendEmailVerification,
@@ -13,8 +13,7 @@ import { auth } from "../firebase";
 
 function UserSignup() {
     document.title = "Signup | Master Book Bank";
-    const { notify, setIsUser, isUser, loading, setAccountDetail } =
-        useBooksContext();
+    const { notify, isUser, loading } = useBooksContext();
     const navigate = useNavigate();
     const [data, setData] = useState({
         name: "",
@@ -99,7 +98,41 @@ function UserSignup() {
                     <h2 className="fw-bold fs-4 text-center">
                         Create your free account
                     </h2>
-                    <form className="mt-4" onSubmit={handleOnSubmit}>
+                    <div className="mt-4 mx-auto" style={{ width: "250px" }}>
+                            <Link
+                                to="/signup/form?with=email"
+                            type="button"
+                            className="w-100 mb-4 btn btn-fill-sea-green btn-sm d-flex justify-content-center align-items-center"
+                        >
+                            <i className="fa-solid fa-envelope fs-5"></i>
+                            <span className="ms-2 fs-6">Email</span>
+                        </Link>
+                            <Link
+                                to="/signup/form?with=phone"
+                            type="button"
+                            className="w-100 mb-4 btn btn-fill-sea-green btn-sm d-flex justify-content-center align-items-center"
+                        >
+                            <i className="fa-solid fa-phone fs-5"></i>
+                            <span className="ms-2 fs-6">Phone</span>
+                        </Link>
+                            <Link
+                                to="/signup/form?with=google"
+                            type="button"
+                            className="w-100 mb-4 btn btn-fill-sea-green btn-sm d-flex justify-content-center align-items-center"
+                        >
+                            <i className="fab fa-google fs-5"></i>
+                            <span className="ms-2 fs-6">Google</span>
+                        </Link>
+                            <Link
+                                to="/signup/form?with=facebook"
+                            type="button"
+                            className="w-100 btn btn-fill-sea-green btn-sm d-flex justify-content-center align-items-center"
+                        >
+                            <i className="fab fa-facebook fs-5"></i>
+                            <span className="ms-2 fs-6">Facebook</span>
+                        </Link>
+                    </div>
+                    {/* <form className="mt-4" onSubmit={handleOnSubmit}>
                         <div className="mb-4">
                             <div className="divider d-flex align-items-center">
                                 <p className="text-center fw-medium mx-3 mb-0">
@@ -349,8 +382,8 @@ function UserSignup() {
                                 Create Account
                             </button>
                         </div>
-                    </form>
-                    <div className="mt-5 text-center">
+                    </form> */}
+                    <div className="mt-4 text-center">
                         <p>
                             Already a member?{" "}
                             <Link className="fw-bold" to="/signin">

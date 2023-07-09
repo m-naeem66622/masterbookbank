@@ -8,7 +8,7 @@ const signinValidationRules = [
 
 const signupValidationRules = [
     body("name").exists().withMessage("Name cannot be empty").trim().isLength({ min: 5 }).withMessage("Name must be atleast 5 characters long"),
-    body("email").exists().withMessage("Username cannot be empty.").isEmail().withMessage("Email is invalid"),
+    body("email").exists().withMessage("Email cannot be empty.").isEmail().withMessage("Email is invalid"),
     body("phoneNumber").exists().withMessage("Phone number cannot be empty.").isNumeric().withMessage("Phone number is invalid"),
     body("password").exists().withMessage("Password cannot be empty").trim().isLength({ min: 8 }).withMessage("Password must contain atleast 8 characters"),
     body('confirmPassword').exists().withMessage('Confirm Password cannot be empty').custom((value, { req }) => {
