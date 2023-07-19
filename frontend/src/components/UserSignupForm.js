@@ -9,14 +9,22 @@ import Page404 from "./Page404";
 import "react-phone-input-2/lib/bootstrap.css";
 import "../styles/input-phone.css";
 import { auth } from "../firebase";
-import { RecaptchaVerifier, signInWithPhoneNumber } from "firebase/auth";
+import {
+    EmailAuthProvider,
+    RecaptchaVerifier,
+    createUserWithEmailAndPassword,
+    linkWithCredential,
+    sendEmailVerification,
+    signInWithPhoneNumber,
+} from "firebase/auth";
 import { signupUser } from "../features/AuthFeatures";
 
 function UserSignupForm() {
+    document.title = "Create Free Account | Master Book Bank";
     const navigate = useNavigate();
     const [params] = useSearchParams();
-    const signupWith = params.get("with");
-    const { isUser, notify } = useBooksContext();
+    const signupWith = params.get("with") || "email";
+    const { isUser, notify, setAccountDetail } = useBooksContext();
     const [ipData, setIpData] = useState({});
     const [progressDetails, setProgressDetails] = useState({
         current: 0,
@@ -39,7 +47,6 @@ function UserSignupForm() {
             .then(async (result) => {
                 // User signed in successfully.
                 const user = result.user;
-                console.log(user.uid);
                 const { status, json } = await signupUser(
                     { ...data, uid: user.uid },
                     {
@@ -48,19 +55,28 @@ function UserSignupForm() {
                     }
                 );
                 if (status === 200) {
+                    const credential = EmailAuthProvider.credential(
+                        data.email,
+                        data.password
+                    );
+                    linkWithCredential(auth.currentUser, credential)
+                        .then((usercred) => {
+                            const user = usercred.user;
+                            console.log("Account linking success", user);
+                        })
+                        .catch((error) => {
+                            console.log("Account linking error", error);
+                        });
                     localStorage.setItem(
                         "accountDetail",
                         JSON.stringify(json.userDetails)
                     );
+                    setAccountDetail(json.userCredential);
                 }
-                console.log("user :", user);
-                // ...
             })
             .catch((error) => {
                 // User couldn't sign in (bad verification code?)
                 notify("error", "Wrong OTP. Try again...");
-                console.log("error: ", error);
-                // ...
             });
     };
 
@@ -77,14 +93,12 @@ function UserSignupForm() {
                         // user in with confirmationResult.confirm(code).
                         window.confirmationResult = confirmationResult;
                         window.scroll(0, 0);
-                        console.log("confirmationResult: ", confirmationResult);
                         next();
                     })
                     .catch((error) => {
                         // Error; SMS not sent
                         // ...
                         // reset recapcha
-                        console.log("error: ", error);
                         notify(
                             "error",
                             "Error while sending OTP. Try again..."
@@ -101,12 +115,42 @@ function UserSignupForm() {
         })();
     };
 
+    const handleSignUpByEmail = async (data) => {
+        createUserWithEmailAndPassword(auth, data.email, data.password)
+            .then(async (userCredential) => {
+                // Signed in
+                const user = userCredential.user;
+                const { status, json } = await signupUser(
+                    { ...data, uid: user.uid },
+                    {
+                        signupWith,
+                        create: true,
+                    }
+                );
+                if (status === 200) {
+                    localStorage.setItem(
+                        "accountDetail",
+                        JSON.stringify(json.userDetails)
+                    );
+                    setAccountDetail(json.userDetails);
+                }
+                await sendEmailVerification(userCredential.user);
+                // ...
+            })
+            .catch((error) => {
+                const errorCode = error.code;
+                const errorMessage = error.message;
+            });
+    };
+
     const onSubmit = async (data) => {
         const { status, json } = await signupUser(data, { check: true });
 
         if (status === 200) {
             if (signupWith === "phone") {
                 handleSignupByPhone(data);
+            } else if (signupWith === "email") {
+                handleSignUpByEmail(data);
             }
             // Todo: Add remaining
         } else if (status === 400) {
@@ -116,7 +160,6 @@ function UserSignupForm() {
 
     const handleFormSubmit = (event) => {
         event.preventDefault();
-        console.log("errors: ", errors);
     };
 
     const nextHandle = async (next) => {
@@ -161,7 +204,6 @@ function UserSignupForm() {
                     size: "invisible",
                     callback: (response) => {
                         // reCAPTCHA solved, allow signInWithPhoneNumber.
-                        console.log("Captcha Resolved");
                     },
                 },
                 auth
@@ -201,7 +243,7 @@ function UserSignupForm() {
 
 const MultiStepForm = (props) => {
     const [params] = useSearchParams();
-    const signupWith = params.get("with");
+    const signupWith = params.get("with") || "email";
     const {
         register,
         errors,
@@ -215,63 +257,6 @@ const MultiStepForm = (props) => {
     useEffect(() => {
         setProgressDetails({ current, total });
     }, [current, total]);
-
-    // const handleOnBlur = (e) => {
-    //     // const elem = e.target;
-    //     // if (elem.name === "name") {
-    //     //     if (data.name.trim().length < 5) {
-    //     //         elem.classList.add("is-invalid");
-    //     //         setIsValidated(false);
-    //     //     } else {
-    //     //         elem.classList.remove("is-invalid");
-    //     //         // setisValidated(true);
-    //     //     }
-    //     // } else if (elem.name === "email") {
-    //     //     const regex = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i;
-    //     //     const regex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-    //     //     if (!regex.test(data.email)) {
-    //     //         elem.classList.add("is-invalid");
-    //     //         setIsValidated(false);
-    //     //     } else {
-    //     //         elem.classList.remove("is-invalid");
-    //     //         // setisValidated(true);
-    //     //     }
-    //     // } else if (elem.name === "password") {
-    //     //     if (data.password.trim().length < 8) {
-    //     //         elem.classList.add("is-invalid");
-    //     //         setIsValidated(false);
-    //     //     } else {
-    //     //         elem.classList.remove("is-invalid");
-    //     //         // setisValidated(true);
-    //     //     }
-    //     // } else if (elem.name === "confirmPassword") {
-    //     //     if (data.password.trim() !== data.confirmPassword.trim()) {
-    //     //         elem.classList.add("is-invalid");
-    //     //         setIsValidated(false);
-    //     //     } else {
-    //     //         elem.classList.remove("is-invalid");
-    //     //         // setisValidated(true);
-    //     //     }
-    //     // }
-    // };
-
-    // const handleOnFocus = (e) => {
-    //     // const elem = e.target;
-    //     // if (elem.name === "name") {
-    //     //     elem.classList.remove("is-invalid");
-    //     // } else if (elem.name === "email") {
-    //     //     elem.classList.remove("is-invalid");
-    //     // } else if (elem.name === "password") {
-    //     //     elem.classList.remove("is-invalid");
-    //     // } else if (elem.name === "confirmPassword") {
-    //     //     elem.classList.remove("is-invalid");
-    //     // }
-    // };
-
-    // const nextHandle = (e) => {
-    //     next();
-    //     window.scroll(0, 0);
-    // };
 
     return (
         <>

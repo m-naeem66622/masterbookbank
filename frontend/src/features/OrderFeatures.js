@@ -1,57 +1,58 @@
 const host = process.env.REACT_APP_SERVER_HOST;
 
 export const placeOrder = async (obj) => {
-    const url = `${host}/api/order/create`;
-    const options = {
-        method: "POST",
-        headers: {
-            authToken: localStorage.getItem("authToken"),
-            "Content-Type": "application/json",
-        },
-        body: JSON.stringify(obj),
-    };
-    const res = await fetch(url, options);
-    const json = await res.json();
+    const idToken = localStorage.getItem("idToken");
+    if (idToken) {
+        const url = `${host}/api/order/create`;
+        const options = {
+            method: "POST",
+            headers: {
+                idToken,
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(obj),
+        };
 
-    return { json, status: res.status };
+        const res = await fetch(url, options);
+        const json = await res.json();
+        return { json, status: res.status };
+    }
+
+    return { status: 401 };
 };
 
 export const fetchOrdersUser = async () => {
-    if (localStorage.getItem("authToken")) {
+    const idToken = localStorage.getItem("idToken");
+    if (idToken) {
         const url = `${host}/api/order/fetchAll`;
         const options = {
             method: "GET",
-            headers: {
-                authToken: localStorage.getItem("authToken"),
-            },
+            headers: { idToken },
         };
 
         const res = await fetch(url, options);
         const json = await res.json();
-
         return { json, status: res.status };
-    } else {
-        return { json: { message: "Access denied 0x00aa2" }, status: 401 };
     }
+
+    return { status: 401 };
 };
 
 export const fetchOrderUser = async (id) => {
-    if (localStorage.getItem("authToken")) {
+    const idToken = localStorage.getItem("idToken");
+    if (idToken) {
         const url = `${host}/api/order/fetch/${id}`;
         const options = {
             method: "GET",
-            headers: {
-                authToken: localStorage.getItem("authToken"),
-            },
+            headers: { idToken },
         };
 
         const res = await fetch(url, options);
         const json = await res.json();
-
         return { json, status: res.status };
-    } else {
-        return { json: { message: "Access denied 0x00aa2" }, status: 401 };
     }
+
+    return { status: 401 };
 };
 
 export const fetchOrdersAdmin = async () => {

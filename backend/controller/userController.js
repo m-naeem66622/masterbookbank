@@ -13,7 +13,6 @@ const signup = async (req, res) => {
         const { uid, name, email, password, phoneNumber, shippingAddress } =
             req.body;
         const { signupWith, check, create } = req.query;
-        console.log(req.query);
 
         // Check whether the user already exist or not
         let user = await User.findOne({ email });
@@ -59,16 +58,8 @@ const signup = async (req, res) => {
         const userDetails = { ...user._doc };
         delete userDetails.password;
 
-        // Create and Send custom token to firebase for signin
-        let customToken;
-        if (signupWith === "email") {
-            customToken = await adminAuth.createCustomToken(user.id);
-            return res.send({ customToken, userDetails });
-        }
-
         res.send({ userDetails });
     } catch (error) {
-        console.log(error);
         res.status(500).json({ message: "Server error 0x000d1" });
     }
 };
@@ -82,19 +73,40 @@ const signin = async (req, res) => {
 
     try {
         // Get user information from request body
-        const { email, password } = req.body;
+        const { email, phoneNumber, password } = req.body;
 
-        // Check whether the username or password correct or not
-        const user = await User.findOne({ email });
-        if (!user) {
-            return res.status(400).send({
-                errors: [
-                    {
-                        msg: "Wrong credentials! Try again.",
-                        param: "email",
-                    },
-                ],
-            });
+        if ((!email && !phoneNumber) || (email && phoneNumber)) {
+            return res
+                .status(400)
+                .send({ errors: [{ msg: "Bad request. Try again" }] });
+        }
+
+        let user;
+        // Check whether the email or phone number correct or not
+        if (email) {
+            user = await User.findOne({ email });
+            if (!user) {
+                return res.status(400).send({
+                    errors: [
+                        {
+                            msg: "Wrong credentials! Try again.",
+                            param: "email",
+                        },
+                    ],
+                });
+            }
+        } else if (phoneNumber) {
+            user = await User.findOne({ phoneNumber });
+            if (!user) {
+                return res.status(400).send({
+                    errors: [
+                        {
+                            msg: "Wrong credentials! Try again.",
+                            param: "phoneNumber",
+                        },
+                    ],
+                });
+            }
         }
 
         const secPass = await bcrypt.compare(password, user.password);
@@ -109,9 +121,10 @@ const signin = async (req, res) => {
             });
         }
 
-        const customToken = await adminAuth.createCustomToken(user.id);
+        const userDetails = { ...user._doc };
+        delete userDetails.password;
 
-        res.send({ customToken });
+        res.send({ userDetails });
     } catch (error) {
         return res.status(500).send({ message: "Server error 0x000d2" });
     }

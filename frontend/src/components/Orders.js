@@ -3,6 +3,7 @@ import { useBooksContext } from "../provider/BookProvider";
 import { Link } from "react-router-dom";
 import { fetchOrdersUser } from "../features/OrderFeatures";
 import Loader from "./Loader";
+import { auth } from "../firebase";
 
 function Orders() {
     document.title = "Admin Orders | Master Book Bank";
@@ -11,7 +12,8 @@ function Orders() {
 
     const asyncFunc = async () => {
         setLoading(true);
-        const res = await fetchOrdersUser();
+        const idToken = await auth.currentUser.getIdToken();
+        const res = await fetchOrdersUser(idToken);
         setLoading(false);
         if (res.status === 200) {
             setOrders(res.json);

@@ -7,7 +7,6 @@ const queryMaker = (params) => {
             return esc(k) + "=" + esc(params[k]);
         })
         .join("&");
-    console.log(query);
     return query;
 };
 
@@ -101,14 +100,13 @@ export const signinUser = async (data) => {
     return { json, status: response.status };
 };
 
-export const authenticateUser = async (token) => {
-    if (token) {
+export const authenticateUser = async () => {
+    const idToken = localStorage.getItem("idToken");
+    if (idToken) {
         const url = `${host}/api/auth/user`;
         const options = {
             method: "POST",
-            headers: {
-                idToken: token,
-            },
+            headers: { idToken },
         };
         const response = await fetch(url, options);
         const json = await response.json();

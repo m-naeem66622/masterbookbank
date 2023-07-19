@@ -126,7 +126,6 @@ const apply = async (req, res) => {
 
         req.body.discount = discountedPrice;
 
-        if(code)
         res.json({ discount: discountedPrice });
     } catch (error) {
         console.error(error);

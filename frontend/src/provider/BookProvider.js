@@ -43,20 +43,46 @@ const BookProvider = (props) => {
     // };
 
     useEffect(() => {
-        const unsubscribe = auth.onAuthStateChanged((user) => {
-            if (user) {
-                console.log("User Signed In");
-                const detail = localStorage.getItem("accountDetail");
-                if (detail) {
-                    setAccountDetail(JSON.parse(detail));
-                } // else {
-                //     authenticate();
-                // }
-                setIsUser(true);
-            } else {
-                setIsUser(false);
+        let interval;
+        function startInterval() {
+            interval = setInterval(async () => {
+                await auth.currentUser.getIdToken(true);
+            }, 3600000);
+        }
+        const unsubscribeOnAuthStateChanged = auth.onAuthStateChanged(
+            async (user) => {
+                if (user) {
+                    const detail = localStorage.getItem("accountDetail");
+                    if (detail) {
+                        setAccountDetail(JSON.parse(detail));
+                    } // else {
+                    //     authenticate();
+                    // }
+                    try {
+                        await auth.currentUser.getIdToken(true);
+                    } catch (error) {
+                        console.log(error);
+                    }
+                    startInterval();
+                    setIsUser(true);
+                } else {
+                    setIsUser(false);
+                }
             }
-        });
+        );
+
+        const unsubscribeOnIdTokenChanged = auth.onIdTokenChanged(
+            async (user) => {
+                const localIdToken = localStorage.getItem("idToken");
+                if (user && user.stsTokenManager.accessToken !== localIdToken) {
+                    console.log("User Token Refreshed");
+                    localStorage.setItem(
+                        "idToken",
+                        user.stsTokenManager.accessToken
+                    );
+                }
+            }
+        );
 
         const cartItems = localStorage.getItem("cartItems");
         if (cartItems) {
@@ -70,7 +96,9 @@ const BookProvider = (props) => {
         }
 
         return () => {
-            unsubscribe();
+            unsubscribeOnAuthStateChanged();
+            unsubscribeOnIdTokenChanged();
+            clearInterval(interval);
         };
     }, []);
 
