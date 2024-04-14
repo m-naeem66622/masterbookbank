@@ -6,14 +6,13 @@ import Loader from "./Loader";
 import { auth } from "../firebase";
 
 function Orders() {
-    document.title = "Admin Orders | Master Book Bank";
-    const { loading, setLoading } = useBooksContext();
+    document.title = "Orders | Master Book Bank";
+    const { loading, setLoading, accountDetail } = useBooksContext();
     const [orders, setOrders] = useState([]);
 
     const asyncFunc = async () => {
         setLoading(true);
-        const idToken = await auth.currentUser.getIdToken();
-        const res = await fetchOrdersUser(idToken);
+        const res = await fetchOrdersUser();
         setLoading(false);
         if (res.status === 200) {
             setOrders(res.json);
@@ -50,7 +49,7 @@ function Orders() {
                         <div className="card-body">
                             <div className="d-flex justify-content-between align-items-cemter">
                                 <p className="mb-2">
-                                    <strong>Name:</strong> {order.user?.name}
+                                    <strong>Name:</strong> {accountDetail?.name}
                                 </p>
                                 <p className="mb-2">
                                     <strong>Status: </strong>

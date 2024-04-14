@@ -52,17 +52,22 @@ function UserSignin() {
             return [true, "phoneNumber", cleanPhoneNumber(value)];
         }
         console.log("inVaild");
-        return "Not valid email or phone number.";
+        return "Invalid Email or Phone Number";
     };
 
     const handleOnSubmit = (e) => {
         e.preventDefault();
         console.log(errors);
         handleSubmit(async (formData) => {
-            console.log(formData);
             const inputField = emailOrPhoneValidator(
                 formData.emailOrPhoneNumber
             );
+
+            if (inputField === "Invalid Email or Phone Number") {
+                notify("error", "Invalid Email or Phone Number");
+                return;
+            }
+
             // json will come from server side after successfull authentication
             const dataToSend = {
                 [inputField[1]]: inputField[2],
@@ -148,8 +153,7 @@ function UserSignin() {
                                 }`}
                                 id="userEmailOrPhoneNumber"
                                 {...register("emailOrPhoneNumber", {
-                                    required:
-                                        "Email or Phone number is required",
+                                    required: "Email or Phone number is required",
                                     validate: emailOrPhoneValidator,
                                 })}
                             />

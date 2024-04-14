@@ -1,7 +1,7 @@
 const { body } = require("express-validator");
 
 const signinValidationRules = [
-    body("email").exists().withMessage("Username cannot be empty.").isEmail().withMessage("Email is invalid"),
+    body("email").if(body("email").exists()).isEmail().withMessage("Email is invalid"),
     body("password").exists().withMessage("Password cannot be empty").trim().isLength({ min: 8 }).withMessage("Password must contain atleast 8 characters")
     // .isStrongPassword().withMessage("Password must be strong")
 ];

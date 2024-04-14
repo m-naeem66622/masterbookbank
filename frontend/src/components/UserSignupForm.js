@@ -71,7 +71,7 @@ function UserSignupForm() {
                         "accountDetail",
                         JSON.stringify(json.userDetails)
                     );
-                    setAccountDetail(json.userCredential);
+                    setAccountDetail(json.userDetails);
                 }
             })
             .catch((error) => {
@@ -103,11 +103,8 @@ function UserSignupForm() {
                             "error",
                             "Error while sending OTP. Try again..."
                         );
-                        window.recaptchaVerifier
-                            .render()
-                            .then(function (widgetId) {
-                                window.recaptchaVerifier.reset(widgetId);
-                            });
+                        window.recaptchaVerifier.recaptcha.reset();
+                        window.recaptchaVerifier.clear();
                     });
             } else if (status === 400) {
                 notify("error", json.errors[0].msg);

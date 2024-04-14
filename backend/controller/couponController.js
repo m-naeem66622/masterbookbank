@@ -11,7 +11,12 @@ const create = async (req, res) => {
     try {
         const { code, type, discount, expirationDate, maxUses } = req.body;
 
-        const coupon = new Coupon({
+        const coupon = await Coupon.findOne({code});
+        if (coupon) {
+            return res.status(400).json({ message: "Coupon already exist." });
+        }
+
+        const newCoupon = new Coupon({
             code,
             type,
             discount,
@@ -19,7 +24,7 @@ const create = async (req, res) => {
             maxUses,
         });
 
-        await coupon.save();
+        await newCoupon.save();
         res.status(201).json({ message: "Coupon sucessfully added" });
     } catch (error) {
         console.error(error);
@@ -40,7 +45,10 @@ const fetchAll = async (req, res) => {
 
 // Route to get a single coupon by code
 const fetch = async (req, res) => {
-    const { code } = req.params;
+    const code = req.params?.code?.toUpperCase();
+    if (!code) {
+        return res.status(404).json({ message: "Coupon not found" });
+    }
 
     try {
         const coupon = await Coupon.findOne({ code });
@@ -80,14 +88,17 @@ const update = async (req, res) => {
 
 // Route to delete a coupon by code
 const drop = async (req, res) => {
-    const { code } = req.params;
+    const code = req.params?.code?.toUpperCase();
+    if (!code) {
+        return res.status(404).json({ message: "Coupon not found" });
+    }
 
     try {
         const coupon = await Coupon.findOneAndDelete({ code });
         if (!coupon) {
             return res.status(404).json({ message: "Coupon not found" });
         }
-        res.json(coupon);
+        res.json({ message: "Coupon successfully deleted." });
     } catch (error) {
         console.error(error);
         res.status(500).json({ message: "Server error" });
@@ -96,7 +107,7 @@ const drop = async (req, res) => {
 
 const apply = async (req, res) => {
     try {
-        const code = req.body.code.toUpperCase();
+        const code = req.body?.code?.toUpperCase();
         const { totalPrice } = req;
 
         const coupon = await Coupon.findOne({ code });

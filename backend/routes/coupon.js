@@ -9,10 +9,10 @@ const router = express.Router();
 
 router.post("/create", couponValidationRules, authenticateAdmin, create);
 router.get("/fetchAll", authenticateAdmin, fetchAll);
-router.get("/fetch/:code",authenticateAdmin, fetch);
+router.get("/fetch/:code", authenticateAdmin, fetch);
 router.put("/update/:code", couponValidationRules, authenticateAdmin, update);
-router.delete("/delete/:code", drop);
-router.post('/apply', authenticateUser, calculator, apply);
-  
+router.delete("/delete/:code", authenticateAdmin, drop);
+router.post("/apply", authenticateUser, calculator, apply);
+
 
 module.exports = router;

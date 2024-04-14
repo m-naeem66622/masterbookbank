@@ -78,7 +78,7 @@ const signin = async (req, res) => {
         if ((!email && !phoneNumber) || (email && phoneNumber)) {
             return res
                 .status(400)
-                .send({ errors: [{ msg: "Bad request. Try again" }] });
+            .send({ errors: [{ msg: "Please provide either email or phoneNumber." }] });
         }
 
         let user;

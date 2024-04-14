@@ -6,7 +6,7 @@ import { useBooksContext } from "../provider/BookProvider";
 import { kebabToTitle } from "../features/BookFeatures";
 
 function Order() {
-    document.title = "Admin Order Details | Master Book Bank";
+    document.title = "Order Details | Master Book Bank";
     const host = process.env.REACT_APP_SERVER_HOST;
     const { loading, setLoading } = useBooksContext();
     const params = useParams();

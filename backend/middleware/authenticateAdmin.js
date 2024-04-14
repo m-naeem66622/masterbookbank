@@ -1,4 +1,4 @@
-const jwt = require('jsonwebtoken');
+const jwt = require("jsonwebtoken");
 const JWT_SECRET = process.env.JWT_SECRET;
 const Admin = require("../models/adminSchema");
 
@@ -16,7 +16,7 @@ const authenticateAdmin = async (req, res, next) => {
         // Verify the token and get payload from it
         const data = jwt.verify(authToken, JWT_SECRET);
 
-        const admin = await Admin.findById(data.admin.id);
+    const admin = await Admin.findById(data.admin?.id);
         if (!admin) {
             return res.status(401).send({ message: "Access denied 0x000f2" });
         }
