@@ -48,9 +48,11 @@
         ]
     },
     "devDependencies": {
-        "@svgr/webpack": "^8.1.0"
+        "@svgr/webpack": "^8.1.0",
+        "postcss": "^8.4.40"
     },
     "overrides": {
-        "@svgr/webpack": "$@svgr/webpack"
+        "@svgr/webpack": "$@svgr/webpack",
+        "postcss": "$postcss"
     }
 }
